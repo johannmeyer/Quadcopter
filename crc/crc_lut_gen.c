@@ -3,7 +3,9 @@
 
 void crcLutGenerate(void)
 {
-	//by Kostas
+	/*Produces the header file, which contains the look-up table
+	  for the specific codeword defined in the "crc.h".
+	  (by Kostas)*/ 
 	
     int i=0;
     
