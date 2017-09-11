@@ -3,6 +3,8 @@
 
 void crcLutGenerate(void)
 {
+	//by Kostas
+	
     int i=0;
     
     FILE *hfil = fopen("lut.h","w");

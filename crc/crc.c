@@ -4,11 +4,15 @@
 
 uint8_t crcLutCode(uint8_t init, uint8_t byte)
 {
+	//by Kostas
+
     return crclut[init ^ byte];
 }
 
 uint8_t crcBasicCode(uint8_t init, uint8_t byte)
 {
+	//by Kostas
+
     register uint8_t gen = CODEWORD;
     register uint8_t crc = init ^ byte;
     
