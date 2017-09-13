@@ -10,103 +10,115 @@
  *  Embedded Software Lab
  *
  *  June 2016
- *------------------------------------------------------------------
+ *******************************------------------------------------------------------------------
  */
-
+#include <stdint.h>
 #include "in4073.h"
+#include "packet_uav.h"
 
 /*------------------------------------------------------------------
  * process_key -- process command keys
- *------------------------------------------------------------------
+ *******************************------------------------------------------------------------------
  */
 void process_key(uint8_t c)
 {
-	switch (c)
-	{
-		case 'q':
-			ae[0] += 10;
-			break;
-		case 'a':
-			ae[0] -= 10;
-			if (ae[0] < 0) ae[0] = 0;
-			break;
-		case 'w':
-			ae[1] += 10;
-			break;
-		case 's':
-			ae[1] -= 10;
-			if (ae[1] < 0) ae[1] = 0;
-			break;
-		case 'e':
-			ae[2] += 10;
-			break;
-		case 'd':
-			ae[2] -= 10;
-			if (ae[2] < 0) ae[2] = 0;
-			break;
-		case 'r':
-			ae[3] += 10;
-			break;
-		case 'f':
-			ae[3] -= 10;
-			if (ae[3] < 0) ae[3] = 0;
-			break;
-		case 27:
-			demo_done = true;
-			break;
-		default:
-			nrf_gpio_pin_toggle(RED);
-	}
+								switch (c)
+								{
+								case 'q':
+																ae[0] += 10;
+																break;
+								case 'a':
+																ae[0] -= 10;
+																if (ae[0] < 0) ae[0] = 0;
+																break;
+								case 'w':
+																ae[1] += 10;
+																break;
+								case 's':
+																ae[1] -= 10;
+																if (ae[1] < 0) ae[1] = 0;
+																break;
+								case 'e':
+																ae[2] += 10;
+																break;
+								case 'd':
+																ae[2] -= 10;
+																if (ae[2] < 0) ae[2] = 0;
+																break;
+								case 'r':
+																ae[3] += 10;
+																break;
+								case 'f':
+																ae[3] -= 10;
+																if (ae[3] < 0) ae[3] = 0;
+																break;
+								case 27:
+																demo_done = true;
+																break;
+								default:
+																nrf_gpio_pin_toggle(RED);
+								}
 }
 
 /*------------------------------------------------------------------
  * main -- everything you need is here :)
- *------------------------------------------------------------------
+ *******************************------------------------------------------------------------------
  */
 int main(void)
 {
-	uart_init();
-	gpio_init();
-	timers_init();
-	adc_init();
-	twi_init();
-	imu_init(true, 100);	
-	baro_init();
-	spi_flash_init();
-	ble_init();
+								uart_init();
+								gpio_init();
+								timers_init();
+								adc_init();
+								twi_init();
+								imu_init(true, 100);
+								baro_init();
+								spi_flash_init();
+								ble_init();
 
-	uint32_t counter = 0;
-	demo_done = false;
+								uint32_t counter = 0;
+								demo_done = false;
 
-	while (!demo_done)
-	{
-		if (rx_queue.count) process_key( dequeue(&rx_queue) );
+								uint8_t mode, roll, pitch, yaw, lift;
 
-		if (check_timer_flag()) 
-		{
-			if (counter++%20 == 0) nrf_gpio_pin_toggle(BLUE);
+								while (!demo_done)
+								{
+																if (rx_queue.count >= sizeof(packet))
+																{
 
-			adc_request_sample();
-			read_baro();
+																								int failed = decode(&mode, &roll, &pitch, &yaw, &lift);
+																								if(!failed)
+																								{
+																																// TODO Process the data e.g. change states
+																																printf("Message:\t%x | %x | %x | %x | %x\n", mode, roll, pitch, yaw, lift);
+																								}
+																}
 
-			printf("%10ld | ", get_time_us());
-			printf("%3d %3d %3d %3d | ",ae[0],ae[1],ae[2],ae[3]);
-			printf("%6d %6d %6d | ", phi, theta, psi);
-			printf("%6d %6d %6d | ", sp, sq, sr);
-			printf("%4d | %4ld | %6ld \n", bat_volt, temperature, pressure);
+																if (check_timer_flag())
+																{
+																								if (counter++%20 == 0) nrf_gpio_pin_toggle(BLUE);
 
-			clear_timer_flag();
-		}
+																								adc_request_sample();
+																								read_baro();
 
-		if (check_sensor_int_flag()) 
-		{
-			get_dmp_data();
-			run_filters_and_control();
-		}
-	}	
+																								printf("%10ld | ", get_time_us());
+																								printf("%3d %3d %3d %3d | ",ae[0],ae[1],ae[2],ae[3]);
+																								printf("%6d %6d %6d | ", phi, theta, psi);
+																								printf("%6d %6d %6d | ", sp, sq, sr);
+																								printf("%4d | %4ld | %6ld \n", bat_volt, temperature, pressure);
 
-	printf("\n\t Goodbye \n\n");
-	nrf_delay_ms(100);
+																								clear_timer_flag();
+																}
 
-	NVIC_SystemReset();
+																if (check_sensor_int_flag())
+																{
+																								get_dmp_data();
+																								run_filters_and_control();
+																}
+								}
+
+								printf("\n\t Goodbye \n\n");
+								nrf_delay_ms(100);
+
+								NVIC_SystemReset();
 }
