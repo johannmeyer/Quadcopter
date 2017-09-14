@@ -21,7 +21,7 @@
 #include "app_util_platform.h"
 #include <math.h>
 
-#define RED		    22
+#define RED		22
 #define YELLOW		24
 #define GREEN		28
 #define BLUE		30
@@ -30,6 +30,12 @@
 bool demo_done;
 
 // Control
+bool Calibration_flag;
+uint8_t mode, prev_mode;
+int8_t lift,pitch,roll,yaw;
+int8_t prev_lift,prev_pitch,prev_roll,prev_yaw;
+int8_t lift_delta, pitch_delta, roll_delta, yaw_delta;
+int8_t b,d;
 int16_t motor[4],ae[4];
 void run_filters_and_control();
 
@@ -48,7 +54,7 @@ void gpio_init(void);
 typedef struct {
 	uint8_t Data[QUEUE_SIZE];
 	uint16_t first,last;
-  	uint16_t count; 
+  	uint16_t count;
 } queue;
 void init_queue(queue *q);
 void enqueue(queue *q, char x);
