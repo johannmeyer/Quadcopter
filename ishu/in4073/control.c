@@ -10,31 +10,9 @@
  *------------------------------------------------------------------
  */
 
-//#include "in4073.h"
+#include "in4073.h"
 
-void update_motors(void)
-{
-	if(ae[0]> 600)
-		{ ae[0] = 600; }
-	if(ae[0] < -600)
-		{ ae[0] = -600; }
-	if(ae[1]> 600)
-		{ ae[1] = 600; }
-	if(ae[1] < -600)
-		{ ae[1] = -600; }
-	if(ae[2]> 600)
-		{ ae[2] = 600; }
-	if(ae[3] < -600)
-		{ ae[3] = -600; }
-	if(ae[4]> 600)
-		{ ae[4] = 600; }
-	if(ae[4] < -600)
-		{ ae[4] = -600; }
-	motor[0] = ae[0];
-	motor[1] = ae[1];
-	motor[2] = ae[2];
-	motor[3] = ae[3];
-}
+
 
 void run_filters_and_control()
 {
@@ -42,5 +20,5 @@ void run_filters_and_control()
 	// control loops and/or filters
 
 	// ae[0] = xxx, ae[1] = yyy etc etc
-	update_motors();
+	//update_motors();
 }

@@ -31,11 +31,11 @@ bool demo_done;
 
 // Control
 bool Calibration_flag;
-uint8_t current_mode, prev_mode;
+uint8_t mode,current_mode, prev_mode;
 int8_t lift,pitch,roll,yaw;
 int8_t prev_lift,prev_pitch,prev_roll,prev_yaw;
 int8_t lift_delta, pitch_delta, roll_delta, yaw_delta;
-float b,d;
+int8_t b,d;
 int16_t motor[4],ae[4];
 void run_filters_and_control();
 

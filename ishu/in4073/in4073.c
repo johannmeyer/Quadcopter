@@ -14,17 +14,37 @@
  */
 
 #include "in4073.h"
-#include "control.c"
+#include <stdint.h>
+#include "packet_uav.h"
+//#include "control.c"
 
 /*------------------------------------------------------------------
  * process_key -- process command keys
  *------------------------------------------------------------------
  */
-void process_key(uint8_t c)
+
+ void update_motors(void)
+ {
+ 	if(ae[0]> 600)
+ 		{ ae[0] = 600; }
+ 	if(ae[1]> 600)
+ 		{ ae[1] = 600; }
+ 	if(ae[2]> 600)
+ 		{ ae[2] = 600; }
+ 	if(ae[3]> 600)
+ 		{ ae[3] = 600; }
+ 	motor[0] = ae[0];
+ 	motor[1] = ae[1];
+ 	motor[2] = ae[2];
+ 	motor[3] = ae[3];
+ }
+
+
+void process_mode(uint8_t mode)
 {
-	switch (c)
+	switch (mode)
 	{
-		case '0':									// Safe mode
+		case 0:									// Safe mode
 			if (prev_mode!= 4 || prev_mode!= 5)
 			{
 				ae[0] = 0;
@@ -36,85 +56,68 @@ void process_key(uint8_t c)
 			}
 			break;
 
-		case '1':									// Panic mode
+		case 1:									// Panic mode
 			prev_mode = 1;
 			break;
-
-		case '2':									// Manual mode
-			if (prev_mode = 0)
+		case 2:									// Manual mode
+			if (prev_mode == 0)
 			{
 				// Lift, pitch, roll and yaw
-				ae[0] = ae[0] + b*(lift_delta + pitch_delta) - d*yaw_delta;
-				ae[1] = ae[1] + b*(lift_delta - roll_delta)  + d*yaw_delta;
-				ae[2] = ae[2] + b*(lift_delta - pitch_delta) - d*yaw_delta;
-				ae[3] = ae[3] + b*(lift_delta + roll_delta)  + d*yaw_delta;
-
+				ae[0] = ae[0] + (lift_delta + pitch_delta)/b - yaw_delta/d;
+				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + yaw_delta/d;
+				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
+				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + yaw_delta/d;
 				update_motors();
 				prev_mode = 2;
 			}
 			break;
 
-		case '3':									// Calibration mode
-			if (prev_mode = 0)
+		case 3:									// Calibration mode
+			if (prev_mode == 0)
 			{
 				Calibration_flag = true;
 				prev_mode = 3;
 			}
 			break;
 
-		case '4':									// Yaw control mode
+		case 4:									// Yaw control mode
 			prev_mode = 4;
 			break;
 
-		case '5':									// Full control mode
+		case 5:									// Full control mode
 			prev_mode = 5;
 			break;
 
-		case '6':
+		case 6:
 
 			break;
-		case '7':
+		case 7:
 
 			break;
-		case '8':
+		case 8:
 
 			break;
+    case 9:
+      demo_done = true;
+      break;
 
-		case 'q':
-			ae[0] += 10;
-			break;
-		case 'a':
-			ae[0] -= 10;
-			if (ae[0] < 0) ae[0] = 0;
-			break;
-		case 'w':
-			ae[1] += 10;
-			break;
-		case 's':
-			ae[1] -= 10;
-			if (ae[1] < 0) ae[1] = 0;
-			break;
-		case 'e':
-			ae[2] += 10;
-			break;
-		case 'd':
-			ae[2] -= 10;
-			if (ae[2] < 0) ae[2] = 0;
-			break;
-		case 'r':
-			ae[3] += 10;
-			break;
-		case 'f':
-			ae[3] -= 10;
-			if (ae[3] < 0) ae[3] = 0;
-			break;
-		case 27:
-			demo_done = true;
-			break;
 		default:
 			nrf_gpio_pin_toggle(RED);
 	}
 }
+void calculate_values()
+{
+  lift_delta = lift - prev_lift;
+  roll_delta = roll - prev_roll;
+  pitch_delta = pitch - prev_pitch;
+  yaw_delta = yaw - prev_yaw;
+  prev_lift = lift;
+  prev_roll = roll;
+  prev_pitch = pitch;
+  prev_yaw = yaw;
+}
+
+
 
 /*------------------------------------------------------------------
  * main -- everything you need is here :)
@@ -139,7 +142,18 @@ int main(void)
 
 	while (!demo_done)
 	{
-		if (rx_queue.count) process_key( dequeue(&rx_queue) );
+		if (rx_queue.count >= sizeof(packet))
+    {
+
+                    int failed = decode(&mode, &roll, &pitch, &yaw, &lift);
+                    calculate_values();
+                    process_mode(mode);
+                    if(!failed)
+                    {
+                                    // TODO Process the data e.g. change states
+                                    printf("Message:\t%x | %x | %x | %x | %x\n", mode, roll, pitch, yaw, lift);
+                    }
+    }
 
 		if (check_timer_flag())
 		{
