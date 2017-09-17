@@ -3,7 +3,7 @@
  */
 #include "packet.h"
 
-void generate_core(core *my_packet_core, uint8_t mode, uint8_t roll, uint8_t pitch, uint8_t yaw, uint8_t lift)
+void generate_core(core *my_packet_core, uint8_t mode, int8_t roll, int8_t pitch, int8_t yaw, uint8_t lift)
 {
         // Construct Packet Header
         struct header my_packet_header;

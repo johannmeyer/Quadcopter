@@ -63,6 +63,8 @@ void process_mode(uint8_t mode)
 			if (prev_mode == 0)
 			{
 				// Lift, pitch, roll and yaw
+        b=100;
+        d=100;
 				ae[0] = ae[0] + (lift_delta + pitch_delta)/b - yaw_delta/d;
 				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + yaw_delta/d;
 				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
@@ -151,7 +153,7 @@ int main(void)
                     if(!failed)
                     {
                                     // TODO Process the data e.g. change states
-                                    printf("Message:\t%x | %x | %x | %x | %x\n", mode, roll, pitch, yaw, lift);
+                                    printf("Message:\t%x | %x | %x | %x | %x\n", rx_queue.count, roll, pitch, yaw, lift);
                     }
     }
 
@@ -162,12 +164,12 @@ int main(void)
 			adc_request_sample();
 			read_baro();
 
-			printf("%10ld | ", get_time_us());
+			/*printf("%10ld | ", get_time_us());
 			printf("%3d %3d %3d %3d | ",ae[0],ae[1],ae[2],ae[3]);
 			printf("%6d %6d %6d | ", phi, theta, psi);
 			printf("%6d %6d %6d | ", sp, sq, sr);
 			printf("%4d | %4ld | %6ld \n", bat_volt, temperature, pressure);
-
+*/
 			clear_timer_flag();
 		}
 

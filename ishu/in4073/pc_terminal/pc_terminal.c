@@ -101,6 +101,7 @@ int16_t lift_js,pitch_js,roll_js,yaw_js;
 int16_t lift,pitch,roll,yaw;
 uint8_t mode;
 
+
 bool isMode(uint8_t c)
 {
 	if (c	>= '0' && c <= '8')			// check if number is between 0 and 8
@@ -147,25 +148,26 @@ void get_key(char c)
 
 			break;
 
-		case 65:									// up key
+		case 'A':									// up key
 			pitch_key = pitch_key +10;
 			break;
 
-		case 66:									// down key
+		case 'B':									// down key
 			pitch_key = pitch_key - 10;
 			break;
 
-		case 67:									// right key
+		case 'C':									// right key
 			roll_key = roll_key + 10;
 			break;
-		case 68:									// left key
+		case 'D':									// left key
 			roll_key = roll_key - 10;
 			break;
 
 
-		case 27:
+		case 'e':
 			mode = EXIT_MODE;
 			break;
+
 		default:
 		if(isMode(c))
 		{
@@ -182,7 +184,7 @@ void combine_values()
 	lift = lift_key + lift_js;
 	pitch = pitch_key + pitch_js;
 	roll = roll_key + roll_js;
-	yaw = yaw_key + lift_js;
+	yaw = yaw_key + yaw_js;
 
 }
 
@@ -283,12 +285,24 @@ int  rs232_putpacket(packet *my_packet)
 int main(int argc, char **argv)
 {
 								char c;
+								lift_js=0;
+								pitch_js=0;
+								roll_js=0;
+								yaw_js=0;
+								lift_key=0;
+								pitch_key=0;
+								roll_key=0;
+								yaw_key=0;
+								lift=0;
+								pitch=0;
+								roll=0;
+								yaw=0;
 
 								term_puts("\nTerminal program - Embedded Real-Time Systems\n");
 
 								term_initio();
 								rs232_open();
-
+								joystick_open();
 								term_puts("Type ^C to exit\n");
 
 								/*
@@ -306,23 +320,31 @@ int main(int argc, char **argv)
 																// Sends data to the Drone
 																if ((c = term_getchar_nb()) != -1)
 																{
+																	if (c == 27)				// check for Esc key in order to read arrow keys
+																  {
+																    term_getchar_nb();   // Up arrow sends Esc,[,A. So skip the second char
+																    c = term_getchar_nb();
+																  }
 																	get_key(c);
 																}
 																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);
+																//printf("joystick: %d | %d |%d | %d | %d|\n", roll_js,pitch_js,yaw_js,lift_js,panic);
 																// TODO combine the keyboard and joystick data
 																combine_values();
+																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
 																if (panic) encode(&my_packet, PANIC_MODE, roll, pitch, yaw, lift);  //TODO
 																else encode(&my_packet, mode, roll, pitch, yaw, lift);  //TODO
 
 																rs232_putpacket(&my_packet);
 
 																// Reads data sent from the Drone
-																if ((c = rs232_getchar_nb()) != -1)
-																								term_putchar(c);
-
+																while(timer)
+																/*if ((c = rs232_getchar_nb()) != -1)
+																								term_putchar(c);*/
 								}
 
 								term_exitio();
+								joystick_close();
 								rs232_close();
 								term_puts("\n<exit>\n");
 

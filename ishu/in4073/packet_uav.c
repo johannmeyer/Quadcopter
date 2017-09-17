@@ -10,7 +10,7 @@
    UAV-side decoding
  */
 
-int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, int8_t *lift)
+int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, uint8_t *lift)
 {
         /*
            TODO replace asserts with actions like discard data.
@@ -28,7 +28,7 @@ int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, int8_t *lift
         int8_t tmp_roll = (int8_t)dequeue(&rx_queue);
         int8_t tmp_pitch = (int8_t)dequeue(&rx_queue);
         int8_t tmp_yaw = (int8_t)dequeue(&rx_queue);
-        int8_t tmp_lift = (int8_t)dequeue(&rx_queue);
+        uint8_t tmp_lift = (uint8_t)dequeue(&rx_queue);
 
         core my_packet_core;
         generate_core(&my_packet_core, tmp_mode, tmp_roll, tmp_pitch, tmp_yaw, tmp_lift);
@@ -45,6 +45,10 @@ int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, int8_t *lift
                 *pitch = tmp_pitch;
                 *yaw = tmp_yaw;
                 *lift = tmp_lift;
+        }
+        else
+        {
+          printf("Packet lost\n");
         }
 
         // Read end byte and verify that it is valid.
