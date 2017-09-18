@@ -94,6 +94,7 @@ int term_getchar()
 #define HEIGHT_MODE 7
 #define WIRELESS_MODE 8
 #define EXIT_MODE 9
+#define TRIM_VALUE 100
 
 int serial_device = 0;
 int fd_RS232;
@@ -101,6 +102,7 @@ int16_t lift_key,pitch_key,roll_key,yaw_key;
 int16_t lift_js,pitch_js,roll_js,yaw_js;
 int16_t lift,pitch,roll,yaw;
 uint8_t mode;
+
 
 
 bool isMode(uint8_t c)
@@ -119,16 +121,18 @@ void get_key(char c)
 	switch (c)
 	{
 		case 'a':
-			lift_key = lift_key + 10;
+			lift_key = lift_key + TRIM_VALUE;
 			break;
 		case 'z':
-			lift_key = lift_key - 10;
+			lift_key = lift_key - TRIM_VALUE;
+			if(lift_key < 0)
+			lift_key =0;
 			break;
 		case 'q':
-			yaw_key = yaw_key + 10;
+			yaw_key = yaw_key + TRIM_VALUE;
 			break;
 		case 'w':
-			yaw_key = yaw_key - 10;
+			yaw_key = yaw_key - TRIM_VALUE;
 			break;
 		case 'u':
 
@@ -149,25 +153,25 @@ void get_key(char c)
 
 			break;
 
-		case 65:									// up key
-			pitch_key = pitch_key +10;
+		case 'A':									// up key
+			pitch_key = pitch_key +TRIM_VALUE;
 			break;
 
-		case 66:									// down key
-			pitch_key = pitch_key - 10;
+		case 'B':									// down key
+			pitch_key = pitch_key - TRIM_VALUE;
 			break;
 
-		case 67:									// right key
-			roll_key = roll_key + 10;
+		case 'C':									// right key
+			roll_key = roll_key + TRIM_VALUE;
 			break;
-		case 68:									// left key
-			roll_key = roll_key - 10;
+		case 'D':									// left key
+			roll_key = roll_key - TRIM_VALUE;
 			break;
 
-
-		case 27:
+		case 'e':
 			mode = EXIT_MODE;
 			break;
+
 		default:
 			if(isMode(c))
 			{
@@ -185,6 +189,10 @@ void combine_values()
 	pitch = pitch_key + pitch_js;
 	roll = roll_key + roll_js;
 	yaw = yaw_key + yaw_js;
+	if(lift < -32767)
+	{
+		lift = - 32767;
+	}
 
 }
 
@@ -286,7 +294,7 @@ int main(int argc, char **argv)
 {
 								char c;
 								clock_t start;
-								lift_js=0;
+								lift_js= -32767;
 								pitch_js=0;
 								roll_js=0;
 								yaw_js=0;
@@ -304,7 +312,7 @@ int main(int argc, char **argv)
 
 								term_initio();
 								rs232_open();
-								joystick_open();
+								//joystick_open();
 								term_puts("Type ^C to exit\n");
 
 								/*
@@ -322,6 +330,11 @@ int main(int argc, char **argv)
 																// Sends data to the Drone
 																if ((c = term_getchar_nb()) != -1)
 																{
+																	if (c == 27)				// check for Esc key in order to read arrow keys
+																		{
+																			term_getchar_nb();   // Up arrow sends Esc,[,A. So skip the second char
+																			c = term_getchar_nb();
+																		}
 																	get_key(c);
 																}
 																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);
@@ -343,7 +356,7 @@ int main(int argc, char **argv)
 								}
 
 								term_exitio();
-								joystick_close();
+								//joystick_close();
 								rs232_close();
 								term_puts("\n<exit>\n");
 

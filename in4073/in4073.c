@@ -32,12 +32,20 @@ core *logCore;
  {
  	if(ae[0]> 600)
  		{ ae[0] = 600; }
+  if(ae[0] < 0)
+    { ae[0] = 0;}
  	if(ae[1]> 600)
  		{ ae[1] = 600; }
+  if(ae[1] < 0)
+    { ae[1] = 0;}
  	if(ae[2]> 600)
  		{ ae[2] = 600; }
- 	if(ae[3]> 600)
+  if(ae[2] < 0)
+    { ae[2] = 0;}
+  if(ae[3]> 600)
  		{ ae[3] = 600; }
+  if(ae[3] < 0)
+    { ae[3] = 0;}
  	motor[0] = ae[0];
  	motor[1] = ae[1];
  	motor[2] = ae[2];
@@ -65,11 +73,11 @@ void process_mode(uint8_t mode)
 			prev_mode = 1;
 			break;
 		case 2:									// Manual mode
-			if (prev_mode == 0)
+			if (prev_mode == 0 || prev_mode == 2)
 			{
 				// Lift, pitch, roll and yaw
-        b=100;
-        d=100;
+        b=1;
+        d=1;
 				ae[0] = ae[0] + (lift_delta + pitch_delta)/b - yaw_delta/d;
 				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + yaw_delta/d;
 				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
@@ -177,7 +185,7 @@ int main(void)
       if(!failed)
       {
         // TODO Process the data e.g. change states
-        //printf("Message:\t%x | %x | %x | %x | %x\n", rx_queue.count, roll, pitch, yaw, lift);
+        printf("Message:\t%x | %x | %x | %x | %x ||\t %x | %x | %x | %x \n", mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
       }
     }
 
@@ -191,7 +199,7 @@ int main(void)
       #endif
 			read_baro();
 
-      if(isCalibrated())
+      /*if(isCalibrated())
       {
         write_log_entry(get_time_us(), prev_mode, logCore, ae, get_sensor(PHI), get_sensor(THETA), get_sensor(PSI),
         get_sensor(SP), get_sensor(SQ), get_sensor(SR), get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ),
@@ -204,7 +212,7 @@ int main(void)
         bat_volt, temperature, pressure);
         print_last_log();
       }
-
+*/
 			clear_timer_flag();
 		}
 
