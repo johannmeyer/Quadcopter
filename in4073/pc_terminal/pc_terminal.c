@@ -193,6 +193,7 @@ void combine_values()
 	{
 		lift = - 32767;
 	}
+	//printf("Roll_key: %x, roll: %x \n",roll_key,roll );
 
 }
 

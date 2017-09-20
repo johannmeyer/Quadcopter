@@ -2,6 +2,7 @@
    Johann Meyer
  */
 #include "packet_pc.h"
+#include <stdio.h>
 /*
    PC-side encoding
  */
@@ -21,7 +22,7 @@ void encode(packet *my_packet, uint8_t mode, int16_t roll_r, int16_t pitch_r, in
          pitch_c =((float)pitch_r/32768)*127;
          yaw_c = ((float)yaw_r/32768)*127;
          lift_c = (((float)lift_r+32768)/65536)*255;
-         
+         //printf("roll_c: %x  roll_r : %x\n",roll_c, roll_r );
         /*
            Construct the Packet
          */

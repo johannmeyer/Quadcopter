@@ -20,9 +20,18 @@
 #include "sensors.h"
 #include <stdlib.h>
 //#include "control.c"
+#define SAFE_MODE 0
+#define PANIC_MODE 1
+#define MANUAL_MODE 2
+#define CALIBRATION_MODE 3
+#define YAW_MODE 4
+#define FULL_MODE 5
+#define RAW_MODE 6
+#define HEIGHT_MODE 7
+#define WIRELESS_MODE 8
+#define EXIT_MODE 9
 
 core *logCore;
-
 /*------------------------------------------------------------------
  * process_key -- process command keys
  *------------------------------------------------------------------
@@ -58,22 +67,26 @@ void process_mode(uint8_t mode)
 	switch (mode)
 	{
 		case 0:									// Safe mode
-			if (prev_mode!= 4 || prev_mode!= 5)
+			if (prev_mode == PANIC_MODE || prev_mode == CALIBRATION_MODE || prev_mode == MANUAL_MODE || prev_mode == SAFE_MODE)
 			{
 				ae[0] = 0;
 				ae[1] = 0;
 				ae[2] = 0;
 				ae[3] = 0;
 				update_motors();
-				prev_mode = 0;
+				prev_mode = SAFE_MODE;
 			}
 			break;
 
-		case 1:									// Panic mode
-			prev_mode = 1;
-			break;
-		case 2:									// Manual mode
-			if (prev_mode == 0 || prev_mode == 2)
+		case 1:			            // Panic mode
+    if (prev_mode != SAFE_MODE || prev_mode != MANUAL_MODE || prev_mode != CALIBRATION_MODE)						// Panic mode
+			{
+        prev_mode = PANIC_MODE;
+      }
+    break;
+
+    case 2:									// Manual mode
+			if (prev_mode == SAFE_MODE || prev_mode == MANUAL_MODE)
 			{
 				// Lift, pitch, roll and yaw
         b=1;
@@ -83,37 +96,67 @@ void process_mode(uint8_t mode)
 				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
 				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + yaw_delta/d;
 				update_motors();
-				prev_mode = 2;
+				prev_mode = MANUAL_MODE;
 			}
 			break;
 
 		case 3:									// Calibration mode
-			if (prev_mode == 0)
+			if (prev_mode == SAFE_MODE || prev_mode == CALIBRATION_MODE)
 			{
-				//Calibration_flag = true; TODO bool isCalibrated() function to be used instead
+				//bool isCalibrated() function is used to check calibration status
         calibrate_sensors();
-
-				prev_mode = 3;
+				prev_mode = CALIBRATION_MODE;
 			}
 			break;
 
 		case 4:									// Yaw control mode
-			prev_mode = 4;
-			break;
+			if(prev_mode == YAW_MODE ||(prev_mode == SAFE_MODE && isCalibrated()) || prev_mode == CALIBRATION_MODE )
+      {
+        b = 1;
+        psi_s = ((float)psi/32768)*127;
+        dcpsi_s = ((float)dcpsi/32768)*127;
+        psi_s = psi_s - dcpsi_s;  // value of yaw from calibrated point
+        yaw_error = yaw - psi_s;
+
+        ae[0] = ae[0] + (lift_delta + pitch_delta)/b - (yaw_parameter*yaw_error);
+				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + (yaw_parameter*yaw_error);
+				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - (yaw_parameter*yaw_error);
+				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + (yaw_parameter*yaw_error);
+
+        update_motors();
+
+        prev_mode = YAW_MODE;
+      }
+      break;
 
 		case 5:									// Full control mode
-			prev_mode = 5;
+      if(prev_mode == FULL_MODE || (prev_mode == SAFE_MODE && isCalibrated()) || prev_mode == CALIBRATION_MODE || prev_mode == YAW_MODE )
+      {
+        prev_mode = FULL_MODE;
+			}
+      break;
+
+		case 6:                 // Raw control mode
+      if(prev_mode == RAW_MODE || (prev_mode == SAFE_MODE && isCalibrated()) || prev_mode == CALIBRATION_MODE)
+      {
+        prev_mode = RAW_MODE;
+      }
 			break;
 
-		case 6:
-
+		case 7:                 // Height control mode
+      if(prev_mode == HEIGHT_MODE || (prev_mode == SAFE_MODE && isCalibrated()) || prev_mode == CALIBRATION_MODE || prev_mode == FULL_MODE)
+      {
+        prev_mode = HEIGHT_MODE;
+      }
 			break;
-		case 7:
 
+		case 8:                 // Wireless mode
+      if(prev_mode == WIRELESS_MODE || (prev_mode == SAFE_MODE && isCalibrated()) || prev_mode == CALIBRATION_MODE)
+      {
+        prev_mode = WIRELESS_MODE;
+      }
 			break;
-		case 8:
 
-			break;
     case 9:
       demo_done = true;
       break;
@@ -122,6 +165,7 @@ void process_mode(uint8_t mode)
 			nrf_gpio_pin_toggle(RED);
 	}
 }
+
 void calculate_values()
 {
   lift_delta = lift - prev_lift;
@@ -142,7 +186,7 @@ void battery_monitoring(uint8_t mode)
   {
     //TODO Warnings to be sent as messages instead of prints.
     printf("Battery level is low(%d mV). Land the drone!\n",bat_volt);
-    if (bat_volt <= 10500) process_mode(1);
+    if (bat_volt <= 10500) process_mode(PANIC_MODE);
   }
 }
 
@@ -172,7 +216,7 @@ int main(void)
 
 	uint32_t counter = 0;
   logCore = (core *) malloc(sizeof(core));
-	prev_mode = 0;
+	prev_mode = SAFE_MODE;
 	demo_done = false;
 
 	while (!demo_done)
@@ -185,7 +229,7 @@ int main(void)
       if(!failed)
       {
         // TODO Process the data e.g. change states
-        printf("Message:\t%x | %x | %x | %x | %x ||\t %x | %x | %x | %x \n", mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+        printf("Message:\t%x | %d | %d | %d | %x ||\t %x | %x | %x | %x\n", mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
       }
     }
 
@@ -199,7 +243,7 @@ int main(void)
       #endif
 			read_baro();
 
-      /*if(isCalibrated())
+    /*  if(isCalibrated())
       {
         write_log_entry(get_time_us(), prev_mode, logCore, ae, get_sensor(PHI), get_sensor(THETA), get_sensor(PSI),
         get_sensor(SP), get_sensor(SQ), get_sensor(SR), get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ),

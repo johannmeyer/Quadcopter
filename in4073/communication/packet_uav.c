@@ -53,7 +53,7 @@ int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, uint8_t *lif
         {
           printf("Packet transmittion error\n");
         }
-
+        //printf("Roll :%x  \n",*roll);
         // Read end byte and verify that it is valid.
         uint8_t end = (uint8_t)dequeue(&rx_queue);
         assert(end==END_BYTE);

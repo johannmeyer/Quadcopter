@@ -1,10 +1,6 @@
 #include "sensors.h"
 #include "in4073.h"
 
-int16_t dcphi, dctheta, dcpsi;
-int16_t dcsp, dcsq, dcsr;
-int16_t dcsax, dcsay, dcsaz;
-
 typedef struct calibData calibData;
 
 #define BUF_SIZE  200
