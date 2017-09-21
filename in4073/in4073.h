@@ -38,6 +38,7 @@ int8_t pitch_delta, roll_delta, yaw_delta, lift_delta;
 int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
+uint8_t P, P1, P2;
 void run_filters_and_control();
 
 // Timers

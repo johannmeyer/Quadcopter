@@ -2,60 +2,72 @@
    Johann Meyer
  */
 
-#include "packet_uav.h"
-#include "in4073.h"
 #include "crc.h"
-#include <assert.h>
+#include "in4073.h"
+#include "packet_uav.h"
 #include <string.h>
 
 /*
    UAV-side decoding
  */
 
-int decode(uint8_t *mode, int8_t *roll, int8_t *pitch, int8_t *yaw, uint8_t *lift, core **logUserIn)
+int decode(core **logUserIn)
 {
         /*
-           TODO replace asserts with actions like discard data.
-           TODO return 1 if packet discarded.
-           TODO change dequeue to support sizeof(). e.g. sizeof(body)
+           TODO create another dequeue to support sizeof(). e.g. sizeof(body)
          */
+        int discard_count = 0;
 
-        // Read start byte and verify that it is valid.
-        uint8_t start = (uint8_t)dequeue(&rx_queue);
-        assert(start==START_BYTE);
-
-        // Temporarily store the data in temp variables so that a CRC check can
-        // first be performed.
-        int8_t tmp_mode = (int8_t)dequeue(&rx_queue);
-        int8_t tmp_roll = (int8_t)dequeue(&rx_queue);
-        int8_t tmp_pitch = (int8_t)dequeue(&rx_queue);
-        int8_t tmp_yaw = (int8_t)dequeue(&rx_queue);
-        uint8_t tmp_lift = (uint8_t)dequeue(&rx_queue);
-
-        core my_packet_core;
-        generate_core(&my_packet_core, tmp_mode, tmp_roll, tmp_pitch, tmp_yaw, tmp_lift);
-
-        uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
-        // TODO insert CRC calculation
-        uint8_t crc = crc_core(&my_packet_core); // TODO REMOVE
-        // uint8_t crc = crc(my_packet_core);
-
-        if (crc == tmp_crc)
+        // Wait until entire packet has arrived
+        while (rx_queue.count >= sizeof(packet))
         {
-                *mode = tmp_mode;
-                *roll = tmp_roll;
-                *pitch = tmp_pitch;
-                *yaw = tmp_yaw;
-                *lift = tmp_lift;
-                memcpy(*logUserIn, &my_packet_core, sizeof(core));
+                uint8_t curr_byte;
+                // Read next byte and verify that it is the START_BYTE.
+                if ((curr_byte = (uint8_t)dequeue(&rx_queue)) == START_BYTE)
+                {
+                        // Temporarily store the data in temp variables so that
+                        // a CRC check can first be performed.
+                        uint8_t header = (uint8_t)dequeue(&rx_queue);
+                        uint8_t data[BODY_LENGTH];
+                        for (int i = 0; i < BODY_LENGTH; i++)
+                                data[i] = (uint8_t)dequeue(&rx_queue);
+
+                        core my_packet_core;
+                        my_packet_core.header = header;
+                        memcpy(my_packet_core.body, data, sizeof(data));
+
+                        // CRC calculation
+                        uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
+                        uint8_t crc = crc_core(&my_packet_core); //TODO change to, sizeof(my_packet_core));
+
+                        if (crc == tmp_crc)
+                        {
+                                uint8_t packet_type;
+                                decode_header(&header, &mode, &packet_type);
+                                switch (packet_type)
+                                {
+                                case PACKET_TYPE_COMMAND:
+                                        decode_data_command(data, &roll, &pitch,
+                                                            &yaw, &lift);
+                                        break;
+                                case PACKET_TYPE_GAINS:
+                                        decode_data_gains(data, &P, &P1, &P2);
+                                        break;
+                                default:
+                                        printf("Unknown Packet Type\n");
+                                        break;
+                                }
+                                // Log the incoming data
+                                memcpy(*logUserIn, &my_packet_core,
+                                       sizeof(core));
+                        }
+                        else
+                        {
+                                discard_count++;
+                                printf("Packet transmission error\n");
+                        }
+                }
         }
-        else
-        {
-          printf("Packet transmittion error\n");
-        }
-        //printf("Roll :%x  \n",*roll);
-        // Read end byte and verify that it is valid.
-        uint8_t end = (uint8_t)dequeue(&rx_queue);
-        assert(end==END_BYTE);
-        return 0;
+
+        return discard_count;
 }

@@ -104,12 +104,12 @@ void print_log_entry(uint16_t entryNo)
         return;
     }
 
-    printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header.mode, readEntry.lastUserInp.body.roll, readEntry.lastUserInp.body.pitch, readEntry.lastUserInp.body.yaw, readEntry.lastUserInp.body.lift);
-    printf("%3d %3d %3d %3d | ", readEntry.actuators.act[0], readEntry.actuators.act[1], readEntry.actuators.act[2], readEntry.actuators.act[3]);
-    printf("%6d %6d %6d | ", readEntry.sensors.phi, readEntry.sensors.theta, readEntry.sensors.psi);
-    printf("%6d %6d %6d | ", readEntry.sensors.sp, readEntry.sensors.sq, readEntry.sensors.sr);
-    printf("%6d %6d %6d | ", readEntry.sensors.sax, readEntry.sensors.say, readEntry.sensors.saz);
-    printf("%4d | %4ld | %6ld \n", readEntry.sensors.bat, readEntry.sensors.temp, readEntry.sensors.press);
+    // printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header.mode, readEntry.lastUserInp.body.roll, readEntry.lastUserInp.body.pitch, readEntry.lastUserInp.body.yaw, readEntry.lastUserInp.body.lift);
+    // printf("%3d %3d %3d %3d | ", readEntry.actuators.act[0], readEntry.actuators.act[1], readEntry.actuators.act[2], readEntry.actuators.act[3]);
+    // printf("%6d %6d %6d | ", readEntry.sensors.phi, readEntry.sensors.theta, readEntry.sensors.psi);
+    // printf("%6d %6d %6d | ", readEntry.sensors.sp, readEntry.sensors.sq, readEntry.sensors.sr);
+    // printf("%6d %6d %6d | ", readEntry.sensors.sax, readEntry.sensors.say, readEntry.sensors.saz);
+    // printf("%4d | %4ld | %6ld \n", readEntry.sensors.bat, readEntry.sensors.temp, readEntry.sensors.press);
 
 }
 
