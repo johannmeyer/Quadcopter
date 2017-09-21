@@ -10,6 +10,7 @@
 
 #ifndef IN4073_H__
 #define IN4073_H__
+//#define FLIGHT
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -28,6 +29,7 @@
 #define INT_PIN		5
 
 bool demo_done;
+bool exit_mode_flag;
 
 // Control
 int8_t yaw_parameter;
@@ -39,7 +41,6 @@ int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
 uint8_t P, P1, P2;
-void run_filters_and_control();
 
 // Timers
 #define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)

@@ -168,13 +168,42 @@ void get_key(char c)
 
 void combine_values()
 {
-	lift = lift_key + lift_js;
+	lift = lift_key - lift_js;
 	pitch = pitch_key + pitch_js;
 	roll = roll_key + roll_js;
 	yaw = yaw_key + yaw_js;
 	if(lift < -32767)
 	{
 		lift = - 32767;
+	}
+	else if(lift > 32767)
+	{
+		lift =  32767;
+	}
+	if(pitch < -32767)
+	{
+		pitch = - 32767;
+	}
+	else if(pitch > 32767)
+	{
+		pitch =  32767;
+	}
+	if(roll < -32767)
+	{
+		roll = - 32767;
+	}
+	else if(roll > 32767)
+	{
+		roll =  32767;
+	}
+
+	if(yaw < -32767)
+	{
+		yaw = - 32767;
+	}
+	else if(yaw > 32767)
+	{
+		yaw =  32767;
 	}
 	//printf("Roll_key: %x, roll: %x \n",roll_key,roll );
 
@@ -278,7 +307,7 @@ int main(int argc, char **argv)
 {
 								char c;
 								clock_t start;
-								lift_js= -32767;
+								lift_js= 0;  //-32768 if not using joystick
 								pitch_js=0;
 								roll_js=0;
 								yaw_js=0;
@@ -296,7 +325,7 @@ int main(int argc, char **argv)
 
 								term_initio();
 								rs232_open();
-								//joystick_open();
+								joystick_open();
 								term_puts("Type ^C to exit\n");
 
 								/*
@@ -340,7 +369,7 @@ int main(int argc, char **argv)
 								}
 
 								term_exitio();
-								//joystick_close();
+								joystick_close();
 								rs232_close();
 								term_puts("\n<exit>\n");
 

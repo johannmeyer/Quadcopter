@@ -25,7 +25,7 @@ void encode(packet *my_packet, uint8_t mode, uint8_t packet_type)
                 roll_c = (int8_t)(((float)roll / 32768) * 127);
                 pitch_c = (int8_t)(((float)pitch / 32768) * 127);
                 yaw_c = (int8_t)(((float)yaw / 32768) * 127);
-                lift_c = (uint8_t)((((float)lift + 32768) / 65536) * 255);
+                lift_c = (uint8_t)((((float)lift + 32767) / 65536) * 255);
 
                 /*
                    Construct the Packet

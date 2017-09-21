@@ -3,7 +3,7 @@
 
 typedef struct calibData calibData;
 
-#define BUF_SIZE  200
+#define BUF_SIZE  225
 
 struct calibData
 {
@@ -40,7 +40,7 @@ void calibrate_sensors(void)
   }
 
   //The process of the identification of the object continues until the dc offset can be determined for all the sensors
-  while(!calibArray[0].ready | !calibArray[1].ready |  !calibArray[2].ready | !calibArray[3].ready | !calibArray[4].ready
+  while(!calibArray[0].ready | !calibArray[1].ready |  !calibArray[3].ready | !calibArray[4].ready
   | !calibArray[5].ready | !calibArray[6].ready | !calibArray[7].ready | !calibArray[8].ready)
   {
     //Polling until a sample is successfully acquired.
@@ -60,11 +60,11 @@ void calibrate_sensors(void)
     {
       //The new sensor value and the biggest difference tolerated between the max and the min value of the
       //sensor buffer, for the sensor to be consider stabilized is passed.
-      insert_data(&calibArray[i], newSensorValues[i], 10);
+      insert_data(&calibArray[i], newSensorValues[i], 5);
     }
     for(i=6; i<9; i++)
     {
-      insert_data(&calibArray[i], newSensorValues[i], 100);
+      insert_data(&calibArray[i], newSensorValues[i], 80);
     }
   }
 
