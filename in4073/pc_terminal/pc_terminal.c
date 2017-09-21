@@ -81,29 +81,12 @@ int term_getchar()
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
-#include "packet_pc.h"
 #include <stdbool.h>
-
-#define SAFE_MODE 0
-#define PANIC_MODE 1
-#define MANUAL_MODE 2
-#define CALIBRATION_MODE 3
-#define YAW_MODE 4
-#define FULL_MODE 5
-#define RAW_MODE 6
-#define HEIGHT_MODE 7
-#define WIRELESS_MODE 8
-#define EXIT_MODE 9
-#define TRIM_VALUE 100
+#include "pc_terminal.h"
+#include "packet_pc.h"
 
 int serial_device = 0;
 int fd_RS232;
-int16_t lift_key,pitch_key,roll_key,yaw_key;
-int16_t lift_js,pitch_js,roll_js,yaw_js;
-int16_t lift,pitch,roll,yaw;
-uint8_t mode;
-
-
 
 bool isMode(uint8_t c)
 {
@@ -343,14 +326,14 @@ int main(int argc, char **argv)
 																// TODO combine the keyboard and joystick data
 																combine_values();
 																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
-																if (panic) encode(&my_packet, PANIC_MODE, roll, pitch, yaw, lift);  //TODO
-																else encode(&my_packet, mode, roll, pitch, yaw, lift);  //TODO
+																if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
+																else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 
 																rs232_putpacket(&my_packet);
 
 																// Reads data sent from the Drone
 																start = clock();
-																while(clock()-start<5000)
+																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
 																{
 																	if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
 																}
