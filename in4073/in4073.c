@@ -47,6 +47,7 @@ void determine_mode(uint8_t mode)
 			if (prev_mode == PANIC_MODE || prev_mode == CALIBRATION_MODE || prev_mode == SAFE_MODE)
 			{
 				prev_mode = SAFE_MODE;
+				printf("Safe mode1 \n");
 			}
 			else
 			{
@@ -55,15 +56,16 @@ void determine_mode(uint8_t mode)
 			break;
 
 		case PANIC_MODE:			            // Panic mode
-		if (prev_mode == SAFE_MODE || prev_mode == CALIBRATION_MODE)						// Panic mode
-			{
-				prev_mode = SAFE_MODE;
-				printf("Safe mode \n");
-			}
-			else
+		 if (prev_mode == SAFE_MODE || prev_mode == CALIBRATION_MODE)
+		 {
+			prev_mode = SAFE_MODE;
+			printf("Safe mode \n");
+		 }
+		else
 			{
 				prev_mode = PANIC_MODE;
 			}
+
 		break;
 
 		case MANUAL_MODE:									// Manual mode
@@ -119,7 +121,8 @@ void determine_mode(uint8_t mode)
 			break;
 
 		case EXIT_MODE:
-
+		process_mode(PANIC_MODE);
+		//demo_done = true;
 		prev_mode = EXIT_MODE;
 		break;
 
@@ -129,9 +132,9 @@ void determine_mode(uint8_t mode)
 
 }
 
-void process_mode(uint8_t prev_mode)
+void process_mode(uint8_t current_mode)
 {
-	switch (prev_mode)
+	switch (current_mode)
 	{
 		case SAFE_MODE:									// Safe mode
 				ae[0] = 0;
@@ -160,8 +163,7 @@ void process_mode(uint8_t prev_mode)
 				  update_motors();
 					}
 					prev_mode = SAFE_MODE;
-					printf("mode: %d\n", prev_mode);
-				  break;
+					break;
 
     case MANUAL_MODE:									// Manual mode
 				// Lift, pitch, roll and yaw
@@ -188,16 +190,16 @@ void process_mode(uint8_t prev_mode)
 
 		case YAW_MODE:									// Yaw control mode
 			  b = 1;
-        yaw_parameter = 1;
+        yaw_parameter = 5;
         psi_s = (int8_t)(((float)get_sensor(PSI)/32768)*127);
         //dcpsi_s = (int8_t)(((float)dcpsi/32768)*127);
         //psi_s = psi_s - dcpsi_s;  // value of yaw from calibrated point
-        yaw_error = yaw - psi_s;
+        yaw_error = (yaw/4) - psi_s;
 				printf("yaw_error: %d,yaw: %d, psi_s: %d, psi: %d \n", yaw_error,yaw,psi_s,get_sensor(PSI) );
-        ae[0] = ae[0] + (lift_delta + pitch_delta)/b - (yaw_parameter*yaw_error);
-				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + (yaw_parameter*yaw_error);
-				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - (yaw_parameter*yaw_error);
-				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + (yaw_parameter*yaw_error);
+        ae[0] = (new_lift + pitch)/b - (yaw_parameter*yaw_error);
+				ae[1] = (new_lift - roll)/b  + (yaw_parameter*yaw_error);
+				ae[2] = (new_lift - pitch)/b - (yaw_parameter*yaw_error);
+				ae[3] = (new_lift + roll)/b  + (yaw_parameter*yaw_error);
         update_motors();
         break;
 
@@ -214,16 +216,7 @@ void process_mode(uint8_t prev_mode)
 			break;
 
     case EXIT_MODE:
-
-		//exit_mode_flag = true;
-		do {
-			ae[0] -= PANIC_SPEED;
-			ae[1] -= PANIC_SPEED;
-			ae[2] -= PANIC_SPEED;
-			ae[3] -= PANIC_SPEED;
-			update_motors();
-		} while(ae[0] > 0 && ae[1] > 0 && ae[2] > 0 && ae[3]  > 0);
-		demo_done = true;
+			demo_done = true;
       break;
 
 		default:
@@ -301,9 +294,11 @@ int main(void)
       calculate_values();
 			if (mode != prev_mode)
 			{
+				//printf("Determine mode \n");
 			determine_mode(mode);
 			}
 			process_mode(prev_mode);
+			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
       if(!failed)
       {
         // TODO Process the data e.g. change states
