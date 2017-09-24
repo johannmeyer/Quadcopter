@@ -151,7 +151,7 @@ void get_key(char c)
 			roll_key = roll_key - TRIM_VALUE;
 			break;
 
-		case 'e':
+		case 27:
 			mode = EXIT_MODE;
 			break;
 
@@ -341,13 +341,12 @@ int main(int argc, char **argv)
 								for (;;)
 								{
 																// Sends data to the Drone
-																if ((c = term_getchar_nb()) != -1)
+																char readChar = -1;
+																if ((readChar = term_getchar_nb()) != -1)
 																{
-																	if (c == 27)				// check for Esc key in order to read arrow keys
-																		{
-																			term_getchar_nb();   // Up arrow sends Esc,[,A. So skip the second char
-																			c = term_getchar_nb();
-																		}
+																	do {
+																		c = readChar;
+																	} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
 																	get_key(c);
 																}
 																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);

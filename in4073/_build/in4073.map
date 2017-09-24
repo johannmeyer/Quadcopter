@@ -190,16 +190,18 @@ errno               0x4               /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu
 saz                 0x2               _build/in4073.o
 prev_pitch          0x1               _build/in4073.o
 logCore             0x4               _build/in4073.o
-roll_delta          0x1               _build/in4073.o
+roll_delta          0x2               _build/in4073.o
 rx_queue            0x106             _build/in4073.o
-yaw_delta           0x1               _build/in4073.o
+yaw_delta           0x2               _build/in4073.o
+current_mode        0x1               _build/in4073.o
 phi                 0x2               _build/in4073.o
 P2                  0x1               _build/in4073.o
-lift_delta          0x1               _build/in4073.o
+lift_delta          0x2               _build/in4073.o
 prev_mode           0x1               _build/in4073.o
 temperature         0x4               _build/in4073.o
 psi_s               0x1               _build/in4073.o
 dcsp                0x2               _build/in4073.o
+new_lift            0x2               _build/in4073.o
 theta               0x2               _build/in4073.o
 pressure            0x4               _build/in4073.o
 dcsq                0x2               _build/in4073.o
@@ -219,17 +221,18 @@ bat_volt            0x2               _build/in4073.o
 ble_rx_queue        0x106             _build/in4073.o
 d                   0x1               _build/in4073.o
 timer_flag          0x1               _build/timers.o
-pitch_delta         0x1               _build/in4073.o
+pitch_delta         0x2               _build/in4073.o
 sp                  0x2               _build/in4073.o
 dctheta             0x2               _build/in4073.o
 dcpsi               0x2               _build/in4073.o
+safe_flag           0x1               _build/in4073.o
 dcsay               0x2               _build/in4073.o
 radio_active        0x1               _build/in4073.o
 motor               0x8               _build/in4073.o
 yaw                 0x1               _build/in4073.o
 last_correct_checksum_time
                     0x4               _build/in4073.o
-prev_lift           0x1               _build/in4073.o
+prev_lift           0x2               _build/in4073.o
 dcphi               0x2               _build/in4073.o
 pitch               0x1               _build/in4073.o
 roll                0x1               _build/in4073.o
@@ -279,9 +282,9 @@ Discarded input sections
  .data          0x00000000        0x0 _build/in4073.o
  .bss           0x00000000        0x0 _build/in4073.o
  .text.calculate_values
-                0x00000000       0x98 _build/in4073.o
+                0x00000000       0xbc _build/in4073.o
  .text.battery_monitoring
-                0x00000000       0x90 _build/in4073.o
+                0x00000000       0x94 _build/in4073.o
  .text.isCharged
                 0x00000000       0x1c _build/in4073.o
  .text          0x00000000        0x0 _build/control.o
@@ -1042,7 +1045,7 @@ END GROUP
  *(fs_data)
                 [!provide]                PROVIDE (__stop_fs_data, .)
 
-.text           0x00018000     0xb8e4
+.text           0x00018000     0xba2c
  *(.Vectors)
  .Vectors       0x00018000       0xc0 _build/gcc_startup_nrf51.o
                 0x00018000                __Vectors
@@ -1066,603 +1069,606 @@ END GROUP
  .text.nrf_delay_ms
                 0x000182b8       0x3c _build/nrf_delay.o
                 0x000182b8                nrf_delay_ms
+ .text.determine_mode
+                0x000182f4      0x17c _build/in4073.o
+                0x000182f4                determine_mode
  .text.process_mode
-                0x000182f4      0x384 _build/in4073.o
-                0x000182f4                process_mode
+                0x00018470      0x2a8 _build/in4073.o
+                0x00018470                process_mode
  .text.startup.main
-                0x00018678      0x200 _build/in4073.o
-                0x00018678                main
+                0x00018718      0x23c _build/in4073.o
+                0x00018718                main
  .text.update_motors
-                0x00018878       0xa4 _build/control.o
-                0x00018878                update_motors
+                0x00018954       0xa4 _build/control.o
+                0x00018954                update_motors
  .text.run_filters_and_control
-                0x0001891c        0x4 _build/control.o
-                0x0001891c                run_filters_and_control
+                0x000189f8        0x4 _build/control.o
+                0x000189f8                run_filters_and_control
  .text.isCalibrated
-                0x00018920        0xc _build/sensors.o
-                0x00018920                isCalibrated
+                0x000189fc        0xc _build/sensors.o
+                0x000189fc                isCalibrated
  .text.get_sensor
-                0x0001892c       0xdc _build/sensors.o
-                0x0001892c                get_sensor
+                0x00018a08       0xdc _build/sensors.o
+                0x00018a08                get_sensor
  .text.insert_data
-                0x00018a08      0x13c _build/sensors.o
-                0x00018a08                insert_data
+                0x00018ae4      0x13c _build/sensors.o
+                0x00018ae4                insert_data
  .text.calibrate_sensors
-                0x00018b44      0x54c _build/sensors.o
-                0x00018b44                calibrate_sensors
+                0x00018c20      0x54c _build/sensors.o
+                0x00018c20                calibrate_sensors
  .text.crc_core
-                0x00019090       0x24 _build/crc.o
-                0x00019090                crc_core
+                0x0001916c       0x24 _build/crc.o
+                0x0001916c                crc_core
  .text.decode_header
-                0x000190b4       0x10 _build/packet.o
-                0x000190b4                decode_header
+                0x00019190       0x10 _build/packet.o
+                0x00019190                decode_header
  .text.decode_data_command
-                0x000190c4       0x18 _build/packet.o
-                0x000190c4                decode_data_command
+                0x000191a0       0x18 _build/packet.o
+                0x000191a0                decode_data_command
  .text.decode_data_gains
-                0x000190dc       0x10 _build/packet.o
-                0x000190dc                decode_data_gains
- .text.decode   0x000190ec      0x110 _build/packet_uav.o
-                0x000190ec                decode
+                0x000191b8       0x10 _build/packet.o
+                0x000191b8                decode_data_gains
+ .text.decode   0x000191c8      0x110 _build/packet_uav.o
+                0x000191c8                decode
  .text.select_log_mode
-                0x000191fc       0x48 _build/logging.o
-                0x000191fc                select_log_mode
+                0x000192d8       0x48 _build/logging.o
+                0x000192d8                select_log_mode
  .text.gpio_init
-                0x00019244       0x8c _build/gpio.o
-                0x00019244                gpio_init
+                0x00019320       0x8c _build/gpio.o
+                0x00019320                gpio_init
  .text.quadrupel_timer_handler
-                0x000192d0        0xc _build/timers.o
-                0x000192d0                quadrupel_timer_handler
+                0x000193ac        0xc _build/timers.o
+                0x000193ac                quadrupel_timer_handler
  .text.TIMER2_IRQHandler
-                0x000192dc       0xb8 _build/timers.o
-                0x000192dc                TIMER2_IRQHandler
+                0x000193b8       0xb8 _build/timers.o
+                0x000193b8                TIMER2_IRQHandler
  .text.TIMER1_IRQHandler
-                0x00019394       0xac _build/timers.o
-                0x00019394                TIMER1_IRQHandler
+                0x00019470       0xac _build/timers.o
+                0x00019470                TIMER1_IRQHandler
  .text.get_time_us
-                0x00019440       0x20 _build/timers.o
-                0x00019440                get_time_us
+                0x0001951c       0x20 _build/timers.o
+                0x0001951c                get_time_us
  .text.check_timer_flag
-                0x00019460        0xc _build/timers.o
-                0x00019460                check_timer_flag
+                0x0001953c        0xc _build/timers.o
+                0x0001953c                check_timer_flag
  .text.clear_timer_flag
-                0x0001946c        0xc _build/timers.o
-                0x0001946c                clear_timer_flag
+                0x00019548        0xc _build/timers.o
+                0x00019548                clear_timer_flag
  .text.timers_init
-                0x00019478      0x1d4 _build/timers.o
-                0x00019478                timers_init
- .text._write   0x0001964c       0x84 _build/uart.o
-                0x0001964c                _write
+                0x00019554      0x1d4 _build/timers.o
+                0x00019554                timers_init
+ .text._write   0x00019728       0x84 _build/uart.o
+                0x00019728                _write
  .text.UART0_IRQHandler
-                0x000196d0       0x84 _build/uart.o
-                0x000196d0                UART0_IRQHandler
+                0x000197ac       0x84 _build/uart.o
+                0x000197ac                UART0_IRQHandler
  .text.uart_init
-                0x00019754       0xa0 _build/uart.o
-                0x00019754                uart_init
+                0x00019830       0xa0 _build/uart.o
+                0x00019830                uart_init
  .text.init_queue
-                0x000197f4       0x14 _build/queue.o
-                0x000197f4                init_queue
- .text.enqueue  0x00019808       0x1c _build/queue.o
-                0x00019808                enqueue
- .text.dequeue  0x00019824       0x20 _build/queue.o
-                0x00019824                dequeue
+                0x000198d0       0x14 _build/queue.o
+                0x000198d0                init_queue
+ .text.enqueue  0x000198e4       0x1c _build/queue.o
+                0x000198e4                enqueue
+ .text.dequeue  0x00019900       0x20 _build/queue.o
+                0x00019900                dequeue
  .text.i2c_read
-                0x00019844       0xc0 _build/twi.o
-                0x00019844                i2c_read
+                0x00019920       0xc0 _build/twi.o
+                0x00019920                i2c_read
  .text.i2c_write
-                0x00019904       0x70 _build/twi.o
-                0x00019904                i2c_write
+                0x000199e0       0x70 _build/twi.o
+                0x000199e0                i2c_write
  .text.SPI0_TWI0_IRQHandler
-                0x00019974       0x70 _build/twi.o
-                0x00019974                SPI0_TWI0_IRQHandler
+                0x00019a50       0x70 _build/twi.o
+                0x00019a50                SPI0_TWI0_IRQHandler
  .text.twi_init
-                0x000199e4       0x84 _build/twi.o
-                0x000199e4                twi_init
+                0x00019ac0       0x84 _build/twi.o
+                0x00019ac0                twi_init
  .text.ADC_IRQHandler
-                0x00019a68       0x24 _build/adc.o
-                0x00019a68                ADC_IRQHandler
+                0x00019b44       0x24 _build/adc.o
+                0x00019b44                ADC_IRQHandler
  .text.adc_init
-                0x00019a8c       0x3c _build/adc.o
-                0x00019a8c                adc_init
+                0x00019b68       0x3c _build/adc.o
+                0x00019b68                adc_init
  .text.read_baro
-                0x00019ac8      0x1b4 _build/baro.o
-                0x00019ac8                read_baro
+                0x00019ba4      0x1b4 _build/baro.o
+                0x00019ba4                read_baro
  .text.baro_init
-                0x00019c7c       0x34 _build/baro.o
-                0x00019c7c                baro_init
+                0x00019d58       0x34 _build/baro.o
+                0x00019d58                baro_init
  .text.sd_ble_gap_disconnect
-                0x00019cb0        0x4 _build/ble.o
+                0x00019d8c        0x4 _build/ble.o
  .text.sd_ble_gap_ppcp_set
-                0x00019cb4        0x4 _build/ble.o
+                0x00019d90        0x4 _build/ble.o
  .text.sd_ble_gap_device_name_set
-                0x00019cb8        0x4 _build/ble.o
+                0x00019d94        0x4 _build/ble.o
  .text.sd_ble_gap_sec_params_reply
-                0x00019cbc        0x4 _build/ble.o
+                0x00019d98        0x4 _build/ble.o
  .text.sd_ble_gatts_sys_attr_set
-                0x00019cc0        0x4 _build/ble.o
+                0x00019d9c        0x4 _build/ble.o
  .text.sd_ble_enable
-                0x00019cc4        0x4 _build/ble.o
+                0x00019da0        0x4 _build/ble.o
  .text.sd_nvic_EnableIRQ
-                0x00019cc8        0x4 _build/ble.o
+                0x00019da4        0x4 _build/ble.o
  .text.sd_nvic_ClearPendingIRQ
-                0x00019ccc        0x4 _build/ble.o
+                0x00019da8        0x4 _build/ble.o
  .text.sd_nvic_SetPriority
-                0x00019cd0        0x4 _build/ble.o
+                0x00019dac        0x4 _build/ble.o
  .text.sd_radio_notification_cfg_set
-                0x00019cd4        0x4 _build/ble.o
+                0x00019db0        0x4 _build/ble.o
  .text.conn_params_error_handler
-                0x00019cd8       0x1c _build/ble.o
+                0x00019db4       0x1c _build/ble.o
  .text.nus_data_handler
-                0x00019cf4       0x20 _build/ble.o
+                0x00019dd0       0x20 _build/ble.o
  .text.ble_evt_dispatch
-                0x00019d14       0x94 _build/ble.o
+                0x00019df0       0x94 _build/ble.o
  .text.on_conn_params_evt
-                0x00019da8       0x38 _build/ble.o
+                0x00019e84       0x38 _build/ble.o
  .text.SWI1_IRQHandler
-                0x00019de0       0x10 _build/ble.o
-                0x00019de0                SWI1_IRQHandler
+                0x00019ebc       0x10 _build/ble.o
+                0x00019ebc                SWI1_IRQHandler
  .text.ble_init
-                0x00019df0      0x204 _build/ble.o
-                0x00019df0                ble_init
+                0x00019ecc      0x204 _build/ble.o
+                0x00019ecc                ble_init
  .text.spi_flash_init
-                0x00019ff4      0x230 _build/spi_flash.o
-                0x00019ff4                spi_flash_init
+                0x0001a0d0      0x230 _build/spi_flash.o
+                0x0001a0d0                spi_flash_init
  .text.mpu_reset_fifo
-                0x0001a224      0x15c _build/inv_mpu.o
-                0x0001a224                mpu_reset_fifo
+                0x0001a300      0x15c _build/inv_mpu.o
+                0x0001a300                mpu_reset_fifo
  .text.mpu_lp_accel_mode
-                0x0001a380      0x1b8 _build/inv_mpu.o
-                0x0001a380                mpu_lp_accel_mode
+                0x0001a45c      0x1b8 _build/inv_mpu.o
+                0x0001a45c                mpu_lp_accel_mode
  .text.mpu_get_accel_fsr
-                0x0001a538       0x4c _build/inv_mpu.o
-                0x0001a538                mpu_get_accel_fsr
+                0x0001a614       0x4c _build/inv_mpu.o
+                0x0001a614                mpu_get_accel_fsr
  .text.mpu_set_lpf
-                0x0001a584       0x78 _build/inv_mpu.o
-                0x0001a584                mpu_set_lpf
+                0x0001a660       0x78 _build/inv_mpu.o
+                0x0001a660                mpu_set_lpf
  .text.mpu_set_sample_rate
-                0x0001a5fc      0x168 _build/inv_mpu.o
-                0x0001a5fc                mpu_set_sample_rate
+                0x0001a6d8      0x168 _build/inv_mpu.o
+                0x0001a6d8                mpu_set_sample_rate
  .text.mpu_configure_fifo
-                0x0001a764       0xd0 _build/inv_mpu.o
-                0x0001a764                mpu_configure_fifo
+                0x0001a840       0xd0 _build/inv_mpu.o
+                0x0001a840                mpu_configure_fifo
  .text.mpu_set_sensors
-                0x0001a834      0x140 _build/inv_mpu.o
-                0x0001a834                mpu_set_sensors
+                0x0001a910      0x140 _build/inv_mpu.o
+                0x0001a910                mpu_set_sensors
  .text.mpu_init
-                0x0001a974      0x1f4 _build/inv_mpu.o
-                0x0001a974                mpu_init
+                0x0001aa50      0x1f4 _build/inv_mpu.o
+                0x0001aa50                mpu_init
  .text.mpu_read_fifo_stream
-                0x0001ab68       0xb0 _build/inv_mpu.o
-                0x0001ab68                mpu_read_fifo_stream
+                0x0001ac44       0xb0 _build/inv_mpu.o
+                0x0001ac44                mpu_read_fifo_stream
  .text.mpu_set_int_level
-                0x0001ac18       0x10 _build/inv_mpu.o
-                0x0001ac18                mpu_set_int_level
+                0x0001acf4       0x10 _build/inv_mpu.o
+                0x0001acf4                mpu_set_int_level
  .text.mpu_set_int_latched
-                0x0001ac28       0x68 _build/inv_mpu.o
-                0x0001ac28                mpu_set_int_latched
+                0x0001ad04       0x68 _build/inv_mpu.o
+                0x0001ad04                mpu_set_int_latched
  .text.mpu_write_mem
-                0x0001ac90       0x58 _build/inv_mpu.o
-                0x0001ac90                mpu_write_mem
+                0x0001ad6c       0x58 _build/inv_mpu.o
+                0x0001ad6c                mpu_write_mem
  .text.mpu_load_firmware
-                0x0001ace8      0x15c _build/inv_mpu.o
-                0x0001ace8                mpu_load_firmware
+                0x0001adc4      0x15c _build/inv_mpu.o
+                0x0001adc4                mpu_load_firmware
  .text.mpu_set_dmp_state
-                0x0001ae44      0x174 _build/inv_mpu.o
-                0x0001ae44                mpu_set_dmp_state
+                0x0001af20      0x174 _build/inv_mpu.o
+                0x0001af20                mpu_set_dmp_state
  .text.dmp_load_motion_driver_firmware
-                0x0001afb8       0x1c _build/inv_mpu_dmp_motion_driver.o
-                0x0001afb8                dmp_load_motion_driver_firmware
+                0x0001b094       0x1c _build/inv_mpu_dmp_motion_driver.o
+                0x0001b094                dmp_load_motion_driver_firmware
  .text.dmp_set_orientation
-                0x0001afd4      0x118 _build/inv_mpu_dmp_motion_driver.o
-                0x0001afd4                dmp_set_orientation
+                0x0001b0b0      0x118 _build/inv_mpu_dmp_motion_driver.o
+                0x0001b0b0                dmp_set_orientation
  .text.dmp_set_fifo_rate
-                0x0001b0ec       0x64 _build/inv_mpu_dmp_motion_driver.o
-                0x0001b0ec                dmp_set_fifo_rate
+                0x0001b1c8       0x64 _build/inv_mpu_dmp_motion_driver.o
+                0x0001b1c8                dmp_set_fifo_rate
  .text.dmp_set_tap_thresh
-                0x0001b150      0x164 _build/inv_mpu_dmp_motion_driver.o
-                0x0001b150                dmp_set_tap_thresh
+                0x0001b22c      0x164 _build/inv_mpu_dmp_motion_driver.o
+                0x0001b22c                dmp_set_tap_thresh
  .text.dmp_enable_feature
-                0x0001b2b4      0x28c _build/inv_mpu_dmp_motion_driver.o
-                0x0001b2b4                dmp_enable_feature
+                0x0001b390      0x28c _build/inv_mpu_dmp_motion_driver.o
+                0x0001b390                dmp_enable_feature
  .text.dmp_read_fifo
-                0x0001b540      0x20c _build/inv_mpu_dmp_motion_driver.o
-                0x0001b540                dmp_read_fifo
+                0x0001b61c      0x20c _build/inv_mpu_dmp_motion_driver.o
+                0x0001b61c                dmp_read_fifo
  .text.inv_orientation_matrix_to_scalar
-                0x0001b74c      0x11c _build/ml.o
-                0x0001b74c                inv_orientation_matrix_to_scalar
+                0x0001b828      0x11c _build/ml.o
+                0x0001b828                inv_orientation_matrix_to_scalar
  .text.get_dmp_data
-                0x0001b868      0x218 _build/mpu_wrapper.o
-                0x0001b868                get_dmp_data
+                0x0001b944      0x218 _build/mpu_wrapper.o
+                0x0001b944                get_dmp_data
  .text.check_sensor_int_flag
-                0x0001ba80       0x20 _build/mpu_wrapper.o
-                0x0001ba80                check_sensor_int_flag
+                0x0001bb5c       0x20 _build/mpu_wrapper.o
+                0x0001bb5c                check_sensor_int_flag
  .text.imu_init
-                0x0001baa0      0x10c _build/mpu_wrapper.o
-                0x0001baa0                imu_init
+                0x0001bb7c      0x10c _build/mpu_wrapper.o
+                0x0001bb7c                imu_init
  .text.app_error_handler
-                0x0001bbac       0x40 _build/app_error.o
-                0x0001bbac                app_error_handler
+                0x0001bc88       0x40 _build/app_error.o
+                0x0001bc88                app_error_handler
  .text.rtc1_stop
-                0x0001bbec       0x78 _build/app_timer.o
+                0x0001bcc8       0x78 _build/app_timer.o
  .text.RTC1_IRQHandler
-                0x0001bc64       0xe0 _build/app_timer.o
-                0x0001bc64                RTC1_IRQHandler
+                0x0001bd40       0xe0 _build/app_timer.o
+                0x0001bd40                RTC1_IRQHandler
  .text.SWI0_IRQHandler
-                0x0001bd44      0x4cc _build/app_timer.o
-                0x0001bd44                SWI0_IRQHandler
+                0x0001be20      0x4cc _build/app_timer.o
+                0x0001be20                SWI0_IRQHandler
  .text.app_timer_init
-                0x0001c210       0xe4 _build/app_timer.o
-                0x0001c210                app_timer_init
+                0x0001c2ec       0xe4 _build/app_timer.o
+                0x0001c2ec                app_timer_init
  .text.app_timer_create
-                0x0001c2f4       0x34 _build/app_timer.o
-                0x0001c2f4                app_timer_create
+                0x0001c3d0       0x34 _build/app_timer.o
+                0x0001c3d0                app_timer_create
  .text.app_timer_start
-                0x0001c328       0xec _build/app_timer.o
-                0x0001c328                app_timer_start
+                0x0001c404       0xec _build/app_timer.o
+                0x0001c404                app_timer_start
  .text.app_timer_stop
-                0x0001c414       0xc4 _build/app_timer.o
-                0x0001c414                app_timer_stop
+                0x0001c4f0       0xc4 _build/app_timer.o
+                0x0001c4f0                app_timer_stop
  .text.pstorage_access_status_get
-                0x0001c4d8       0x28 _build/pstorage.o
-                0x0001c4d8                pstorage_access_status_get
+                0x0001c5b4       0x28 _build/pstorage.o
+                0x0001c5b4                pstorage_access_status_get
  .text.sd_ble_gap_address_get
-                0x0001c500        0x4 _build/ble_advdata.o
+                0x0001c5dc        0x4 _build/ble_advdata.o
  .text.sd_ble_gap_adv_data_set
-                0x0001c504        0x4 _build/ble_advdata.o
+                0x0001c5e0        0x4 _build/ble_advdata.o
  .text.sd_ble_gap_appearance_get
-                0x0001c508        0x4 _build/ble_advdata.o
+                0x0001c5e4        0x4 _build/ble_advdata.o
  .text.sd_ble_gap_device_name_get
-                0x0001c50c        0x4 _build/ble_advdata.o
+                0x0001c5e8        0x4 _build/ble_advdata.o
  .text.sd_ble_uuid_encode
-                0x0001c510        0x4 _build/ble_advdata.o
+                0x0001c5ec        0x4 _build/ble_advdata.o
  .text.uuid_list_sized_encode
-                0x0001c514       0xf8 _build/ble_advdata.o
+                0x0001c5f0       0xf8 _build/ble_advdata.o
  .text.adv_data_encode
-                0x0001c60c      0x5b8 _build/ble_advdata.o
-                0x0001c60c                adv_data_encode
+                0x0001c6e8      0x5b8 _build/ble_advdata.o
+                0x0001c6e8                adv_data_encode
  .text.ble_advdata_set
-                0x0001cbc4       0x68 _build/ble_advdata.o
-                0x0001cbc4                ble_advdata_set
+                0x0001cca0       0x68 _build/ble_advdata.o
+                0x0001cca0                ble_advdata_set
  .text.sd_ble_gap_adv_start
-                0x0001cc2c        0x4 _build/ble_advertising.o
+                0x0001cd08        0x4 _build/ble_advertising.o
  .text.ble_advertising_start.part.1
-                0x0001cc30      0x2a8 _build/ble_advertising.o
+                0x0001cd0c      0x2a8 _build/ble_advertising.o
  .text.ble_advertising_init
-                0x0001ced8      0x144 _build/ble_advertising.o
-                0x0001ced8                ble_advertising_init
+                0x0001cfb4      0x144 _build/ble_advertising.o
+                0x0001cfb4                ble_advertising_init
  .text.ble_advertising_start
-                0x0001d01c       0x3c _build/ble_advertising.o
-                0x0001d01c                ble_advertising_start
+                0x0001d0f8       0x3c _build/ble_advertising.o
+                0x0001d0f8                ble_advertising_start
  .text.ble_advertising_on_ble_evt
-                0x0001d058       0xec _build/ble_advertising.o
-                0x0001d058                ble_advertising_on_ble_evt
+                0x0001d134       0xec _build/ble_advertising.o
+                0x0001d134                ble_advertising_on_ble_evt
  .text.sd_ble_gap_conn_param_update
-                0x0001d144        0x4 _build/ble_conn_params.o
+                0x0001d220        0x4 _build/ble_conn_params.o
  .text.sd_ble_gap_disconnect
-                0x0001d148        0x4 _build/ble_conn_params.o
+                0x0001d224        0x4 _build/ble_conn_params.o
  .text.sd_ble_gap_ppcp_set
-                0x0001d14c        0x4 _build/ble_conn_params.o
+                0x0001d228        0x4 _build/ble_conn_params.o
  .text.sd_ble_gap_ppcp_get
-                0x0001d150        0x4 _build/ble_conn_params.o
+                0x0001d22c        0x4 _build/ble_conn_params.o
  .text.update_timeout_handler
-                0x0001d154       0x78 _build/ble_conn_params.o
+                0x0001d230       0x78 _build/ble_conn_params.o
  .text.conn_params_negotiation
-                0x0001d1cc       0x88 _build/ble_conn_params.o
+                0x0001d2a8       0x88 _build/ble_conn_params.o
  .text.ble_conn_params_init
-                0x0001d254       0x78 _build/ble_conn_params.o
-                0x0001d254                ble_conn_params_init
+                0x0001d330       0x78 _build/ble_conn_params.o
+                0x0001d330                ble_conn_params_init
  .text.ble_conn_params_on_ble_evt
-                0x0001d2cc       0xac _build/ble_conn_params.o
-                0x0001d2cc                ble_conn_params_on_ble_evt
+                0x0001d3a8       0xac _build/ble_conn_params.o
+                0x0001d3a8                ble_conn_params_on_ble_evt
  .text.sd_ble_gatts_service_add
-                0x0001d378        0x4 _build/ble_nus.o
+                0x0001d454        0x4 _build/ble_nus.o
  .text.sd_ble_gatts_characteristic_add
-                0x0001d37c        0x4 _build/ble_nus.o
+                0x0001d458        0x4 _build/ble_nus.o
  .text.sd_ble_uuid_vs_add
-                0x0001d380        0x4 _build/ble_nus.o
+                0x0001d45c        0x4 _build/ble_nus.o
  .text.ble_nus_on_ble_evt
-                0x0001d384       0x60 _build/ble_nus.o
-                0x0001d384                ble_nus_on_ble_evt
+                0x0001d460       0x60 _build/ble_nus.o
+                0x0001d460                ble_nus_on_ble_evt
  .text.ble_nus_init
-                0x0001d3e4      0x208 _build/ble_nus.o
-                0x0001d3e4                ble_nus_init
+                0x0001d4c0      0x208 _build/ble_nus.o
+                0x0001d4c0                ble_nus_init
  .text.sd_nvic_EnableIRQ
-                0x0001d5ec        0x4 _build/softdevice_handler.o
+                0x0001d6c8        0x4 _build/softdevice_handler.o
  .text.sd_evt_get
-                0x0001d5f0        0x4 _build/softdevice_handler.o
+                0x0001d6cc        0x4 _build/softdevice_handler.o
  .text.sd_softdevice_enable
-                0x0001d5f4        0x4 _build/softdevice_handler.o
+                0x0001d6d0        0x4 _build/softdevice_handler.o
  .text.sd_ble_evt_get
-                0x0001d5f8        0x4 _build/softdevice_handler.o
+                0x0001d6d4        0x4 _build/softdevice_handler.o
  .text.softdevice_assertion_handler
-                0x0001d5fc        0xc _build/softdevice_handler.o
-                0x0001d5fc                softdevice_assertion_handler
+                0x0001d6d8        0xc _build/softdevice_handler.o
+                0x0001d6d8                softdevice_assertion_handler
  .text.intern_softdevice_events_execute.part.0
-                0x0001d608       0xec _build/softdevice_handler.o
+                0x0001d6e4       0xec _build/softdevice_handler.o
  .text.softdevice_handler_init
-                0x0001d6f4       0x4c _build/softdevice_handler.o
-                0x0001d6f4                softdevice_handler_init
+                0x0001d7d0       0x4c _build/softdevice_handler.o
+                0x0001d7d0                softdevice_handler_init
  .text.softdevice_ble_evt_handler_set
-                0x0001d740       0x14 _build/softdevice_handler.o
-                0x0001d740                softdevice_ble_evt_handler_set
+                0x0001d81c       0x14 _build/softdevice_handler.o
+                0x0001d81c                softdevice_ble_evt_handler_set
  .text.SWI2_IRQHandler
-                0x0001d754       0x34 _build/softdevice_handler.o
-                0x0001d754                SWI2_IRQHandler
- .text          0x0001d788       0x54 _build/gcc_startup_nrf51.o
-                0x0001d788                Reset_Handler
-                0x0001d7d0                NMI_Handler
-                0x0001d7d2                HardFault_Handler
-                0x0001d7d4                SVC_Handler
-                0x0001d7d6                PendSV_Handler
-                0x0001d7d8                SysTick_Handler
-                0x0001d7da                RTC0_IRQHandler
-                0x0001d7da                GPIOTE_IRQHandler
-                0x0001d7da                POWER_CLOCK_IRQHandler
-                0x0001d7da                RADIO_IRQHandler
-                0x0001d7da                LPCOMP_IRQHandler
-                0x0001d7da                SWI4_IRQHandler
-                0x0001d7da                TEMP_IRQHandler
-                0x0001d7da                QDEC_IRQHandler
-                0x0001d7da                SWI5_IRQHandler
-                0x0001d7da                TIMER0_IRQHandler
-                0x0001d7da                ECB_IRQHandler
-                0x0001d7da                Default_Handler
-                0x0001d7da                SWI3_IRQHandler
-                0x0001d7da                CCM_AAR_IRQHandler
-                0x0001d7da                WDT_IRQHandler
-                0x0001d7da                RNG_IRQHandler
-                0x0001d7da                SPI1_TWI1_IRQHandler
- .text.fabs     0x0001d7dc        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_fabs.o)
-                0x0001d7dc                fabs
- .text.asin     0x0001d7e4       0xc4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
-                0x0001d7e4                asin
- .text.atan2    0x0001d8a8        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_atan2.o)
-                0x0001d8a8                atan2
+                0x0001d830       0x34 _build/softdevice_handler.o
+                0x0001d830                SWI2_IRQHandler
+ .text          0x0001d864       0x54 _build/gcc_startup_nrf51.o
+                0x0001d864                Reset_Handler
+                0x0001d8ac                NMI_Handler
+                0x0001d8ae                HardFault_Handler
+                0x0001d8b0                SVC_Handler
+                0x0001d8b2                PendSV_Handler
+                0x0001d8b4                SysTick_Handler
+                0x0001d8b6                RTC0_IRQHandler
+                0x0001d8b6                GPIOTE_IRQHandler
+                0x0001d8b6                POWER_CLOCK_IRQHandler
+                0x0001d8b6                RADIO_IRQHandler
+                0x0001d8b6                LPCOMP_IRQHandler
+                0x0001d8b6                SWI4_IRQHandler
+                0x0001d8b6                TEMP_IRQHandler
+                0x0001d8b6                QDEC_IRQHandler
+                0x0001d8b6                SWI5_IRQHandler
+                0x0001d8b6                TIMER0_IRQHandler
+                0x0001d8b6                ECB_IRQHandler
+                0x0001d8b6                Default_Handler
+                0x0001d8b6                SWI3_IRQHandler
+                0x0001d8b6                CCM_AAR_IRQHandler
+                0x0001d8b6                WDT_IRQHandler
+                0x0001d8b6                RNG_IRQHandler
+                0x0001d8b6                SPI1_TWI1_IRQHandler
+ .text.fabs     0x0001d8b8        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_fabs.o)
+                0x0001d8b8                fabs
+ .text.asin     0x0001d8c0       0xc4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
+                0x0001d8c0                asin
+ .text.atan2    0x0001d984        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_atan2.o)
+                0x0001d984                atan2
  .text.__ieee754_asin
-                0x0001d8b0      0x3cc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_asin.o)
-                0x0001d8b0                __ieee754_asin
+                0x0001d98c      0x3cc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_asin.o)
+                0x0001d98c                __ieee754_asin
  .text.__ieee754_atan2
-                0x0001dc7c      0x178 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_atan2.o)
-                0x0001dc7c                __ieee754_atan2
+                0x0001dd58      0x178 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_atan2.o)
+                0x0001dd58                __ieee754_atan2
  .text.__ieee754_sqrt
-                0x0001ddf4      0x1ec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_sqrt.o)
-                0x0001ddf4                __ieee754_sqrt
- .text.atan     0x0001dfe0      0x33c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
-                0x0001dfe0                atan
- .text.matherr  0x0001e31c        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_matherr.o)
-                0x0001e31c                matherr
- .text.nan      0x0001e320        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_nan.o)
-                0x0001e320                nan
- .text          0x0001e32c      0x114 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
-                0x0001e32c                __udivsi3
-                0x0001e32c                __aeabi_uidiv
-                0x0001e438                __aeabi_uidivmod
- .text          0x0001e440      0x1d4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_divsi3.o)
-                0x0001e440                __aeabi_idiv
-                0x0001e440                __divsi3
-                0x0001e60c                __aeabi_idivmod
- .text          0x0001e614        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
-                0x0001e614                __aeabi_ldiv0
-                0x0001e614                __aeabi_idiv0
- .text          0x0001e618       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpdf2.o)
-                0x0001e618                __aeabi_cdrcmple
-                0x0001e628                __aeabi_cdcmple
-                0x0001e628                __aeabi_cdcmpeq
-                0x0001e638                __aeabi_dcmpeq
-                0x0001e644                __aeabi_dcmplt
-                0x0001e658                __aeabi_dcmple
-                0x0001e66c                __aeabi_dcmpgt
-                0x0001e680                __aeabi_dcmpge
- .text          0x0001e694       0x74 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpsf2.o)
-                0x0001e694                __aeabi_cfrcmple
-                0x0001e69c                __aeabi_cfcmple
-                0x0001e69c                __aeabi_cfcmpeq
-                0x0001e6ac                __aeabi_fcmpeq
-                0x0001e6b8                __aeabi_fcmplt
-                0x0001e6cc                __aeabi_fcmple
-                0x0001e6e0                __aeabi_fcmpgt
-                0x0001e6f4                __aeabi_fcmpge
- .text          0x0001e708       0x58 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_muldi3.o)
-                0x0001e708                __aeabi_lmul
-                0x0001e708                __muldi3
- .text          0x0001e760       0x30 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_fixunssfsi.o)
-                0x0001e760                __aeabi_f2uiz
-                0x0001e760                __fixunssfsi
- .text          0x0001e790      0x2ec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(addsf3.o)
-                0x0001e790                __aeabi_fadd
- .text          0x0001ea7c      0x234 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
-                0x0001ea7c                __aeabi_fdiv
- .text          0x0001ecb0       0x50 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqsf2.o)
-                0x0001ecb0                __nesf2
-                0x0001ecb0                __eqsf2
- .text          0x0001ed00       0x88 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gesf2.o)
-                0x0001ed00                __gtsf2
-                0x0001ed00                __gesf2
- .text          0x0001ed88       0x88 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(lesf2.o)
-                0x0001ed88                __lesf2
-                0x0001ed88                __ltsf2
- .text          0x0001ee10      0x228 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
-                0x0001ee10                __aeabi_fmul
- .text          0x0001f038      0x30c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subsf3.o)
-                0x0001f038                __aeabi_fsub
- .text          0x0001f344       0x44 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixsfsi.o)
-                0x0001f344                __aeabi_f2iz
- .text          0x0001f388       0x90 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatsisf.o)
-                0x0001f388                __aeabi_i2f
- .text          0x0001f418       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatunsisf.o)
-                0x0001f418                __aeabi_ui2f
- .text          0x0001f494      0x658 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(adddf3.o)
-                0x0001f494                __aeabi_dadd
- .text          0x0001faec      0x62c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
-                0x0001faec                __aeabi_ddiv
- .text          0x00020118       0x80 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqdf2.o)
-                0x00020118                __eqdf2
-                0x00020118                __nedf2
- .text          0x00020198       0xc8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gedf2.o)
-                0x00020198                __gtdf2
-                0x00020198                __gedf2
- .text          0x00020260       0xd4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(ledf2.o)
-                0x00020260                __ltdf2
-                0x00020260                __ledf2
- .text          0x00020334      0x4f4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
-                0x00020334                __aeabi_dmul
- .text          0x00020828      0x6a8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subdf3.o)
-                0x00020828                __aeabi_dsub
- .text          0x00020ed0       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(unorddf2.o)
-                0x00020ed0                __aeabi_dcmpun
- .text          0x00020f10       0x6c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixdfsi.o)
-                0x00020f10                __aeabi_d2iz
- .text          0x00020f7c       0xa8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(extendsfdf2.o)
-                0x00020f7c                __aeabi_f2d
- .text          0x00021024       0x3c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_clzsi2.o)
-                0x00021024                __clzsi2
- .text.__errno  0x00021060        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-errno.o)
-                0x00021060                __errno
- .text.malloc   0x0002106c       0x14 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
-                0x0002106c                malloc
- .text.free     0x00021080       0x14 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
-                0x00021080                free
- .text.memcmp   0x00021094       0x1e /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcmp.o)
-                0x00021094                memcmp
- .text.memcpy   0x000210b2       0x12 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcpy-stub.o)
-                0x000210b2                memcpy
- .text._free_r  0x000210c4       0x98 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-freer.o)
-                0x000210c4                _free_r
+                0x0001ded0      0x1ec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_sqrt.o)
+                0x0001ded0                __ieee754_sqrt
+ .text.atan     0x0001e0bc      0x33c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+                0x0001e0bc                atan
+ .text.matherr  0x0001e3f8        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_matherr.o)
+                0x0001e3f8                matherr
+ .text.nan      0x0001e3fc        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_nan.o)
+                0x0001e3fc                nan
+ .text          0x0001e408      0x114 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                0x0001e408                __udivsi3
+                0x0001e408                __aeabi_uidiv
+                0x0001e514                __aeabi_uidivmod
+ .text          0x0001e51c      0x1d4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_divsi3.o)
+                0x0001e51c                __aeabi_idiv
+                0x0001e51c                __divsi3
+                0x0001e6e8                __aeabi_idivmod
+ .text          0x0001e6f0        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+                0x0001e6f0                __aeabi_ldiv0
+                0x0001e6f0                __aeabi_idiv0
+ .text          0x0001e6f4       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpdf2.o)
+                0x0001e6f4                __aeabi_cdrcmple
+                0x0001e704                __aeabi_cdcmple
+                0x0001e704                __aeabi_cdcmpeq
+                0x0001e714                __aeabi_dcmpeq
+                0x0001e720                __aeabi_dcmplt
+                0x0001e734                __aeabi_dcmple
+                0x0001e748                __aeabi_dcmpgt
+                0x0001e75c                __aeabi_dcmpge
+ .text          0x0001e770       0x74 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpsf2.o)
+                0x0001e770                __aeabi_cfrcmple
+                0x0001e778                __aeabi_cfcmple
+                0x0001e778                __aeabi_cfcmpeq
+                0x0001e788                __aeabi_fcmpeq
+                0x0001e794                __aeabi_fcmplt
+                0x0001e7a8                __aeabi_fcmple
+                0x0001e7bc                __aeabi_fcmpgt
+                0x0001e7d0                __aeabi_fcmpge
+ .text          0x0001e7e4       0x58 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_muldi3.o)
+                0x0001e7e4                __aeabi_lmul
+                0x0001e7e4                __muldi3
+ .text          0x0001e83c       0x30 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_fixunssfsi.o)
+                0x0001e83c                __aeabi_f2uiz
+                0x0001e83c                __fixunssfsi
+ .text          0x0001e86c      0x2ec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(addsf3.o)
+                0x0001e86c                __aeabi_fadd
+ .text          0x0001eb58      0x234 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
+                0x0001eb58                __aeabi_fdiv
+ .text          0x0001ed8c       0x50 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqsf2.o)
+                0x0001ed8c                __nesf2
+                0x0001ed8c                __eqsf2
+ .text          0x0001eddc       0x88 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gesf2.o)
+                0x0001eddc                __gtsf2
+                0x0001eddc                __gesf2
+ .text          0x0001ee64       0x88 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(lesf2.o)
+                0x0001ee64                __lesf2
+                0x0001ee64                __ltsf2
+ .text          0x0001eeec      0x228 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
+                0x0001eeec                __aeabi_fmul
+ .text          0x0001f114      0x30c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subsf3.o)
+                0x0001f114                __aeabi_fsub
+ .text          0x0001f420       0x44 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixsfsi.o)
+                0x0001f420                __aeabi_f2iz
+ .text          0x0001f464       0x90 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatsisf.o)
+                0x0001f464                __aeabi_i2f
+ .text          0x0001f4f4       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatunsisf.o)
+                0x0001f4f4                __aeabi_ui2f
+ .text          0x0001f570      0x658 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(adddf3.o)
+                0x0001f570                __aeabi_dadd
+ .text          0x0001fbc8      0x62c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
+                0x0001fbc8                __aeabi_ddiv
+ .text          0x000201f4       0x80 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqdf2.o)
+                0x000201f4                __eqdf2
+                0x000201f4                __nedf2
+ .text          0x00020274       0xc8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gedf2.o)
+                0x00020274                __gtdf2
+                0x00020274                __gedf2
+ .text          0x0002033c       0xd4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(ledf2.o)
+                0x0002033c                __ltdf2
+                0x0002033c                __ledf2
+ .text          0x00020410      0x4f4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
+                0x00020410                __aeabi_dmul
+ .text          0x00020904      0x6a8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subdf3.o)
+                0x00020904                __aeabi_dsub
+ .text          0x00020fac       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(unorddf2.o)
+                0x00020fac                __aeabi_dcmpun
+ .text          0x00020fec       0x6c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixdfsi.o)
+                0x00020fec                __aeabi_d2iz
+ .text          0x00021058       0xa8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(extendsfdf2.o)
+                0x00021058                __aeabi_f2d
+ .text          0x00021100       0x3c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_clzsi2.o)
+                0x00021100                __clzsi2
+ .text.__errno  0x0002113c        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-errno.o)
+                0x0002113c                __errno
+ .text.malloc   0x00021148       0x14 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
+                0x00021148                malloc
+ .text.free     0x0002115c       0x14 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
+                0x0002115c                free
+ .text.memcmp   0x00021170       0x1e /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcmp.o)
+                0x00021170                memcmp
+ .text.memcpy   0x0002118e       0x12 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcpy-stub.o)
+                0x0002118e                memcpy
+ .text._free_r  0x000211a0       0x98 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-freer.o)
+                0x000211a0                _free_r
  .text._malloc_r
-                0x0002115c       0xc0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-mallocr.o)
-                0x0002115c                _malloc_r
- .text.printf   0x0002121c       0x34 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-printf.o)
-                0x0002121c                printf
-                0x0002121c                iprintf
- .text._sbrk_r  0x00021250       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sbrkr.o)
-                0x00021250                _sbrk_r
- .text.sprintf  0x00021274       0x44 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sprintf.o)
-                0x00021274                sprintf
-                0x00021274                siprintf
- .text          0x000212b8        0xe /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-strlen.o)
-                0x000212b8                strlen
- *fill*         0x000212c6        0x2 
+                0x00021238       0xc0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-mallocr.o)
+                0x00021238                _malloc_r
+ .text.printf   0x000212f8       0x34 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-printf.o)
+                0x000212f8                printf
+                0x000212f8                iprintf
+ .text._sbrk_r  0x0002132c       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sbrkr.o)
+                0x0002132c                _sbrk_r
+ .text.sprintf  0x00021350       0x44 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sprintf.o)
+                0x00021350                sprintf
+                0x00021350                siprintf
+ .text          0x00021394        0xe /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-strlen.o)
+                0x00021394                strlen
+ *fill*         0x000213a2        0x2 
  .text._cleanup_r
-                0x000212c8       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x000212c8                _cleanup_r
+                0x000213a4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000213a4                _cleanup_r
  .text.std.isra.0
-                0x000212d8       0x48 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000213b4       0x48 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
  .text.__sfmoreglue
-                0x00021320       0x2c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00021320                __sfmoreglue
- .text.__sinit  0x0002134c       0x68 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x0002134c                __sinit
- .text.__sfp    0x000213b4       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x000213b4                __sfp
+                0x000213fc       0x2c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000213fc                __sfmoreglue
+ .text.__sinit  0x00021428       0x68 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00021428                __sinit
+ .text.__sfp    0x00021490       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00021490                __sfp
  .text._fwalk_reent
-                0x00021430       0x42 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fwalk.o)
-                0x00021430                _fwalk_reent
+                0x0002150c       0x42 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fwalk.o)
+                0x0002150c                _fwalk_reent
  .text.__malloc_lock
-                0x00021472        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
-                0x00021472                __malloc_lock
+                0x0002154e        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
+                0x0002154e                __malloc_lock
  .text.__malloc_unlock
-                0x00021474        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
-                0x00021474                __malloc_unlock
- *fill*         0x00021476        0x2 
+                0x00021550        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
+                0x00021550                __malloc_unlock
+ *fill*         0x00021552        0x2 
  .text.__ssputs_r
-                0x00021478       0xc4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
-                0x00021478                __ssputs_r
+                0x00021554       0xc4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x00021554                __ssputs_r
  .text._svfprintf_r
-                0x0002153c      0x1fc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0002153c                _svfprintf_r
-                0x0002153c                _svfiprintf_r
+                0x00021618      0x1fc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x00021618                _svfprintf_r
+                0x00021618                _svfiprintf_r
  .text.__sfputc_r
-                0x00021738       0x2a /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x00021814       0x2a /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
  .text.__sfputs_r
-                0x00021762       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
-                0x00021762                __sfputs_r
- *fill*         0x00021786        0x2 
+                0x0002183e       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x0002183e                __sfputs_r
+ *fill*         0x00021862        0x2 
  .text._vfprintf_r
-                0x00021788      0x238 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
-                0x00021788                _vfiprintf_r
-                0x00021788                _vfprintf_r
+                0x00021864      0x238 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x00021864                _vfiprintf_r
+                0x00021864                _vfprintf_r
  .text._printf_common
-                0x000219c0       0xdc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x000219c0                _printf_common
+                0x00021a9c       0xdc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00021a9c                _printf_common
  .text._printf_i
-                0x00021a9c      0x244 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00021a9c                _printf_i
- .text.__sread  0x00021ce0       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00021ce0                __sread
+                0x00021b78      0x244 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00021b78                _printf_i
+ .text.__sread  0x00021dbc       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00021dbc                __sread
  .text.__swrite
-                0x00021d08       0x38 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00021d08                __swrite
- .text.__sseek  0x00021d40       0x2c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00021d40                __sseek
+                0x00021de4       0x38 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00021de4                __swrite
+ .text.__sseek  0x00021e1c       0x2c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00021e1c                __sseek
  .text.__sclose
-                0x00021d6c        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00021d6c                __sclose
+                0x00021e48        0xc /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00021e48                __sclose
  .text.__swbuf_r
-                0x00021d78       0xb0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wbuf.o)
-                0x00021d78                __swbuf_r
+                0x00021e54       0xb0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wbuf.o)
+                0x00021e54                __swbuf_r
  .text._write_r
-                0x00021e28       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-writer.o)
-                0x00021e28                _write_r
+                0x00021f04       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-writer.o)
+                0x00021f04                _write_r
  .text.__swsetup_r
-                0x00021e50       0xec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wsetup.o)
-                0x00021e50                __swsetup_r
+                0x00021f2c       0xec /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wsetup.o)
+                0x00021f2c                __swsetup_r
  .text._close_r
-                0x00021f3c       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-closer.o)
-                0x00021f3c                _close_r
+                0x00022018       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-closer.o)
+                0x00022018                _close_r
  .text.__sflush_r
-                0x00021f60      0x10c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
-                0x00021f60                __sflush_r
+                0x0002203c      0x10c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
+                0x0002203c                __sflush_r
  .text._fflush_r
-                0x0002206c       0x58 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
-                0x0002206c                _fflush_r
+                0x00022148       0x58 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
+                0x00022148                _fflush_r
  .text._lseek_r
-                0x000220c4       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-lseekr.o)
-                0x000220c4                _lseek_r
+                0x000221a0       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-lseekr.o)
+                0x000221a0                _lseek_r
  .text.__swhatbuf_r
-                0x000220ec       0x4c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
-                0x000220ec                __swhatbuf_r
+                0x000221c8       0x4c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
+                0x000221c8                __swhatbuf_r
  .text.__smakebuf_r
-                0x00022138       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
-                0x00022138                __smakebuf_r
- .text.memchr   0x000221b4       0x16 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memchr-stub.o)
-                0x000221b4                memchr
- .text.memmove  0x000221ca       0x2a /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memmove.o)
-                0x000221ca                memmove
+                0x00022214       0x7c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
+                0x00022214                __smakebuf_r
+ .text.memchr   0x00022290       0x16 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memchr-stub.o)
+                0x00022290                memchr
+ .text.memmove  0x000222a6       0x2a /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memmove.o)
+                0x000222a6                memmove
  .text._realloc_r
-                0x000221f4       0x4c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-reallocr.o)
-                0x000221f4                _realloc_r
- .text._read_r  0x00022240       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-readr.o)
-                0x00022240                _read_r
+                0x000222d0       0x4c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-reallocr.o)
+                0x000222d0                _realloc_r
+ .text._read_r  0x0002231c       0x28 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-readr.o)
+                0x0002231c                _read_r
  .text._fstat_r
-                0x00022268       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fstatr.o)
-                0x00022268                _fstat_r
+                0x00022344       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fstatr.o)
+                0x00022344                _fstat_r
  .text._isatty_r
-                0x0002228c       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-isattyr.o)
-                0x0002228c                _isatty_r
+                0x00022368       0x24 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-isattyr.o)
+                0x00022368                _isatty_r
  .text._malloc_usable_size_r
-                0x000222b0       0x16 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-msizer.o)
-                0x000222b0                _malloc_usable_size_r
- *fill*         0x000222c6        0x2 
- .text._close   0x000222c8       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(close.o)
-                0x000222c8                _close
- .text._fstat   0x000222d8       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(fstat.o)
-                0x000222d8                _fstat
- .text._isatty  0x000222e8       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(isatty.o)
-                0x000222e8                _isatty
- .text._lseek   0x000222f8       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(lseek.o)
-                0x000222f8                _lseek
- .text._read    0x00022308       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(read.o)
-                0x00022308                _read
- .text._sbrk    0x00022318       0x1c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(sbrk.o)
-                0x00022318                _sbrk
+                0x0002238c       0x16 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-msizer.o)
+                0x0002238c                _malloc_usable_size_r
+ *fill*         0x000223a2        0x2 
+ .text._close   0x000223a4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(close.o)
+                0x000223a4                _close
+ .text._fstat   0x000223b4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(fstat.o)
+                0x000223b4                _fstat
+ .text._isatty  0x000223c4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(isatty.o)
+                0x000223c4                _isatty
+ .text._lseek   0x000223d4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(lseek.o)
+                0x000223d4                _lseek
+ .text._read    0x000223e4       0x10 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(read.o)
+                0x000223e4                _read
+ .text._sbrk    0x000223f4       0x1c /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(sbrk.o)
+                0x000223f4                _sbrk
  *(.init)
- .init          0x00022334        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00022334                _init
- .init          0x00022338        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .init          0x00022410        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x00022410                _init
+ .init          0x00022414        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *(.fini)
- .fini          0x00022340        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00022340                _fini
- .fini          0x00022344        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .fini          0x0002241c        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0002241c                _fini
+ .fini          0x00022420        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -1675,126 +1681,128 @@ END GROUP
  *(.dtors)
  *(.rodata*)
  .rodata.str1.1
-                0x0002234c        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
- *fill*         0x0002234e        0x2 
+                0x00022428        0x2 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
+ *fill*         0x0002242a        0x2 
  .rodata._global_impure_ptr
-                0x00022350        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
-                0x00022350                _global_impure_ptr
+                0x0002242c        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
+                0x0002242c                _global_impure_ptr
+ .rodata.determine_mode
+                0x00022430       0x28 _build/in4073.o
  .rodata.process_mode
-                0x00022354       0x28 _build/in4073.o
+                0x00022458       0x28 _build/in4073.o
  .rodata.str1.4
-                0x0002237c       0xc6 _build/in4073.o
- *fill*         0x00022442        0x2 
+                0x00022480      0x10a _build/in4073.o
+ *fill*         0x0002258a        0x2 
  .rodata.get_sensor
-                0x00022444       0x28 _build/sensors.o
+                0x0002258c       0x28 _build/sensors.o
  .rodata.crclut
-                0x0002246c      0x100 _build/crc.o
-                0x0002246c                crclut
+                0x000225b4      0x100 _build/crc.o
+                0x000225b4                crclut
  .rodata.str1.4
-                0x0002256c       0x33 _build/packet_uav.o
- *fill*         0x0002259f        0x1 
+                0x000226b4       0x33 _build/packet_uav.o
+ *fill*         0x000226e7        0x1 
  .rodata.str1.4
-                0x000225a0      0x215 _build/logging.o
- *fill*         0x000227b5        0x3 
- .rodata.quadrupel_timer.7121
-                0x000227b8        0x4 _build/timers.o
+                0x000226e8      0x215 _build/logging.o
+ *fill*         0x000228fd        0x3 
+ .rodata.quadrupel_timer.7124
+                0x00022900        0x4 _build/timers.o
  .rodata.str1.4
-                0x000227bc       0x11 _build/uart.o
- *fill*         0x000227cd        0x3 
+                0x00022904       0x11 _build/uart.o
+ *fill*         0x00022915        0x3 
  .rodata.str1.4
-                0x000227d0       0x38 _build/twi.o
+                0x00022918       0x38 _build/twi.o
  .rodata.str1.4
-                0x00022808       0x12 _build/ble.o
- *fill*         0x0002281a        0x2 
- .rodata.test   0x0002281c       0x28 _build/inv_mpu.o
-                0x0002281c                test
+                0x00022950       0x12 _build/ble.o
+ *fill*         0x00022962        0x2 
+ .rodata.test   0x00022964       0x28 _build/inv_mpu.o
+                0x00022964                test
  .rodata.str1.4
-                0x00022844       0xa6 _build/inv_mpu.o
- *fill*         0x000228ea        0x2 
- .rodata.hw     0x000228ec        0xc _build/inv_mpu.o
-                0x000228ec                hw
- .rodata.reg    0x000228f8       0x1e _build/inv_mpu.o
-                0x000228f8                reg
- *fill*         0x00022916        0x2 
- .rodata        0x00022918       0x4b _build/inv_mpu_dmp_motion_driver.o
- *fill*         0x00022963        0x1 
+                0x0002298c       0xa6 _build/inv_mpu.o
+ *fill*         0x00022a32        0x2 
+ .rodata.hw     0x00022a34        0xc _build/inv_mpu.o
+                0x00022a34                hw
+ .rodata.reg    0x00022a40       0x1e _build/inv_mpu.o
+                0x00022a40                reg
+ *fill*         0x00022a5e        0x2 
+ .rodata        0x00022a60       0x4b _build/inv_mpu_dmp_motion_driver.o
+ *fill*         0x00022aab        0x1 
  .rodata.dmp_memory
-                0x00022964      0xbf6 _build/inv_mpu_dmp_motion_driver.o
- *fill*         0x0002355a        0x2 
+                0x00022aac      0xbf6 _build/inv_mpu_dmp_motion_driver.o
+ *fill*         0x000236a2        0x2 
  .rodata.str1.4
-                0x0002355c      0x12a _build/mpu_wrapper.o
- *fill*         0x00023686        0x2 
+                0x000236a4      0x12a _build/mpu_wrapper.o
+ *fill*         0x000237ce        0x2 
  .rodata.str1.4
-                0x00023688       0x27 _build/app_error.o
- *fill*         0x000236af        0x1 
+                0x000237d0       0x27 _build/app_error.o
+ *fill*         0x000237f7        0x1 
  .rodata.m_conn_params_timer_id
-                0x000236b0        0x4 _build/ble_conn_params.o
- .rodata        0x000236b4       0x10 _build/ble_nus.o
+                0x000237f8        0x4 _build/ble_conn_params.o
+ .rodata        0x000237fc       0x10 _build/ble_nus.o
  .rodata.str1.4
-                0x000236c4        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
+                0x0002380c        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
                                   0x9 (size before relaxing)
- *fill*         0x000236cc        0x4 
+ *fill*         0x00023814        0x4 
  .rodata.atanlo
-                0x000236d0       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+                0x00023818       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
  .rodata.atanhi
-                0x000236f0       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
- .rodata        0x00023710       0x80 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
- .rodata        0x00023790       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
- .rodata        0x000237d0       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
- .rodata        0x00023810       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
+                0x00023838       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+ .rodata        0x00023858       0x80 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
+ .rodata        0x000238d8       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
+ .rodata        0x00023918       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
+ .rodata        0x00023958       0x40 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
  .rodata.__sf_fake_stdin
-                0x00023850       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00023850                __sf_fake_stdin
+                0x00023998       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00023998                __sf_fake_stdin
  .rodata.__sf_fake_stdout
-                0x00023870       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00023870                __sf_fake_stdout
+                0x000239b8       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000239b8                __sf_fake_stdout
  .rodata.__sf_fake_stderr
-                0x00023890       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00023890                __sf_fake_stderr
+                0x000239d8       0x20 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000239d8                __sf_fake_stderr
  .rodata.str1.1
-                0x000238b0       0x11 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x000239f8       0x11 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
  .rodata.str1.1
-                0x000238c1       0x11 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x00023a09       0x11 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
  .rodata.str1.1
-                0x000238c1       0x22 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00023a09       0x22 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
  *(.eh_frame*)
- *fill*         0x000238e3        0x1 
- .eh_frame      0x000238e4        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
-                0x000238e4                . = ALIGN (0x4)
+ *fill*         0x00023a2b        0x1 
+ .eh_frame      0x00023a2c        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+                0x00023a2c                . = ALIGN (0x4)
 
-.glue_7         0x000238e4        0x0
- .glue_7        0x000238e4        0x0 linker stubs
+.glue_7         0x00023a2c        0x0
+ .glue_7        0x00023a2c        0x0 linker stubs
 
-.glue_7t        0x000238e4        0x0
- .glue_7t       0x000238e4        0x0 linker stubs
+.glue_7t        0x00023a2c        0x0
+ .glue_7t       0x00023a2c        0x0 linker stubs
 
-.vfp11_veneer   0x000238e4        0x0
- .vfp11_veneer  0x000238e4        0x0 linker stubs
+.vfp11_veneer   0x00023a2c        0x0
+ .vfp11_veneer  0x00023a2c        0x0 linker stubs
 
-.v4_bx          0x000238e4        0x0
- .v4_bx         0x000238e4        0x0 linker stubs
+.v4_bx          0x00023a2c        0x0
+ .v4_bx         0x00023a2c        0x0 linker stubs
 
-.iplt           0x000238e4        0x0
- .iplt          0x000238e4        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x00023a2c        0x0
+ .iplt          0x00023a2c        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.ARM.extab      0x000238e4        0x0
+.ARM.extab      0x00023a2c        0x0
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x000238e4                . = ALIGN (0x4)
-                0x000238e4                __exidx_start = .
+                0x00023a2c                . = ALIGN (0x4)
+                0x00023a2c                __exidx_start = .
 
-.ARM.exidx      0x000238e4        0x8
+.ARM.exidx      0x00023a2c        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x000238e4        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
- .ARM.exidx     0x000238ec        0x0 _build/gcc_startup_nrf51.o
+ .ARM.exidx     0x00023a2c        0x8 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x00023a34        0x0 _build/gcc_startup_nrf51.o
                                   0x8 (size before relaxing)
-                0x000238ec                . = ALIGN (0x4)
-                0x000238ec                __exidx_end = .
-                0x000238ec                __etext = .
+                0x00023a34                . = ALIGN (0x4)
+                0x00023a34                __exidx_end = .
+                0x00023a34                __etext = .
 
-.rel.dyn        0x000238ec        0x0
- .rel.iplt      0x000238ec        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x00023a34        0x0
+ .rel.iplt      0x00023a34        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.data           0x20002000       0xb4 load address 0x000238ec
+.data           0x20002000       0xb4 load address 0x00023a34
                 0x20002000                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -1813,7 +1821,7 @@ END GROUP
                 0x2000206c        0x2 _build/ble.o
  *fill*         0x2000206e        0x2 
  .data.st       0x20002070       0x2c _build/inv_mpu.o
- .data.gyro_orientation.7041
+ .data.gyro_orientation.7044
                 0x2000209c        0x9 _build/mpu_wrapper.o
  *fill*         0x200020a5        0x1 
  .data.current_slave_link_conn_handle.7275
@@ -1843,10 +1851,10 @@ END GROUP
                 0x200020b4                . = ALIGN (0x4)
                 0x200020b4                __data_end__ = .
 
-.igot.plt       0x200020b4        0x0 load address 0x000239a0
+.igot.plt       0x200020b4        0x0 load address 0x00023ae8
  .igot.plt      0x200020b4        0x0 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x200020b4      0x9ec load address 0x000239a0
+.bss            0x200020b4      0x9f4 load address 0x00023ae8
                 0x200020b4                . = ALIGN (0x4)
                 0x200020b4                __bss_start__ = .
  *(.bss*)
@@ -1859,9 +1867,9 @@ END GROUP
  .bss.shortLogging
                 0x200020d4        0x1 _build/logging.o
  *fill*         0x200020d5        0x3 
- .bss.APP_TIMER_BUF.7117
+ .bss.APP_TIMER_BUF.7120
                 0x200020d8      0x1c8 _build/timers.o
- .bss.quadrupel_timer_data.7120
+ .bss.quadrupel_timer_data.7123
                 0x200022a0       0x20 _build/timers.o
  .bss.sent      0x200022c0        0x1 _build/twi.o
  .bss.read      0x200022c1        0x1 _build/twi.o
@@ -1869,14 +1877,14 @@ END GROUP
                 0x200022c2        0x1 _build/baro.o
  *fill*         0x200022c3        0x1 
  .bss.prom      0x200022c4       0x10 _build/baro.o
- .bss.data.7034
+ .bss.data.7037
                 0x200022d4        0x2 _build/baro.o
  *fill*         0x200022d6        0x2 
  .bss.data      0x200022d8        0x3 _build/baro.o
  *fill*         0x200022db        0x1 
  .bss.initTime  0x200022dc        0x4 _build/baro.o
                 0x200022dc                initTime
- .bss.BLE_EVT_BUFFER.8965
+ .bss.BLE_EVT_BUFFER.8968
                 0x200022e0       0x48 _build/ble.o
  .bss.m_nus     0x20002328       0x1c _build/ble.o
  .bss.spi_config_table
@@ -1991,7 +1999,7 @@ END GROUP
  .bss.heap_end.4167
                 0x200025f0        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(sbrk.o)
  *(COMMON)
- COMMON         0x200025f4      0x496 _build/in4073.o
+ COMMON         0x200025f4      0x49e _build/in4073.o
                 0x200025f4                yaw_parameter
                 0x200025f6                say
                 0x200025f8                b
@@ -2006,72 +2014,75 @@ END GROUP
                 0x2000260c                roll_delta
                 0x20002610                rx_queue
                 0x20002716                yaw_delta
-                0x20002718                phi
-                0x2000271a                P2
-                0x2000271b                lift_delta
-                0x2000271c                prev_mode
-                0x20002720                temperature
-                0x20002724                psi_s
-                0x20002726                dcsp
-                0x20002728                theta
-                0x2000272c                pressure
-                0x20002730                dcsq
-                0x20002732                exit_mode_flag
-                0x20002734                dcsax
-                0x20002736                mode
-                0x20002737                dcpsi_s
-                0x20002738                tx_queue
-                0x2000283e                sax
-                0x20002840                prev_yaw
-                0x20002841                lift
-                0x20002842                sq
-                0x20002844                yaw_error
-                0x20002846                bat_volt
-                0x20002848                ble_rx_queue
-                0x2000294e                d
-                0x2000294f                pitch_delta
-                0x20002950                sp
-                0x20002952                dctheta
-                0x20002954                dcpsi
-                0x20002956                dcsay
-                0x20002958                radio_active
-                0x2000295c                motor
-                0x20002964                yaw
-                0x20002968                last_correct_checksum_time
-                0x2000296c                prev_lift
-                0x2000296e                dcphi
-                0x20002970                pitch
-                0x20002971                roll
-                0x20002974                ble_tx_queue
-                0x20002a7c                ae
-                0x20002a84                sr
-                0x20002a86                dcsaz
-                0x20002a88                demo_done
-                0x20002a89                P
- *fill*         0x20002a8a        0x2 
- COMMON         0x20002a8c        0x5 _build/timers.o
-                0x20002a8c                global_time
-                0x20002a90                timer_flag
- *fill*         0x20002a91        0x3 
- COMMON         0x20002a94        0x8 _build/baro.o
-                0x20002a94                D2
-                0x20002a98                D1
- COMMON         0x20002a9c        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-reent.o)
-                0x20002a9c                errno
-                0x20002aa0                . = ALIGN (0x4)
-                0x20002aa0                __bss_end__ = .
+                0x20002718                current_mode
+                0x2000271a                phi
+                0x2000271c                P2
+                0x2000271e                lift_delta
+                0x20002720                prev_mode
+                0x20002724                temperature
+                0x20002728                psi_s
+                0x2000272a                dcsp
+                0x2000272c                new_lift
+                0x2000272e                theta
+                0x20002730                pressure
+                0x20002734                dcsq
+                0x20002736                exit_mode_flag
+                0x20002738                dcsax
+                0x2000273a                mode
+                0x2000273b                dcpsi_s
+                0x2000273c                tx_queue
+                0x20002842                sax
+                0x20002844                prev_yaw
+                0x20002845                lift
+                0x20002846                sq
+                0x20002848                yaw_error
+                0x2000284a                bat_volt
+                0x2000284c                ble_rx_queue
+                0x20002952                d
+                0x20002954                pitch_delta
+                0x20002956                sp
+                0x20002958                dctheta
+                0x2000295a                dcpsi
+                0x2000295c                safe_flag
+                0x2000295e                dcsay
+                0x20002960                radio_active
+                0x20002964                motor
+                0x2000296c                yaw
+                0x20002970                last_correct_checksum_time
+                0x20002974                prev_lift
+                0x20002976                dcphi
+                0x20002978                pitch
+                0x20002979                roll
+                0x2000297c                ble_tx_queue
+                0x20002a84                ae
+                0x20002a8c                sr
+                0x20002a8e                dcsaz
+                0x20002a90                demo_done
+                0x20002a91                P
+ *fill*         0x20002a92        0x2 
+ COMMON         0x20002a94        0x5 _build/timers.o
+                0x20002a94                global_time
+                0x20002a98                timer_flag
+ *fill*         0x20002a99        0x3 
+ COMMON         0x20002a9c        0x8 _build/baro.o
+                0x20002a9c                D2
+                0x20002aa0                D1
+ COMMON         0x20002aa4        0x4 /media/ishu/Data/MS/Quarter5/ERTS/lab/ishu/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-reent.o)
+                0x20002aa4                errno
+                0x20002aa8                . = ALIGN (0x4)
+                0x20002aa8                __bss_end__ = .
 
-.heap           0x20002aa0      0x800
-                0x20002aa0                __end__ = .
-                0x20002aa0                end = __end__
+.heap           0x20002aa8      0x800
+                0x20002aa8                __end__ = .
+                0x20002aa8                end = __end__
  *(.heap*)
- .heap          0x20002aa0      0x800 _build/gcc_startup_nrf51.o
-                0x20002aa0                __HeapBase
-                0x200032a0                __HeapLimit = .
+ .heap          0x20002aa8      0x800 _build/gcc_startup_nrf51.o
+                0x20002aa8                __HeapBase
+                0x200032a8                __HeapLimit = .
 
-.stack_dummy    0x20002aa0      0x800
+.stack_dummy    0x20002aa8      0x800
  *(.stack*)
- .stack         0x20002aa0      0x800 _build/gcc_startup_nrf51.o
+ .stack         0x20002aa8      0x800 _build/gcc_startup_nrf51.o
                 0x20004000                __StackTop = (ORIGIN (RAM) + LENGTH (RAM))
                 0x20003800                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20004000                PROVIDE (__stack, __StackTop)
