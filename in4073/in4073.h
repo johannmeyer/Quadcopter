@@ -57,7 +57,7 @@ int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
 uint8_t P, P1, P2;
 void determine_mode(uint8_t);
-
+void process_mode(uint8_t);
 
 // Timers
 #define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)

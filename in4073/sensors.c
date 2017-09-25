@@ -15,6 +15,10 @@ struct calibData
   bool ready;
 };
 
+int16_t dcphi, dctheta, dcpsi;
+int16_t dcsp, dcsq, dcsr;
+int16_t dcsax, dcsay, dcsaz;
+
 void init_calibData(calibData *data);
 
 void maxElem(calibData *data);
