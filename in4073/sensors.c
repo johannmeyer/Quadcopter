@@ -15,6 +15,10 @@ struct calibData
   bool ready;
 };
 
+int16_t dcphi, dctheta, dcpsi;
+int16_t dcsp, dcsq, dcsr;
+int16_t dcsax, dcsay, dcsaz;
+
 void init_calibData(calibData *data);
 
 void maxElem(calibData *data);
@@ -60,7 +64,7 @@ void calibrate_sensors(void)
     {
       //The new sensor value and the biggest difference tolerated between the max and the min value of the
       //sensor buffer, for the sensor to be consider stabilized is passed.
-      insert_data(&calibArray[i], newSensorValues[i], 3);
+      insert_data(&calibArray[i], newSensorValues[i], 5);
     }
     for(i=6; i<9; i++)
     {

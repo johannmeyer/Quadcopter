@@ -15,10 +15,6 @@
 #define SAY   8
 #define SAZ   9
 
-int16_t dcphi, dctheta, dcpsi;
-int16_t dcsp, dcsq, dcsr;
-int16_t dcsax, dcsay, dcsaz;
-
 void calibrate_sensors(void);
 
 bool isCalibrated(void);

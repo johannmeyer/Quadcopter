@@ -81,29 +81,12 @@ int term_getchar()
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
-#include "packet_pc.h"
 #include <stdbool.h>
-
-#define SAFE_MODE 0
-#define PANIC_MODE 1
-#define MANUAL_MODE 2
-#define CALIBRATION_MODE 3
-#define YAW_MODE 4
-#define FULL_MODE 5
-#define RAW_MODE 6
-#define HEIGHT_MODE 7
-#define WIRELESS_MODE 8
-#define EXIT_MODE 9
-#define TRIM_VALUE 100
+#include "pc_terminal.h"
+#include "packet_pc.h"
 
 int serial_device = 0;
 int fd_RS232;
-int16_t lift_key,pitch_key,roll_key,yaw_key;
-int16_t lift_js,pitch_js,roll_js,yaw_js;
-int16_t lift,pitch,roll,yaw;
-uint8_t mode;
-
-
 
 bool isMode(uint8_t c)
 {
@@ -168,7 +151,7 @@ void get_key(char c)
 			roll_key = roll_key - TRIM_VALUE;
 			break;
 
-		case 'e':
+		case 27:
 			mode = EXIT_MODE;
 			break;
 
@@ -185,13 +168,42 @@ void get_key(char c)
 
 void combine_values()
 {
-	lift = lift_key + lift_js;
+	lift = lift_key - lift_js;
 	pitch = pitch_key + pitch_js;
 	roll = roll_key + roll_js;
 	yaw = yaw_key + yaw_js;
 	if(lift < -32767)
 	{
 		lift = - 32767;
+	}
+	else if(lift > 32767)
+	{
+		lift =  32767;
+	}
+	if(pitch < -32767)
+	{
+		pitch = - 32767;
+	}
+	else if(pitch > 32767)
+	{
+		pitch =  32767;
+	}
+	if(roll < -32767)
+	{
+		roll = - 32767;
+	}
+	else if(roll > 32767)
+	{
+		roll =  32767;
+	}
+
+	if(yaw < -32767)
+	{
+		yaw = - 32767;
+	}
+	else if(yaw > 32767)
+	{
+		yaw =  32767;
 	}
 	//printf("Roll_key: %x, roll: %x \n",roll_key,roll );
 
@@ -295,7 +307,7 @@ int main(int argc, char **argv)
 {
 								char c;
 								clock_t start;
-								lift_js= -32767;
+								lift_js= 0;  //-32768 if not using joystick
 								pitch_js=0;
 								roll_js=0;
 								yaw_js=0;
@@ -313,7 +325,7 @@ int main(int argc, char **argv)
 
 								term_initio();
 								rs232_open();
-								//joystick_open();
+								joystick_open();
 								term_puts("Type ^C to exit\n");
 
 								/*
@@ -329,13 +341,12 @@ int main(int argc, char **argv)
 								for (;;)
 								{
 																// Sends data to the Drone
-																if ((c = term_getchar_nb()) != -1)
+																char readChar = -1;
+																if ((readChar = term_getchar_nb()) != -1)
 																{
-																	if (c == 27)				// check for Esc key in order to read arrow keys
-																		{
-																			term_getchar_nb();   // Up arrow sends Esc,[,A. So skip the second char
-																			c = term_getchar_nb();
-																		}
+																	do {
+																		c = readChar;
+																	} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
 																	get_key(c);
 																}
 																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);
@@ -343,21 +354,21 @@ int main(int argc, char **argv)
 																// TODO combine the keyboard and joystick data
 																combine_values();
 																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
-																if (panic) encode(&my_packet, PANIC_MODE, roll, pitch, yaw, lift);  //TODO
-																else encode(&my_packet, mode, roll, pitch, yaw, lift);  //TODO
+																if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
+																else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 
 																rs232_putpacket(&my_packet);
 
 																// Reads data sent from the Drone
 																start = clock();
-																while(clock()-start<10000)
+																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
 																{
 																	if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
 																}
 								}
 
 								term_exitio();
-								//joystick_close();
+								joystick_close();
 								rs232_close();
 								term_puts("\n<exit>\n");
 

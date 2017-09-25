@@ -42,6 +42,7 @@ $(abspath ../components/drivers_nrf/delay/nrf_delay.c) \
 $(abspath ./in4073.c) \
 $(abspath ./control.c) \
 $(abspath ./sensors.c) \
+$(abspath ./libfixmath/fix16.c) \
 $(abspath ./communication/crc.c) \
 $(abspath ./communication/packet.c) \
 $(abspath ./communication/packet_uav.c) \
@@ -79,6 +80,7 @@ INC_PATHS += -I$(abspath ./)
 INC_PATHS += -I$(abspath ./invensense)
 INC_PATHS += -I$(abspath ./drivers/config)
 INC_PATHS += -I$(abspath ./shared)
+INC_PATHS += -I$(abspath ./libfixmath)
 INC_PATHS += -I$(abspath ./communication)
 INC_PATHS += -I$(abspath ../components/device)
 INC_PATHS += -I$(abspath ../components/toolchain/gcc)

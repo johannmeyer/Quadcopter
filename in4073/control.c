@@ -11,8 +11,54 @@
  */
 
 #include "in4073.h"
+#include "control.h"
+#include "fixmath.h"
 
+void update_motors(void)
+{
+ if(ae[0]> 600)
+   { ae[0] = 600; }
+ if(ae[0] < 0)
+   { ae[0] = 0;}
+ if(ae[1]> 600)
+   { ae[1] = 600; }
+ if(ae[1] < 0)
+   { ae[1] = 0;}
+ if(ae[2]> 600)
+   { ae[2] = 600; }
+ if(ae[2] < 0)
+   { ae[2] = 0;}
+ if(ae[3]> 600)
+   { ae[3] = 600; }
+ if(ae[3] < 0)
+   { ae[3] = 0;}
+ motor[0] = ae[0];
+ motor[1] = ae[1];
+ motor[2] = ae[2];
+ motor[3] = ae[3];
+}
 
+void fp_yaw_control(int16_t roll, int16_t pitch, int16_t yaw, uint16_t lift, uint16_t yawPpar, int16_t senPsi)
+{
+  //const fix16_t convIndex = F16(127/32768);
+  const fix16_t convIndex = F16(0.00387573242188);
+  fix16_t froll = fix16_from_int(roll);
+  fix16_t fpitch = fix16_from_int(pitch);
+  fix16_t fyaw = fix16_from_int(yaw);
+  fix16_t flift = fix16_from_int(lift);
+  fix16_t fyawPpar = fix16_from_int(yawPpar);
+  fix16_t fsenPsi = fix16_from_int(senPsi);
+
+  fix16_t convPsi = fix16_mul(fsenPsi, convIndex);
+  fix16_t fyaw_error = fix16_sub(fyaw, convPsi);
+
+  printf("yaw_error: %d,yaw: %d, converted Psi: %d, sensed Psi: %d \n", fix16_to_int(fyaw_error),fix16_to_int(fyaw), fix16_to_int(convPsi), senPsi);
+  ae[0] = fix16_to_int(fix16_sub(fix16_add(flift, fpitch),fix16_mul(fyawPpar,fyaw_error)));
+  ae[1] = fix16_to_int(fix16_add(fix16_sub(flift, froll), fix16_mul(fyawPpar,fyaw_error)));
+  ae[2] = fix16_to_int(fix16_sub(fix16_sub(flift, fpitch), fix16_mul(fyawPpar,fyaw_error)));
+  ae[3] = fix16_to_int(fix16_add(fix16_add(flift, froll), fix16_mul(fyawPpar,fyaw_error)));
+
+}
 
 void run_filters_and_control()
 {
