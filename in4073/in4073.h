@@ -28,6 +28,19 @@
 #define BLUE		30
 #define INT_PIN		5
 
+#define SAFE_MODE 0
+#define PANIC_MODE 1
+#define MANUAL_MODE 2
+#define CALIBRATION_MODE 3
+#define YAW_MODE 4
+#define FULL_MODE 5
+#define RAW_MODE 6
+#define HEIGHT_MODE 7
+#define WIRELESS_MODE 8
+#define EXIT_MODE 9
+
+#define PANIC_SPEED 1
+
 bool demo_done;
 bool exit_mode_flag;
 bool safe_flag;
@@ -44,7 +57,7 @@ int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
 uint8_t P, P1, P2;
 void determine_mode(uint8_t);
-void process_mode(uint8_t);
+
 
 // Timers
 #define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)
