@@ -193,7 +193,7 @@ void print_log_entry(uint16_t entryNo)
           return;
       }
 
-      printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header.mode, readEntry.lastUserInp.body.roll, readEntry.lastUserInp.body.pitch, readEntry.lastUserInp.body.yaw, readEntry.lastUserInp.body.lift);
+      printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header & MODE_LENGTH, readEntry.lastUserInp.body[ROLL_OFFSET], readEntry.lastUserInp.body[PITCH_OFFSET], readEntry.lastUserInp.body[YAW_OFFSET], readEntry.lastUserInp.body[LIFT_OFFSET]);
       printf("%3d %3d %3d %3d | ", readEntry.actuators[0], readEntry.actuators[1], readEntry.actuators[2], readEntry.actuators[3]);
       printf("%6d %6d %6d | ", readEntry.sensors.phi, readEntry.sensors.theta, readEntry.sensors.psi);
       printf("%6d %6d %6d | ", readEntry.sensors.sp, readEntry.sensors.sq, readEntry.sensors.sr);

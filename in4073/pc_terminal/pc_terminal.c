@@ -354,8 +354,10 @@ int main(int argc, char **argv)
 																// TODO combine the keyboard and joystick data
 																combine_values();
 																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
-																if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
-																else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+																//if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
+																//else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+																if (panic) mode = PANIC_MODE;
+																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 
 																rs232_putpacket(&my_packet);
 

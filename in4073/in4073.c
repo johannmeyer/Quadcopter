@@ -81,6 +81,7 @@ void determine_mode(uint8_t mode)
 				printf("Calibrating sensors \n");
 				calibrate_sensors();
 				printf("Calibration done \n");
+				init_logging(FULL_LOGGING);
 				prev_mode = CALIBRATION_MODE;
 			}
 			break;
@@ -142,7 +143,7 @@ void process_mode(uint8_t current_mode)
 				ae[2] = 0;
 				ae[3] = 0;
 				update_motors();
-				if (lift == 0 && roll ==0 && pitch ==0 && yaw ==0)
+				if (lift == 0 && roll == 0 && pitch == 0 && yaw == 0)
 				{
 					safe_flag = true;
 				}
@@ -162,6 +163,7 @@ void process_mode(uint8_t current_mode)
   				ae[3] -= PANIC_SPEED;
 				  update_motors();
 					}
+					safe_flag = false;
 					prev_mode = SAFE_MODE;
 					break;
 
@@ -179,7 +181,6 @@ void process_mode(uint8_t current_mode)
 				ae[2] = (new_lift - pitch)/b - yaw/d;
 				ae[3] = (new_lift + roll)/b  + yaw/d;
 
-				printf("data:%d %d %d",yaw,ae[0],ae[1]);
 				update_motors();
 				break;
 
@@ -189,18 +190,10 @@ void process_mode(uint8_t current_mode)
 				break;
 
 		case YAW_MODE:									// Yaw control mode
-			  /*b = 1;
-        yaw_parameter = 5;
-        psi_s = (int8_t)(((float)get_sensor(PSI)/32768)*127);
-        //dcpsi_s = (int8_t)(((float)dcpsi/32768)*127);
-        //psi_s = psi_s - dcpsi_s;  // value of yaw from calibrated point
-        yaw_error = (yaw/4) - psi_s;
-				printf("yaw_error: %d,yaw: %d, psi_s: %d, psi: %d \n", yaw_error,yaw,psi_s,get_sensor(PSI) );
-        ae[0] = (new_lift + pitch)/b - (yaw_parameter*yaw_error);
-				ae[1] = (new_lift - roll)/b  + (yaw_parameter*yaw_error);
-				ae[2] = (new_lift - pitch)/b - (yaw_parameter*yaw_error);
-				ae[3] = (new_lift + roll)/b  + (yaw_parameter*yaw_error);*/
-				fp_yaw_control(roll, pitch, yaw, new_lift, 100, get_sensor(PSI));
+
+				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
+				fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
+
         update_motors();
         break;
 
@@ -317,7 +310,7 @@ int main(void)
       #endif
 			read_baro();
 
-    /*  if(isCalibrated())
+    /*if(isCalibrated())
       {
         write_log_entry(get_time_us(), prev_mode, logCore, ae, get_sensor(PHI), get_sensor(THETA), get_sensor(PSI),
         get_sensor(SP), get_sensor(SQ), get_sensor(SR), get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ),
@@ -326,11 +319,10 @@ int main(void)
       }
       else
       {
-        write_log_entry(get_time_us(), prev_mode, logCore, ae, phi, theta, psi, sp, sq, sr, sax, say, saz,
-        bat_volt, temperature, pressure);
+        write_short_log(get_time_us(), prev_mode, ae, phi, theta, psi);
         print_last_log();
-      }
-*/
+      }*/
+
 			clear_timer_flag();
 		}
 
