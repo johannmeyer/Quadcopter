@@ -3,7 +3,7 @@
 
 typedef struct calibData calibData;
 
-#define BUF_SIZE  225
+#define BUF_SIZE  200
 
 struct calibData
 {
