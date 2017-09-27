@@ -11,9 +11,9 @@
  */
 
 #include "control.h"
-#include "sensors.h"
+#include "fixmath.h"
 #include "in4073.h"
-
+#include "sensors.h"
 /*
 Local Variables
  */
@@ -27,6 +27,15 @@ void angle_controller();
 
 void update_motors(void)
 {
+        // Apply actuation
+        // TODO is b still necessary for full control?
+        int8_t b = 1;
+        ae[0] = (new_lift + pitch_act) / b - yaw_act;
+        ae[1] = (new_lift - roll_act) / b + yaw_act;
+        ae[2] = (new_lift - pitch_act) / b - yaw_act;
+        ae[3] = (new_lift + roll_act) / b + yaw_act;
+        update_motors();
+
         for (int i = 0; i < 4; i++)
         {
                 if (ae[i] > 600)
@@ -41,17 +50,86 @@ void update_motors(void)
         motor[3] = ae[3];
 }
 
+void fp_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw, uint16_t plift,
+                    uint16_t yawPpar, int16_t senPsi)
+{
+        // const fix16_t convIndex = F16(127/32768);
+        const fix16_t convIndex = F16(0.00387573242188);
+        fix16_t       froll = fix16_from_int(proll);
+        fix16_t       fpitch = fix16_from_int(ppitch);
+        fix16_t       fyaw = fix16_from_int(pyaw >> 2);
+        fix16_t       flift = fix16_from_int(plift);
+        fix16_t       fyawPpar = fix16_from_int(yawPpar);
+        fix16_t       fsenPsi = fix16_from_int(senPsi);
+
+        fix16_t convPsi = fix16_mul(fsenPsi, convIndex);
+        fix16_t fyaw_error = fix16_sub(fyaw, convPsi);
+
+        printf("yaw_error: %d,yaw: %d, converted Psi: %d, sensed Psi: %d \n",
+               fix16_to_int(fyaw_error), fix16_to_int(fyaw),
+               fix16_to_int(convPsi), senPsi);
+        ae[0] = fix16_to_int(fix16_sub(fix16_add(flift, fpitch),
+                                       fix16_mul(fyawPpar, fyaw_error)));
+        ae[1] = fix16_to_int(fix16_add(fix16_sub(flift, froll),
+                                       fix16_mul(fyawPpar, fyaw_error)));
+        ae[2] = fix16_to_int(fix16_sub(fix16_sub(flift, fpitch),
+                                       fix16_mul(fyawPpar, fyaw_error)));
+        ae[3] = fix16_to_int(fix16_add(fix16_add(flift, froll),
+                                       fix16_mul(fyawPpar, fyaw_error)));
+}
+/*
+TODO Deprecated
+ */
+void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
+                     uint16_t plift, uint16_t yawPpar, int16_t psi_sen)
+{
+        int8_t b = 1;
+        int8_t psi_conv = (int8_t)((psi_sen * 127) / 32768);
+        // dcpsi_s = (int8_t)(((float)dcpsi/32768)*127);
+        // psi_s = psi_s - dcpsi_s;  // value of yaw from calibrated point
+        int8_t yaw_error = (pyaw / 4) - psi_conv;
+        printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d \n",
+               yaw_error, pyaw, psi_conv, psi_sen);
+        ae[0] = (plift + ppitch) / b - (yawPpar * yaw_error);
+        ae[1] = (plift - proll) / b + (yawPpar * yaw_error);
+        ae[2] = (plift - ppitch) / b - (yawPpar * yaw_error);
+        ae[3] = (plift + proll) / b + (yawPpar * yaw_error);
+}
+
+void yaw_controller()
+{
+        int8_t yaw_s = (int32_t)get_sensor(PSI) * 127 / 32768;
+        // TODO why divide by 4 in old code?
+        yaw_act = P * (yaw - yaw_s);
+
+}
+
 void run_filters_and_control()
 {
         // fancy stuff here
         // control loops and/or filters
+}
+void yaw_mode()
+{
+        yaw_controller();
+        roll_act = roll;
+        pitch_act = pitch;
 
-        // Apply actuation
-        // TODO is be still necessary?
-        ae[0] = (new_lift + pitch_act) / b - yaw_act;
-        ae[1] = (new_lift - roll_act) / b + yaw_act;
-        ae[2] = (new_lift - pitch_act) / b - yaw_act;
-        ae[3] = (new_lift + roll_act) / b + yaw_act;
+        update_motors();
+}
+
+void full_mode()
+{
+        outer_counter++;
+        if (outer_counter > 4)
+        {
+                angle_controller();
+                yaw_controller();
+                
+                outer_counter = 0;
+        }
+        rate_controller();
+
         update_motors();
 }
 

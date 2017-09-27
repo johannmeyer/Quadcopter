@@ -14,9 +14,9 @@
  */
 // HEADER
 #define MODE_OFFSET 0             // bit offset
-#define MODE_LENGTH 0b1111;       // used for anding
+#define MODE_LENGTH 0b1111       // used for anding
 #define PACKET_TYPE_OFFSET 4      // bit offset
-#define PACKET_TYPE_LENGTH 0b111; // used for anding
+#define PACKET_TYPE_LENGTH 0b111 // used for anding
 
 // Packet types
 #define PACKET_TYPE_COMMAND 0

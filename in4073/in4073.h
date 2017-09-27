@@ -40,6 +40,19 @@
 #define BLUE		30
 #define INT_PIN		5
 
+#define SAFE_MODE 0
+#define PANIC_MODE 1
+#define MANUAL_MODE 2
+#define CALIBRATION_MODE 3
+#define YAW_MODE 4
+#define FULL_MODE 5
+#define RAW_MODE 6
+#define HEIGHT_MODE 7
+#define WIRELESS_MODE 8
+#define EXIT_MODE 9
+
+#define PANIC_SPEED 1
+
 bool demo_done;
 bool exit_mode_flag;
 bool safe_flag;

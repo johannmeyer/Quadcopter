@@ -353,7 +353,7 @@ int main(int argc, char **argv)
 
 																// combine the keyboard and joystick data
 																combine_values();
-
+																
 																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 
 																rs232_putpacket(&my_packet);
