@@ -349,13 +349,12 @@ int main(int argc, char **argv)
 																	} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
 																	get_key(c);
 																}
-																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);
-																//printf("joystick: %d | %d |%d | %d | %d|\n", roll_js,pitch_js,yaw_js,lift_js,panic);
-																// TODO combine the keyboard and joystick data
+																get_joystick_action(&mode, &roll_js, &pitch_js, &yaw_js, &lift_js);
+
+																// combine the keyboard and joystick data
 																combine_values();
-																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
-																if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
-																else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+
+																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 
 																rs232_putpacket(&my_packet);
 

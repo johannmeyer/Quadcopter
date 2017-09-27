@@ -20,20 +20,10 @@
 #include "control.h"
 #include <stdlib.h>
 
-#define SAFE_MODE 0
-#define PANIC_MODE 1
-#define MANUAL_MODE 2
-#define CALIBRATION_MODE 3
-#define YAW_MODE 4
-#define FULL_MODE 5
-#define RAW_MODE 6
-#define HEIGHT_MODE 7
-#define WIRELESS_MODE 8
-#define EXIT_MODE 9
-
 #define PANIC_SPEED 1
 
 core *logCore;
+int outer_counter;
 /*------------------------------------------------------------------
  * process_key -- process command keys
  *------------------------------------------------------------------
@@ -204,6 +194,14 @@ void process_mode(uint8_t current_mode)
         break;
 
 		case FULL_MODE:									// Full control mode
+			outer_counter++;
+			if (outer_counter > 4)
+			{
+					angle_controller();
+					// int_yaw_controller(); // TODO remove the update_motors and ae code
+					outer_counter = 0;
+			}
+			rate_controller();
       break;
 
 		case RAW_MODE:                 // Raw control mode
@@ -281,6 +279,7 @@ int main(void)
 
 	uint32_t counter = 0;
   logCore = (core *) malloc(sizeof(core));
+	outer_counter = 0;
 	prev_mode = SAFE_MODE;
 	demo_done = false;
 	exit_mode_flag = false;
@@ -290,20 +289,17 @@ int main(void)
 	{
 		if (rx_queue.count >= sizeof(packet))
     {
-      int failed = decode(&logCore);
+      decode(&logCore);
       calculate_values();
 			if (mode != prev_mode)
 			{
 				//printf("Determine mode \n");
-			determine_mode(mode);
+				determine_mode(mode);
 			}
 			process_mode(prev_mode);
 			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
-      if(!failed)
-      {
         // TODO Process the data e.g. change states
         printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-      }
     }
 
 		if (check_timer_flag())

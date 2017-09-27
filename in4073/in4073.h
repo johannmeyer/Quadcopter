@@ -21,6 +21,18 @@
 #include "ml.h"
 #include "app_util_platform.h"
 #include <math.h>
+#include "control.h"
+
+#define SAFE_MODE 0
+#define PANIC_MODE 1
+#define MANUAL_MODE 2
+#define CALIBRATION_MODE 3
+#define YAW_MODE 4
+#define FULL_MODE 5
+#define RAW_MODE 6
+#define HEIGHT_MODE 7
+#define WIRELESS_MODE 8
+#define EXIT_MODE 9
 
 #define RED		22
 #define YELLOW		24
