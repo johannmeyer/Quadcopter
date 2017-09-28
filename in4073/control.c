@@ -17,6 +17,7 @@
 /*
 Local Variables
  */
+uint8_t outer_counter = 0;
 int16_t pitch_rate_d, roll_rate_d;
 int16_t pitch_act, roll_act, yaw_act;
 /*
@@ -24,6 +25,7 @@ Local Function Prototypes
  */
 void rate_controller();
 void angle_controller();
+void yaw_controller();
 
 void update_motors(void)
 {
@@ -121,12 +123,10 @@ void yaw_mode()
 void full_mode()
 {
         outer_counter++;
-        if (outer_counter > 4)
+        if (outer_counter % 4 == 0)
         {
                 angle_controller();
                 yaw_controller();
-                
-                outer_counter = 0;
         }
         rate_controller();
 

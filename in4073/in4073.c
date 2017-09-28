@@ -23,7 +23,7 @@
 #define PANIC_SPEED 1
 
 core *logCore;
-int outer_counter;
+
 /*------------------------------------------------------------------
  * process_key -- process command keys
  *------------------------------------------------------------------
@@ -266,7 +266,6 @@ int main(void)
 
 	uint32_t counter = 0;
   logCore = (core *) malloc(sizeof(core));
-	outer_counter = 0;
 	prev_mode = SAFE_MODE;
 	demo_done = false;
 	exit_mode_flag = false;
