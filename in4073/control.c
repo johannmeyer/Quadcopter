@@ -108,7 +108,7 @@ void yaw_controller()
         int8_t yaw_s = (int32_t)get_sensor(PSI) * 127 / 32768;
         // TODO why divide by 4 in old code?
         printf("P in controller:%d\n", P);
-        //P=5;
+        P=5;
         yaw_act = P * (yaw/4 - yaw_s);
         printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d P: %d \n",
                yaw_act, yaw/4, yaw_s, get_sensor(PSI),P);
