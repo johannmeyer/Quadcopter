@@ -57,9 +57,11 @@ void decode(core **logUserIn)
                                 case PACKET_TYPE_COMMAND:
                                         decode_data_command(data, &roll, &pitch,
                                                             &yaw, &lift);
+                                        printf("roll:%d\n", roll);
                                         break;
                                 case PACKET_TYPE_GAINS:
                                         decode_data_gains(data, &P, &P1, &P2);
+                                        printf("P:%d\n", P);
                                         break;
                                 default:
                                         printf("Unknown Packet Type\n");

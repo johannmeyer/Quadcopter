@@ -20,7 +20,6 @@
 #include "control.h"
 #include <stdlib.h>
 
-#define PANIC_SPEED 1
 
 core *logCore;
 
@@ -49,7 +48,7 @@ void determine_mode(uint8_t mode)
 		 if (prev_mode == SAFE_MODE || prev_mode == CALIBRATION_MODE)
 		 {
 			prev_mode = SAFE_MODE;
-			printf("Safe mode \n");
+			//printf("Safe mode \n");
 		 }
 		else
 			{
@@ -147,11 +146,16 @@ void process_mode(uint8_t current_mode)
     		printf("Panic mode reached\n");
         while(ae[0] > 0 || ae[1] > 0 || ae[2] > 0 || ae[3]  > 0)
           {
-					ae[0] -= PANIC_SPEED;
-  				ae[1] -= PANIC_SPEED;
-  				ae[2] -= PANIC_SPEED;
-  				ae[3] -= PANIC_SPEED;
-				  update_motors();
+						if(check_timer_flag())			// timer of 50ms
+						{
+							ae[0] -= PANIC_SPEED;
+		  				ae[1] -= PANIC_SPEED;
+		  				ae[2] -= PANIC_SPEED;
+		  				ae[3] -= PANIC_SPEED;
+						  update_motors();
+							clear_timer_flag();
+						}
+
 					}
 					safe_flag = false;
 					prev_mode = SAFE_MODE;
@@ -182,8 +186,8 @@ void process_mode(uint8_t current_mode)
 		case YAW_MODE:									// Yaw control mode
 
 				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
-				fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
-				//yaw_mode();
+				//fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
+				yaw_mode();
         update_motors();
         break;
 

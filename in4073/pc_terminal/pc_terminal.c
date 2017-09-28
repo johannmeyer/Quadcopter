@@ -118,11 +118,12 @@ void get_key(char c)
 			yaw_key = yaw_key - TRIM_VALUE;
 			break;
 		case 'u':
-
+			P += P_CHANGE;
 			break;
 		case 'j':
-
+			P -= P_CHANGE;
 			break;
+
 		case 'i':
 
 			break;
@@ -319,7 +320,9 @@ int main(int argc, char **argv)
 								pitch=0;
 								roll=0;
 								yaw=0;
-
+								P = 5;
+								P1=1;
+								P2=1;
 
 								term_puts("\nTerminal program - Embedded Real-Time Systems\n");
 
@@ -353,11 +356,11 @@ int main(int argc, char **argv)
 
 																// combine the keyboard and joystick data
 																combine_values();
-																
+
 																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
-
 																rs232_putpacket(&my_packet);
-
+																encode(&my_packet, mode, PACKET_TYPE_GAINS);
+																rs232_putpacket(&my_packet);
 																// Reads data sent from the Drone
 																start = clock();
 																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)

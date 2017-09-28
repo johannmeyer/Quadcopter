@@ -23,21 +23,25 @@ int16_t pitch_act, roll_act, yaw_act;
 /*
 Local Function Prototypes
  */
+void update_actuator();
 void rate_controller();
 void angle_controller();
 void yaw_controller();
 
+void update_actuator()
+{
+      // Apply actuation
+      // TODO is b still necessary for full control?
+      int8_t b = 1;
+      ae[0] = (new_lift + pitch_act) / b - yaw_act;
+      ae[1] = (new_lift - roll_act) / b + yaw_act;
+      ae[2] = (new_lift - pitch_act) / b - yaw_act;
+      ae[3] = (new_lift + roll_act) / b + yaw_act;
+      update_motors();
+}
+
 void update_motors(void)
 {
-        // Apply actuation
-        // TODO is b still necessary for full control?
-        int8_t b = 1;
-        ae[0] = (new_lift + pitch_act) / b - yaw_act;
-        ae[1] = (new_lift - roll_act) / b + yaw_act;
-        ae[2] = (new_lift - pitch_act) / b - yaw_act;
-        ae[3] = (new_lift + roll_act) / b + yaw_act;
-        update_motors();
-
         for (int i = 0; i < 4; i++)
         {
                 if (ae[i] > 600)
@@ -82,6 +86,7 @@ void fp_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw, uint16_t plift,
 /*
 TODO Deprecated
  */
+ /*
 void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
                      uint16_t plift, uint16_t yawPpar, int16_t psi_sen)
 {
@@ -97,13 +102,16 @@ void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
         ae[2] = (plift - ppitch) / b - (yawPpar * yaw_error);
         ae[3] = (plift + proll) / b + (yawPpar * yaw_error);
 }
-
+*/
 void yaw_controller()
 {
         int8_t yaw_s = (int32_t)get_sensor(PSI) * 127 / 32768;
         // TODO why divide by 4 in old code?
-        yaw_act = P * (yaw - yaw_s);
-
+        printf("P in controller:%d\n", P);
+        //P=5;
+        yaw_act = P * (yaw/4 - yaw_s);
+        printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d P: %d \n",
+               yaw_act, yaw/4, yaw_s, get_sensor(PSI),P);
 }
 
 void run_filters_and_control()
@@ -116,8 +124,7 @@ void yaw_mode()
         yaw_controller();
         roll_act = roll;
         pitch_act = pitch;
-
-        update_motors();
+        update_actuator();
 }
 
 void full_mode()
@@ -130,7 +137,7 @@ void full_mode()
         }
         rate_controller();
 
-        update_motors();
+        update_actuator();
 }
 
 void rate_controller()
@@ -153,7 +160,7 @@ void angle_controller()
         /*
         Johann Meyer
          */
-        // Scale sensor values
+        // Scale sensor va`lues
         // TODO check this works
         int8_t roll_s = (int32_t)get_sensor(PHI) * 127 / 32768;
         int8_t pitch_s = (int32_t)get_sensor(THETA) * 127 / 32768;
