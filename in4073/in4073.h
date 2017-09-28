@@ -10,7 +10,7 @@
 
 #ifndef IN4073_H__
 #define IN4073_H__
-//#define FLIGHT
+#define FLIGHT
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -40,7 +40,7 @@
 #define BLUE		30
 #define INT_PIN		5
 
-#define PANIC_SPEED 5
+#define PANIC_SPEED 10
 
 bool demo_done;
 bool exit_mode_flag;

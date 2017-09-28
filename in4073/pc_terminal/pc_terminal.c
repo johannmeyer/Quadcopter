@@ -125,7 +125,7 @@ void get_key(char c)
 			break;
 
 		case 'i':
-
+		
 			break;
 		case 'k':
 
@@ -343,6 +343,9 @@ int main(int argc, char **argv)
 								packet my_packet;
 								for (;;)
 								{
+																start = clock();
+																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
+																{
 																// Sends data to the Drone
 																char readChar = -1;
 																if ((readChar = term_getchar_nb()) != -1)
@@ -356,17 +359,18 @@ int main(int argc, char **argv)
 
 																// combine the keyboard and joystick data
 																combine_values();
-
+																// Reads data sent from the Drone
+																if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
+																}
 																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
 																rs232_putpacket(&my_packet);
 																encode(&my_packet, mode, PACKET_TYPE_GAINS);
 																rs232_putpacket(&my_packet);
-																// Reads data sent from the Drone
-																start = clock();
-																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
-																{
-																	if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
-																}
+
+
+
+																	//
+
 								}
 
 								term_exitio();

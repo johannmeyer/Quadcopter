@@ -15,8 +15,10 @@ void encode_header(uint8_t *header, uint8_t mode, uint8_t packet_type)
 
 void decode_header(uint8_t *header, uint8_t *mode, uint8_t *packet_type)
 {
-        *mode = (*header << MODE_OFFSET) & MODE_LENGTH;
-        *packet_type = (*header << PACKET_TYPE_OFFSET) & PACKET_TYPE_LENGTH;
+      uint8_t data_pointer = *header << MODE_OFFSET;
+      *mode = data_pointer & MODE_LENGTH;
+      data_pointer = data_pointer >> PACKET_TYPE_OFFSET;
+      *packet_type = data_pointer & PACKET_TYPE_LENGTH;
 }
 
 /*

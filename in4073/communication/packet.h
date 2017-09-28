@@ -19,7 +19,7 @@
 #define PACKET_TYPE_LENGTH 0b111 // used for anding
 
 // Packet types
-#define PACKET_TYPE_COMMAND 2
+#define PACKET_TYPE_COMMAND 0
 #define PACKET_TYPE_GAINS 1
 
 // BODY

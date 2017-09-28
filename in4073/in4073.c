@@ -174,6 +174,11 @@ void process_mode(uint8_t current_mode)
 				ae[1] = (new_lift - roll)/b  + yaw/d;
 				ae[2] = (new_lift - pitch)/b - yaw/d;
 				ae[3] = (new_lift + roll)/b  + yaw/d;
+				for (int i = 0; i < 4; i++)
+        {
+                if (ae[i] < 180 && new_lift > 180)
+                        ae[i] = 180;
+        }
 
 				update_motors();
 				break;
@@ -277,26 +282,43 @@ int main(void)
 
 	while (!demo_done)
 	{
-		if (rx_queue.count >= sizeof(packet))
-    {
-      decode(&logCore);
-      calculate_values();
-			if (mode != prev_mode)
-			{
-				//printf("Determine mode \n");
-				determine_mode(mode);
-			}
-			process_mode(prev_mode);
-			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
+
+  			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
         // TODO Process the data e.g. change states
-        printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-    }
+				decode(&logCore);
+				calculate_values();
+				if (mode != prev_mode)
+				{
+					//printf("Determine mode \n");
+					determine_mode(mode);
+				}
+				process_mode(prev_mode);
 
-		if (check_timer_flag())
-		{
-			if (counter++%20 == 0) nrf_gpio_pin_toggle(BLUE);
 
-      //TODO Separate flight mode in the Makefile
+				if (check_timer_flag())
+				{
+
+					if (counter++%20 == 0)
+					{
+						nrf_gpio_pin_toggle(BLUE);
+						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, bat_volt, P, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						if(isCalibrated())
+				      {
+								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      printf("%6d %6d %6d | ", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+								printf("\n");
+				      }
+				      else
+				      {
+								printf("%6d %6d %6d | ", phi, theta, psi);
+					      printf("%6d %6d %6d | ", sp, sq, sr);
+					      printf("%6d %6d %6d | ", sax, say, saz);
+								printf("\n");
+				      }
+					}
+
+			//TODO Separate flight mode in the Makefile
       #ifdef FLIGHT
 			battery_monitoring(prev_mode);
       #endif
@@ -304,20 +326,20 @@ int main(void)
 
     /*if(isCalibrated())
       {
-        write_log_entry(get_time_us(), prev_mode, logCore, ae, get_sensor(PHI), get_sensor(THETA), get_sensor(PSI),
-        get_sensor(SP), get_sensor(SQ), get_sensor(SR), get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ),
-        bat_volt, temperature, pressure);
-        print_last_log();
+				printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+	      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+	      printf("%6d %6d %6d | ", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+				printf("\n");
       }
       else
       {
-        write_short_log(get_time_us(), prev_mode, ae, phi, theta, psi);
-        print_last_log();
+				printf("%6d %6d %6d | ", phi, theta, psi);
+	      printf("%6d %6d %6d | ", sp, sq, sr);
+	      printf("%6d %6d %6d | ", sax, say, saz);
+				printf("\n");
       }*/
-
 			clear_timer_flag();
 		}
-
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();

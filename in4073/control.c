@@ -37,6 +37,11 @@ void update_actuator()
       ae[1] = (new_lift - roll_act) / b + yaw_act;
       ae[2] = (new_lift - pitch_act) / b - yaw_act;
       ae[3] = (new_lift + roll_act) / b + yaw_act;
+      for (int i = 0; i < 4; i++)
+      {
+              if (ae[i] < 180 && new_lift > 180)
+                      ae[i] = 180;
+      }
       update_motors();
 }
 
@@ -107,11 +112,11 @@ void yaw_controller()
 {
         int8_t yaw_s = (int32_t)get_sensor(PSI) * 127 / 32768;
         // TODO why divide by 4 in old code?
-        printf("P in controller:%d\n", P);
-        P=5;
+        //printf("P in controller:%d\n", P);
+        //P=5;
         yaw_act = P * (yaw/4 - yaw_s);
-        printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d P: %d \n",
-               yaw_act, yaw/4, yaw_s, get_sensor(PSI),P);
+      /*  printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d P: %d \n",
+               yaw_act, yaw/4, yaw_s, get_sensor(PSI),P);*/
 }
 
 void run_filters_and_control()
