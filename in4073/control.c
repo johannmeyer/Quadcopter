@@ -17,8 +17,10 @@
 /*
 Local Variables
  */
+uint32_t control_counter =0 ;
 uint8_t outer_counter = 0;
-int16_t pitch_rate_d, roll_rate_d;
+int16_t yaw_prev, yaw_s;
+int16_t pitch_rate_d, roll_rate_d, yaw_rate;
 int16_t pitch_act, roll_act, yaw_act;
 /*
 Local Function Prototypes
@@ -37,10 +39,13 @@ void update_actuator()
       ae[1] = (new_lift - roll_act) / b + yaw_act;
       ae[2] = (new_lift - pitch_act) / b - yaw_act;
       ae[3] = (new_lift + roll_act) / b + yaw_act;
-      for (int i = 0; i < 4; i++)
+      for (int i = 0; i < 4; i++)         // Safe check for motor values
       {
-              if (ae[i] < 180 && new_lift > 180)
+              if (ae[i] < 180 && new_lift > 180)      // not allowing motor to stop rotation
                       ae[i] = 180;
+
+              if(new_lift < 160)  // if lift is not provided, do not respond to yaw error
+              ae[i] = 0;
       }
       update_motors();
 }
@@ -110,13 +115,36 @@ void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
 */
 void yaw_controller()
 {
-        int8_t yaw_s = (int32_t)get_sensor(PSI) * 127 / 32768;
-        // TODO why divide by 4 in old code?
+        yaw_s = (int16_t)((int32_t)(get_sensor(PSI) * 255) / 32768);
         //printf("P in controller:%d\n", P);
         //P=5;
-        yaw_act = P * (yaw/4 - yaw_s);
-      /*  printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d P: %d \n",
-               yaw_act, yaw/4, yaw_s, get_sensor(PSI),P);*/
+
+        yaw_rate = yaw_s - yaw_prev;
+        if (yaw_rate > 250)
+        {
+          yaw_rate -= 510;
+        }
+        else if(yaw_rate < -250)
+        {
+          yaw_rate += 510;
+        }
+        yaw_act = P*((yaw>>2) - yaw_rate);      // yaw/4 to scale down yaw coming from joystick
+        yaw_prev = yaw_s;
+        /*if (check_timer_flag())
+        {
+              if (yaw_rate !=0)
+              {
+                printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
+               yaw_act, yaw>>1, yaw_s,yaw_rate,P);
+              }
+             clear_timer_flag();
+
+        }*/
+        /*if (yaw_rate !=0)
+        {
+          printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
+         yaw_act, yaw>>1, yaw_s,yaw_rate,get_sensor(PSI));
+       }*/
 }
 
 void run_filters_and_control()

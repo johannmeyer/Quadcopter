@@ -125,7 +125,7 @@ void get_key(char c)
 			break;
 
 		case 'i':
-		
+
 			break;
 		case 'k':
 
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
 								pitch=0;
 								roll=0;
 								yaw=0;
-								P = 5;
+								P = 10;
 								P1=1;
 								P2=1;
 

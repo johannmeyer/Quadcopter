@@ -3,7 +3,8 @@
 
 typedef struct calibData calibData;
 
-#define BUF_SIZE  225
+#define BUF_SIZE  200
+#define ACC_TOLERANCE 80
 
 struct calibData
 {
@@ -68,7 +69,7 @@ void calibrate_sensors(void)
     }
     for(i=6; i<9; i++)
     {
-      insert_data(&calibArray[i], newSensorValues[i], 80);
+      insert_data(&calibArray[i], newSensorValues[i], ACC_TOLERANCE);
     }
   }
 

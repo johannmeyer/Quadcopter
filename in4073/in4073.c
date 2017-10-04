@@ -222,14 +222,6 @@ void calculate_values()
 {
 	new_lift = 3*lift;
 	if(new_lift > 600) new_lift = 600;
-  lift_delta = new_lift - prev_lift;
-  roll_delta = roll - prev_roll;
-  pitch_delta = pitch - prev_pitch;
-  yaw_delta = yaw - prev_yaw;
-  prev_lift = new_lift;
-  prev_roll = roll;
-  prev_pitch = pitch;
-  prev_yaw = yaw;
 }
 
 void battery_monitoring(uint8_t mode)
@@ -297,12 +289,13 @@ int main(void)
 
 				if (check_timer_flag())
 				{
+					printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
 					if (counter++%20 == 0)
 					{
 						nrf_gpio_pin_toggle(BLUE);
-						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, bat_volt, P, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-						if(isCalibrated())
+						//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						/*if(isCalibrated())
 				      {
 								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
 					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
@@ -315,7 +308,7 @@ int main(void)
 					      printf("%6d %6d %6d | ", sp, sq, sr);
 					      printf("%6d %6d %6d | ", sax, say, saz);
 								printf("\n");
-				      }
+				      }*/
 					}
 
 			//TODO Separate flight mode in the Makefile
