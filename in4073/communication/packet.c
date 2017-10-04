@@ -2,10 +2,61 @@
    Johann Meyer
  */
 #include "packet.h"
+#include <stdio.h>
 #include <string.h>
 
 // HEADER
-void encode_header(uint8_t *header, uint8_t mode, uint8_t packet_type)
+void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer)
+{
+        // Construct Packet Header
+        *header = 0;
+        *header |= mode << MODE_OFFSET;
+        *header |= p_incrementer << PACKET_TYPE_OFFSET;
+}
+
+void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
+                          uint8_t *P1, uint8_t *P2)
+{
+        uint8_t data_pointer = *header << MODE_OFFSET;
+        *mode = data_pointer & MODE_LENGTH;
+        data_pointer = data_pointer >> PACKET_TYPE_OFFSET;
+        uint8_t p_incrementer = data_pointer & PACKET_TYPE_LENGTH;
+
+        switch (p_incrementer)
+        {
+        case GAIN_NO_INCREMENT:
+                break;
+        case GAIN_P_INCREMENT:
+                if (*P != 255)
+                        *P += 1;
+                break;
+        case GAIN_P_DECREMENT:
+                if (*P != 0)
+                        *P -= 1;
+                break;
+        case GAIN_P1_INCREMENT:
+                if (*P1 != 255)
+                        *P1 += 1;
+                break;
+        case GAIN_P1_DECREMENT:
+                if (*P1 != 0)
+                        *P1 -= 1;
+                break;
+        case GAIN_P2_INCREMENT:
+                if (*P2 != 255)
+                        *P2 += 1;
+                break;
+        case GAIN_P2_DECREMENT:
+                if (*P2 != 0)
+                        *P2 -= 1;
+                break;
+        default:
+                printf("GAIN_INCREMENTER code not valid.\n");
+                break;
+        }
+}
+
+void encode_header_uav_pc(uint8_t *header, uint8_t mode, uint8_t packet_type)
 {
         // Construct Packet Header
         *header = 0;
@@ -13,12 +64,12 @@ void encode_header(uint8_t *header, uint8_t mode, uint8_t packet_type)
         *header |= packet_type << PACKET_TYPE_OFFSET;
 }
 
-void decode_header(uint8_t *header, uint8_t *mode, uint8_t *packet_type)
+void decode_header_uav_pc(uint8_t *header, uint8_t *mode, uint8_t *packet_type)
 {
-      uint8_t data_pointer = *header << MODE_OFFSET;
-      *mode = data_pointer & MODE_LENGTH;
-      data_pointer = data_pointer >> PACKET_TYPE_OFFSET;
-      *packet_type = data_pointer & PACKET_TYPE_LENGTH;
+        uint8_t data_pointer = *header << MODE_OFFSET;
+        *mode = data_pointer & MODE_LENGTH;
+        data_pointer = data_pointer >> PACKET_TYPE_OFFSET;
+        *packet_type = data_pointer & PACKET_TYPE_LENGTH;
 }
 
 /*
@@ -44,20 +95,20 @@ void decode_data_command(uint8_t *data, int8_t *roll, int8_t *pitch,
         *lift = data[LIFT_OFFSET];
 }
 
-// PACKET_TYPE_GAINS
-void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2)
-{
-        data[P_GAIN_OFFSET] = P;
-        data[P1_GAIN_OFFSET] = P1;
-        data[P2_GAIN_OFFSET] = P2;
-}
-
-void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2)
-{
-        *P = data[P_GAIN_OFFSET];
-        *P1 = data[P1_GAIN_OFFSET];
-        *P2 = data[P2_GAIN_OFFSET];
-}
+// // PACKET_TYPE_GAINS
+// void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2)
+// {
+//         data[P_GAIN_OFFSET] = P;
+//         data[P1_GAIN_OFFSET] = P1;
+//         data[P2_GAIN_OFFSET] = P2;
+// }
+//
+// void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2)
+// {
+//         *P = data[P_GAIN_OFFSET];
+//         *P1 = data[P1_GAIN_OFFSET];
+//         *P2 = data[P2_GAIN_OFFSET];
+// }
 
 /*
 UAV -> PC

@@ -9,18 +9,27 @@
 #define START_BYTE 0xff
 #define BODY_LENGTH 4
 
+#define GAIN_NO_INCREMENT 0
+#define GAIN_P_INCREMENT 1
+#define GAIN_P_DECREMENT 2
+#define GAIN_P1_INCREMENT 3
+#define GAIN_P1_DECREMENT 4
+#define GAIN_P2_INCREMENT 5
+#define GAIN_P2_DECREMENT 6
+
 /*
  Packet Definition PC -> UAV
  */
 // HEADER
-#define MODE_OFFSET 0             // bit offset
-#define MODE_LENGTH 0b1111       // used for anding
-#define PACKET_TYPE_OFFSET 4      // bit offset
-#define PACKET_TYPE_LENGTH 0b111 // used for anding
+#define MODE_OFFSET 0                 // bit offset
+#define MODE_LENGTH 0b1111            // used for anding
+#define GAIN_INCREMENTER_OFFSET 4     // bit offset
+#define GAIN_INCREMENTER_LENGTH 0b111 // used for anding
 
+/* Only one Packet Type now as Gains are now implemented as incrementers */
 // Packet types
-#define PACKET_TYPE_COMMAND 0
-#define PACKET_TYPE_GAINS 1
+// #define PACKET_TYPE_COMMAND 0
+// #define PACKET_TYPE_GAINS 1
 
 // BODY
 // PACKET_TYPE_COMMAND
@@ -29,15 +38,22 @@
 #define YAW_OFFSET 2   // byte offset
 #define LIFT_OFFSET 3  // byte offset
 
-// PACKET_TYPE_GAINS
-#define P_GAIN_OFFSET 0  // byte offset // Yaw controller
-#define P1_GAIN_OFFSET 1 // byte offset
-#define P2_GAIN_OFFSET 2 // byte offset
+// // PACKET_TYPE_GAINS
+// #define P_GAIN_OFFSET 0  // byte offset // Yaw controller
+// #define P1_GAIN_OFFSET 1 // byte offset
+// #define P2_GAIN_OFFSET 2 // byte offset
 
 /*
  Packet Definition UAV -> PC
  */
-// HEADER = HEADER OF PC -> UAV
+// HEADER
+// HEADER
+#define MODE_OFFSET 0            // bit offset
+#define MODE_LENGTH 0b1111       // used for anding
+#define PACKET_TYPE_OFFSET 4     // bit offset
+#define PACKET_TYPE_LENGTH 0b111 // used for anding
+
+// Packet types
 #define PACKET_TYPE_ACTUATOR 0
 #define PACKET_TYPE_ANGLES_BAT 1
 #define PACKET_TYPE_GYRO 2
@@ -84,17 +100,23 @@ typedef struct packet
 /*
    Function Prototypes
  */
-void encode_header(uint8_t *header, uint8_t mode, uint8_t packet_type);
-void decode_header(uint8_t *header, uint8_t *mode, uint8_t *packet_type);
+
 // PC -> UAV
+void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer);
+void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
+                          uint8_t *P1, uint8_t *P2);
+
 void encode_data_command(uint8_t *data, int8_t roll, int8_t pitch, int8_t yaw,
                          uint8_t lift);
 void decode_data_command(uint8_t *data, int8_t *roll, int8_t *pitch,
                          int8_t *yaw, uint8_t *lift);
-void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2);
-void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2);
+// void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2);
+// void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2);
 
 // UAV -> PC
+void encode_header_uav_pc(uint8_t *header, uint8_t mode, uint8_t packet_type);
+void decode_header_uav_pc(uint8_t *header, uint8_t *mode, uint8_t *packet_type);
+
 void encode_data_motor(uint8_t *data, int8_t *ae);
 void decode_data_motor(uint8_t *data, int8_t *ae);
 void encode_data_angles_bat(uint8_t *data, int8_t phi, int8_t theta, int8_t psi,
