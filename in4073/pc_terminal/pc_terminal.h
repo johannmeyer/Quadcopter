@@ -11,13 +11,18 @@
 #define HEIGHT_MODE 7
 #define WIRELESS_MODE 8
 #define EXIT_MODE 9
+
 #define TRIM_VALUE 200
+#define P_CHANGE 1
 
 int16_t lift_key, pitch_key, roll_key, yaw_key;
 int16_t lift_js, pitch_js, roll_js, yaw_js;
 int32_t pitch, roll, yaw;
 int32_t lift;
 uint8_t mode;
-uint8_t P, P1, P2;
+uint8_t P;
+uint8_t P1;
+uint8_t P2;
+
 
 #endif // PC_TERMINAL_H__

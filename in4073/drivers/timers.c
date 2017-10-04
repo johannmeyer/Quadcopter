@@ -12,7 +12,7 @@
 
 #include "in4073.h"
 #include "app_timer.h"
-
+ 
 uint32_t global_time;
 bool timer_flag;
 
@@ -27,11 +27,11 @@ void TIMER2_IRQHandler(void)
 		// This interrupt should only fire at the first 62 us of each motor pulse - otherwise there is a chance of flipping the pwm signal!
 		NRF_TIMER2->TASKS_CAPTURE[2]=1;
 		if(!radio_active && (NRF_TIMER2->CC[2] < 500))
-		{
+		{	
 			motor[2] = (motor[2] < 1000) ? ((motor[2] < 0) ? 0: motor[2]) : 1000;
 			motor[3] = (motor[3] < 1000) ? ((motor[3] < 0) ? 0: motor[3]) : 1000;
-			NRF_TIMER2->CC[0] = 1000 + motor[2];
-			NRF_TIMER2->CC[1] = 1000 + motor[3];
+			NRF_TIMER2->CC[0] = 1000 + motor[2];			
+			NRF_TIMER2->CC[1] = 1000 + motor[3];	
 		}
 	}
 }
@@ -47,8 +47,8 @@ void TIMER1_IRQHandler(void)
 		{
 			motor[0] = (motor[0] < 1000) ? ((motor[0] < 0) ? 0: motor[0]) : 1000;
 			motor[1] = (motor[1] < 1000) ? ((motor[1] < 0) ? 0: motor[1]) : 1000;
-			NRF_TIMER1->CC[0] = 1000 + motor[0];
-			NRF_TIMER1->CC[1] = 1000 + motor[1];
+			NRF_TIMER1->CC[0] = 1000 + motor[0];			
+			NRF_TIMER1->CC[1] = 1000 + motor[1];	
 		}
 	}
 }
@@ -81,19 +81,19 @@ void timers_init(void)
 	global_time = 0;
 	timer_flag = false;
 
-	NRF_TIMER2->PRESCALER 	= 0x1UL; // 0.125us
+	NRF_TIMER2->PRESCALER 	= 0x1UL; // 0.125us 
 	NRF_TIMER2->INTENSET    = TIMER_INTENSET_COMPARE3_Msk;
 	NRF_TIMER2->CC[0]	= 1000; // motor signal is 125-250us
-	NRF_TIMER2->CC[1]	= 1000; //
+	NRF_TIMER2->CC[1]	= 1000; // 
 //	NRF_TIMER2->CC[2]	= 1000; // is used to measure at which part of the motor pulse we are currently at & timekeeping
-	NRF_TIMER2->CC[3]	= 2500;
+	NRF_TIMER2->CC[3]	= 2500; 
 	NRF_TIMER2->SHORTS	= TIMER_SHORTS_COMPARE3_CLEAR_Msk;
 	NRF_TIMER2->TASKS_CLEAR = 1;
 
 	NRF_TIMER1->PRESCALER 	= 0x1UL; // 0.125us
 	NRF_TIMER1->INTENSET    = TIMER_INTENSET_COMPARE3_Msk;
 	NRF_TIMER1->CC[0]	= 1000; // motor signal is 125-250us
-	NRF_TIMER1->CC[1]	= 1000; //
+	NRF_TIMER1->CC[1]	= 1000; // 
 //	NRF_TIMER1->CC[2]	= 1000; // is used to measure at which part of the motor pulse we are currently at
 	NRF_TIMER1->CC[3]	= 2500; // 2500 * 0.125 = 312.5 us
 	NRF_TIMER1->SHORTS	= TIMER_SHORTS_COMPARE3_CLEAR_Msk;
@@ -101,7 +101,7 @@ void timers_init(void)
 
 	NRF_TIMER2->TASKS_START	= 1;
 	NRF_TIMER1->TASKS_START	= 1;
-
+	
 	NVIC_ClearPendingIRQ(TIMER2_IRQn);
 	NVIC_SetPriority(TIMER2_IRQn, 3);
 	NVIC_EnableIRQ(TIMER2_IRQn);
@@ -139,7 +139,7 @@ void timers_init(void)
 	#define APP_TIMER_PRESCALER             0                                           /**< Value of the RTC1 PRESCALER register. */
 	#define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
 	#define QUADRUPEL_TIMER_PERIOD  APP_TIMER_TICKS(TIMER_PERIOD, APP_TIMER_PRESCALER)  // timer period is in ms
-
+	
 	APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
 
 	APP_TIMER_DEF(quadrupel_timer);

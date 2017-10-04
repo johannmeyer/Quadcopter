@@ -20,20 +20,9 @@
 #include "control.h"
 #include <stdlib.h>
 
-#define SAFE_MODE 0
-#define PANIC_MODE 1
-#define MANUAL_MODE 2
-#define CALIBRATION_MODE 3
-#define YAW_MODE 4
-#define FULL_MODE 5
-#define RAW_MODE 6
-#define HEIGHT_MODE 7
-#define WIRELESS_MODE 8
-#define EXIT_MODE 9
-
-#define PANIC_SPEED 1
 
 core *logCore;
+
 /*------------------------------------------------------------------
  * process_key -- process command keys
  *------------------------------------------------------------------
@@ -59,7 +48,7 @@ void determine_mode(uint8_t mode)
 		 if (prev_mode == SAFE_MODE || prev_mode == CALIBRATION_MODE)
 		 {
 			prev_mode = SAFE_MODE;
-			printf("Safe mode \n");
+			//printf("Safe mode \n");
 		 }
 		else
 			{
@@ -78,9 +67,10 @@ void determine_mode(uint8_t mode)
 		case CALIBRATION_MODE:									// Calibration mode
 			if (prev_mode == SAFE_MODE )
 			{
+				uint32_t time = get_time_us();
 				printf("Calibrating sensors \n");
 				calibrate_sensors();
-				printf("Calibration done \n");
+				printf("Calibration done. Time elapsed: %ld ms\n", (get_time_us()-time)/1000);
 				init_logging(FULL_LOGGING);
 				prev_mode = CALIBRATION_MODE;
 			}
@@ -156,35 +146,34 @@ void process_mode(uint8_t current_mode)
 		case PANIC_MODE:			            // Panic mode
     		printf("Panic mode reached\n");
         while(ae[0] > 0 || ae[1] > 0 || ae[2] > 0 || ae[3]  > 0)
-        {
-					if(check_timer_flag())
-					{
-					ae[0] -= PANIC_SPEED;
-  				ae[1] -= PANIC_SPEED;
-  				ae[2] -= PANIC_SPEED;
-  				ae[3] -= PANIC_SPEED;
-				  update_motors();
-					clear_timer_flag();
+          {
+						if(check_timer_flag())			// timer of 50ms
+						{
+							ae[0] -= PANIC_SPEED;
+		  				ae[1] -= PANIC_SPEED;
+		  				ae[2] -= PANIC_SPEED;
+		  				ae[3] -= PANIC_SPEED;
+						  update_motors();
+							clear_timer_flag();
+						}
+
 					}
-				}
 					safe_flag = false;
 					prev_mode = SAFE_MODE;
 					break;
 
     case MANUAL_MODE:									// Manual mode
 				// Lift, pitch, roll and yaw
-        b=1;
-        d=1;
-				/*ae[0] = ae[0] + (lift_delta + pitch_delta)/b - yaw_delta/d;
-				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + yaw_delta/d;
-				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
-				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + yaw_delta/d;
-				*/
-				ae[0] = (new_lift + pitch)/b - yaw/d;
-				ae[1] = (new_lift - roll)/b  + yaw/d;
-				ae[2] = (new_lift - pitch)/b - yaw/d;
-				ae[3] = (new_lift + roll)/b  + yaw/d;
-
+        d=2;
+				ae[0] = new_lift + pitch - yaw*d;
+				ae[1] = new_lift - roll  + yaw*d;
+				ae[2] = new_lift - pitch - yaw*d;
+				ae[3] = new_lift + roll  + yaw*d;
+				for (int i = 0; i < 4; i++)
+        {
+                if (ae[i] < 180 && new_lift > 180)
+                        ae[i] = 180;
+        }
 				update_motors();
 				break;
 
@@ -196,12 +185,16 @@ void process_mode(uint8_t current_mode)
 		case YAW_MODE:									// Yaw control mode
 
 				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
-				fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
+				//fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
+				yaw_mode();
+        //update_motors();
 
-        update_motors();
         break;
 
 		case FULL_MODE:									// Full control mode
+
+			full_mode();
+
       break;
 
 		case RAW_MODE:                 // Raw control mode
@@ -226,14 +219,6 @@ void calculate_values()
 {
 	new_lift = 3*lift;
 	if(new_lift > 600) new_lift = 600;
-  lift_delta = new_lift - prev_lift;
-  roll_delta = roll - prev_roll;
-  pitch_delta = pitch - prev_pitch;
-  yaw_delta = yaw - prev_yaw;
-  prev_lift = new_lift;
-  prev_roll = roll;
-  prev_pitch = pitch;
-  prev_yaw = yaw;
 }
 
 void battery_monitoring(uint8_t mode)
@@ -255,7 +240,7 @@ void battery_monitoring(uint8_t mode)
 bool isCharged(void)
 {
   adc_request_sample();
-
+	// TODO duplicate of battery_monitoring()?
   if (bat_volt < 11000) return false;
   else return true;
 }
@@ -286,49 +271,67 @@ int main(void)
 
 	while (!demo_done)
 	{
-		if (check_timer_flag())
-		{
-			if (counter++%20 == 0) nrf_gpio_pin_toggle(BLUE);
+  			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
+        // TODO Process the data e.g. change states
 
-      //TODO Separate flight mode in the Makefile
+				if (check_timer_flag())
+				{
+					decode(&logCore);
+					calculate_values();
+					if (mode != prev_mode)
+					{
+						//printf("Determine mode \n");
+						determine_mode(mode);
+					}
+
+					process_mode(prev_mode);
+					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+
+					if (counter++%30 == 0)
+					{
+						nrf_gpio_pin_toggle(BLUE);
+						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						if(isCalibrated())
+				      {
+								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      printf("%6d %6d %6d |\n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+							}
+				      /*else
+				      {
+								printf("%6d %6d %6d | ", phi, theta, psi);
+					      printf("%6d %6d %6d | ", sp, sq, sr);
+					      printf("%6d %6d %6d | ", sax, say, saz);
+								printf("\n");
+				      }*/
+					}
+
+			//TODO Separate flight mode in the Makefile
       #ifdef FLIGHT
 			battery_monitoring(prev_mode);
       #endif
-			if (rx_queue.count >= sizeof(packet))
-	    {
-	      int failed = decode(&logCore);
-	      calculate_values();
-				if (mode != prev_mode)	determine_mode(mode);
-				process_mode(prev_mode);
-				//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
-	      if(!failed)
-	      {
-	        // TODO Process the data e.g. change states
-	        printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll, pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-	      }
-	    }
 			read_baro();
 
     /*if(isCalibrated())
       {
-        write_log_entry(get_time_us(), prev_mode, logCore, ae, get_sensor(PHI), get_sensor(THETA), get_sensor(PSI),
-        get_sensor(SP), get_sensor(SQ), get_sensor(SR), get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ),
-        bat_volt, temperature, pressure);
-        print_last_log();
+				printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+	      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+	      printf("%6d %6d %6d | ", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+				printf("\n");
       }
       else
       {
-        write_short_log(get_time_us(), prev_mode, ae, phi, theta, psi);
-        print_last_log();
+				printf("%6d %6d %6d | ", phi, theta, psi);
+	      printf("%6d %6d %6d | ", sp, sq, sr);
+	      printf("%6d %6d %6d | ", sax, say, saz);
+				printf("\n");
       }*/
-
 			clear_timer_flag();
 		}
-
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();
-			//run_filters_and_control();
+			run_filters_and_control(prev_mode);
 		}
 	}
 

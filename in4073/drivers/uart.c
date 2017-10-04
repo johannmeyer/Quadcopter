@@ -51,6 +51,7 @@ void UART0_IRQHandler(void)
 
 	if (NRF_UART0->EVENTS_ERROR != 0)
 	{
+		nrf_gpio_pin_toggle(RED); //TODO check this works
 		NRF_UART0->EVENTS_ERROR = 0;
 		printf("uart error: %lu\n", NRF_UART0->ERRORSRC);
 	}
@@ -62,7 +63,7 @@ void uart_init(void)
 	init_queue(&tx_queue); // Initialize transmit queue
 
 	nrf_gpio_cfg_output(TX_PIN_NUMBER);
-	nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL); 
+	nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
 	NRF_UART0->PSELTXD = TX_PIN_NUMBER;
 	NRF_UART0->PSELRXD = RX_PIN_NUMBER;
 	NRF_UART0->BAUDRATE        = (UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos);

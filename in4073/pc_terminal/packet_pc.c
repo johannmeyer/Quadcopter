@@ -41,8 +41,7 @@ void encode(packet *my_packet, uint8_t mode, uint8_t packet_type)
         }
 
         encode_header(&my_packet_core->header, mode, packet_type);
-        uint8_t crc =
-            crc_core(my_packet_core); // TODO update crc to use sizeof
+        uint8_t crc = crc_message((void*) my_packet_core, sizeof(*my_packet_core));
 
         my_packet->start = START_BYTE;
         my_packet->crc = crc;

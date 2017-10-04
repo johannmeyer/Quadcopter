@@ -118,11 +118,12 @@ void get_key(char c)
 			yaw_key = yaw_key - TRIM_VALUE;
 			break;
 		case 'u':
-
+			P += P_CHANGE;
 			break;
 		case 'j':
-
+			P -= P_CHANGE;
 			break;
+
 		case 'i':
 
 			break;
@@ -319,7 +320,9 @@ int main(int argc, char **argv)
 								pitch=0;
 								roll=0;
 								yaw=0;
-
+								P = 10;
+								P1=1;
+								P2=1;
 
 								term_puts("\nTerminal program - Embedded Real-Time Systems\n");
 
@@ -340,6 +343,9 @@ int main(int argc, char **argv)
 								packet my_packet;
 								for (;;)
 								{
+																start = clock();
+																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
+																{
 																// Sends data to the Drone
 																char readChar = -1;
 																if ((readChar = term_getchar_nb()) != -1)
@@ -349,24 +355,22 @@ int main(int argc, char **argv)
 																	} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
 																	get_key(c);
 																}
-																int panic = get_joystick_action(&roll_js, &pitch_js, &yaw_js, &lift_js);
-																//printf("joystick: %d | %d |%d | %d | %d|\n", roll_js,pitch_js,yaw_js,lift_js,panic);
-																// TODO combine the keyboard and joystick data
-																combine_values();
-																//printf("joystick: %d | %d |%d | %d | \n", roll,pitch,yaw,lift);
-																//if (panic) encode(&my_packet, PANIC_MODE, PACKET_TYPE_COMMAND);
-																//else encode(&my_packet, mode, PACKET_TYPE_COMMAND);
-																if (panic) mode = PANIC_MODE;
-																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+																get_joystick_action(&mode, &roll_js, &pitch_js, &yaw_js, &lift_js);
 
+																// combine the keyboard and joystick data
+																combine_values();
+																// Reads data sent from the Drone
+																if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
+																}
+																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+																rs232_putpacket(&my_packet);
+																encode(&my_packet, mode, PACKET_TYPE_GAINS);
 																rs232_putpacket(&my_packet);
 
-																// Reads data sent from the Drone
-																start = clock();
-																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
-																{
-																	if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
-																}
+
+
+																	//
+
 								}
 
 								term_exitio();
