@@ -163,23 +163,16 @@ void process_mode(uint8_t current_mode)
 
     case MANUAL_MODE:									// Manual mode
 				// Lift, pitch, roll and yaw
-        b=1;
-        d=1;
-				/*ae[0] = ae[0] + (lift_delta + pitch_delta)/b - yaw_delta/d;
-				ae[1] = ae[1] + (lift_delta - roll_delta)/b  + yaw_delta/d;
-				ae[2] = ae[2] + (lift_delta - pitch_delta)/b - yaw_delta/d;
-				ae[3] = ae[3] + (lift_delta + roll_delta)/b  + yaw_delta/d;
-				*/
-				ae[0] = (new_lift + pitch)/b - yaw/d;
-				ae[1] = (new_lift - roll)/b  + yaw/d;
-				ae[2] = (new_lift - pitch)/b - yaw/d;
-				ae[3] = (new_lift + roll)/b  + yaw/d;
+        d=2;
+				ae[0] = new_lift + pitch - yaw*d;
+				ae[1] = new_lift - roll  + yaw*d;
+				ae[2] = new_lift - pitch - yaw*d;
+				ae[3] = new_lift + roll  + yaw*d;
 				for (int i = 0; i < 4; i++)
         {
                 if (ae[i] < 180 && new_lift > 180)
                         ae[i] = 180;
         }
-
 				update_motors();
 				break;
 
@@ -289,20 +282,20 @@ int main(void)
 
 				if (check_timer_flag())
 				{
-					printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
 					if (counter++%20 == 0)
 					{
 						nrf_gpio_pin_toggle(BLUE);
-						//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-						/*if(isCalibrated())
+						read_baro();
+						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						if(isCalibrated())
 				      {
-								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      printf("%6d %6d %6d | ", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
-								printf("\n");
-				      }
-				      else
+								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+					      //printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      printf(" %6d %6d %6d %ld| \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure);
+							}
+				      /*else
 				      {
 								printf("%6d %6d %6d | ", phi, theta, psi);
 					      printf("%6d %6d %6d | ", sp, sq, sr);

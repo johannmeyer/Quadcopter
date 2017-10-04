@@ -115,12 +115,12 @@ void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
 */
 void yaw_controller()
 {
-        yaw_s = (int16_t)((int32_t)(get_sensor(PSI) * 255) / 32768);
+        yaw_s = (int16_t)((int32_t)(get_sensor(SR) * 255) / 32768);  //can use PSI as well
         //printf("P in controller:%d\n", P);
         //P=5;
 
-        yaw_rate = yaw_s - yaw_prev;
-        if (yaw_rate > 250)
+       yaw_rate = yaw_s;// - yaw_prev;
+        if (yaw_rate > 250) // boundary condition for psi values
         {
           yaw_rate -= 510;
         }
@@ -129,7 +129,7 @@ void yaw_controller()
           yaw_rate += 510;
         }
         yaw_act = P*((yaw>>2) - yaw_rate);      // yaw/4 to scale down yaw coming from joystick
-        yaw_prev = yaw_s;
+        //yaw_prev = yaw_s;
         /*if (check_timer_flag())
         {
               if (yaw_rate !=0)
@@ -162,15 +162,16 @@ void yaw_mode()
 
 void full_mode()
 {
-        outer_counter++;
-        if (outer_counter % 4 == 0)
+
+        if (outer_counter++ % 4 == 0)
         {
                 angle_controller();
                 yaw_controller();
         }
-        rate_controller();
 
+        rate_controller();
         update_actuator();
+      //  outer_counter++;
 }
 
 void rate_controller()
