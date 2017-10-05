@@ -186,7 +186,7 @@ void process_mode(uint8_t current_mode)
 				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				//fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				yaw_mode();
-        update_motors();
+      //  update_motors();
         break;
 
 		case FULL_MODE:									// Full control mode
@@ -264,6 +264,9 @@ int main(void)
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
+	P = 10;
+	P1 = 1;
+	P2 =1;
 
 	while (!demo_done)
 	{
@@ -292,8 +295,8 @@ int main(void)
 						if(isCalibrated())
 				      {
 								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      //printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      printf(" %6d %6d %6d %ld| \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure);
+					      printf(" Gyro : %6d %6d %6d | \n", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      //printf(" %6d %6d %6d %ld| \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure);
 							}
 				      /*else
 				      {

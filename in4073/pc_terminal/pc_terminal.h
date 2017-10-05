@@ -20,9 +20,7 @@ int16_t lift_js, pitch_js, roll_js, yaw_js;
 int32_t pitch, roll, yaw;
 int32_t lift;
 uint8_t mode;
-uint8_t P;
-uint8_t P1;
-uint8_t P2;
+
 
 
 #endif // PC_TERMINAL_H__
