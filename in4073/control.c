@@ -147,10 +147,19 @@ void yaw_controller()
        }*/
 }
 
-void run_filters_and_control()
+void run_filters_and_control(uint8_t mode)
 {
+  switch (mode)
+  {
+    case FULL_MODE:
+      rate_controller();
+      update_actuator();
+      break;
+
+  }
         // fancy stuff here
         // control loops and/or filters
+
 }
 void yaw_mode()
 {
@@ -163,14 +172,14 @@ void yaw_mode()
 void full_mode()
 {
 
-        if (outer_counter++ % 4 == 0)
-        {
+        /*if (outer_counter++ % 4 == 0)
+        {*/
                 angle_controller();
                 yaw_controller();
-        }
+        /*}
 
         rate_controller();
-        update_actuator();
+        update_actuator();*/
       //  outer_counter++;
 }
 

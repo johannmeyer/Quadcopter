@@ -40,7 +40,7 @@
 #define BLUE		30
 #define INT_PIN		5
 
-#define PANIC_SPEED 10
+#define PANIC_SPEED 5
 
 bool demo_done;
 bool exit_mode_flag;
@@ -57,11 +57,12 @@ int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
 uint8_t P, P1, P2;
-void determine_mode(uint8_t);
-void process_mode(uint8_t);
+void determine_mode(uint8_t mode);
+void process_mode(uint8_t current_mode);
 
 // Timers
-#define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)
+//#define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)
+#define TIMER_PERIOD	30
 void timers_init(void);
 uint32_t get_time_us(void);
 bool check_timer_flag(void);

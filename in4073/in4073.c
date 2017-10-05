@@ -67,9 +67,10 @@ void determine_mode(uint8_t mode)
 		case CALIBRATION_MODE:									// Calibration mode
 			if (prev_mode == SAFE_MODE )
 			{
+				uint32_t time = get_time_us();
 				printf("Calibrating sensors \n");
 				calibrate_sensors();
-				printf("Calibration done \n");
+				printf("Calibration done. Time elapsed: %ld ms\n", (get_time_us()-time)/1000);
 				init_logging(FULL_LOGGING);
 				prev_mode = CALIBRATION_MODE;
 			}
@@ -186,11 +187,14 @@ void process_mode(uint8_t current_mode)
 				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				//fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				yaw_mode();
-        update_motors();
+        //update_motors();
+
         break;
 
 		case FULL_MODE:									// Full control mode
+
 			full_mode();
+
       break;
 
 		case RAW_MODE:                 // Raw control mode
@@ -267,33 +271,31 @@ int main(void)
 
 	while (!demo_done)
 	{
-
   			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
         // TODO Process the data e.g. change states
-				decode(&logCore);
-				calculate_values();
-				if (mode != prev_mode)
-				{
-					//printf("Determine mode \n");
-					determine_mode(mode);
-				}
-				process_mode(prev_mode);
-
 
 				if (check_timer_flag())
 				{
+					decode(&logCore);
+					calculate_values();
+					if (mode != prev_mode)
+					{
+						//printf("Determine mode \n");
+						determine_mode(mode);
+					}
+
+					process_mode(prev_mode);
 					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
-					if (counter++%20 == 0)
+					if (counter++%30 == 0)
 					{
 						nrf_gpio_pin_toggle(BLUE);
-						read_baro();
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 						if(isCalibrated())
 				      {
-								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      //printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      printf(" %6d %6d %6d %ld| \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure);
+								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      printf("%6d %6d %6d |\n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
 							}
 				      /*else
 				      {
@@ -329,7 +331,7 @@ int main(void)
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();
-			run_filters_and_control();
+			run_filters_and_control(prev_mode);
 		}
 	}
 
