@@ -52,7 +52,7 @@ void decode(core **logUserIn)
                         // CRC calculation
                         uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
                         uint8_t crc = crc_message((void*) &my_packet_core, sizeof(my_packet_core));
-                        
+
                         if (crc == tmp_crc)
                         {
                                 uint8_t packet_type;
