@@ -14,6 +14,8 @@
 #include "fixmath.h"
 #include "in4073.h"
 #include "sensors.h"
+
+
 /*
 Local Variables
  */
@@ -22,6 +24,7 @@ uint8_t outer_counter = 0;
 int16_t yaw_prev, yaw_s;
 int16_t pitch_rate_d, roll_rate_d, yaw_rate;
 int16_t pitch_act, roll_act, yaw_act;
+int16_t yaw_overflow, pitch_overflow, roll_overflow;
 /*
 Local Function Prototypes
  */
@@ -35,6 +38,7 @@ void update_actuator()
       // Apply actuation
       // TODO is b still necessary for full control?
       int8_t b = 1;
+      //int8_t overflow =0;
       ae[0] = (new_lift + pitch_act) / b - yaw_act;
       ae[1] = (new_lift - roll_act) / b + yaw_act;
       ae[2] = (new_lift - pitch_act) / b - yaw_act;
@@ -42,11 +46,18 @@ void update_actuator()
       for (int i = 0; i < 4; i++)         // Safe check for motor values
       {
               if (ae[i] < 180 && new_lift > 180)      // not allowing motor to stop rotation
-                      ae[i] = 180;
-
+                {
+                        //overflow = 180 - ae[i];
+                        ae[i] = 180;
+                }
+              /*  else if(overflow > 0 && ae[i] > 180 && new_lift > 180)
+                {
+                        ae[i] -= overflow;
+                }*/
               if(new_lift < 160)  // if lift is not provided, do not respond to yaw error
               ae[i] = 0;
       }
+
       update_motors();
 }
 
@@ -54,8 +65,8 @@ void update_motors(void)
 {
         for (int i = 0; i < 4; i++)
         {
-                if (ae[i] > 600)
-                        ae[i] = 600;
+                if (ae[i] > MAX_MOTOR)
+                        ae[i] = MAX_MOTOR;
                 else if (ae[i] < 0)
                         ae[i] = 0;
         }
@@ -128,7 +139,7 @@ void yaw_controller()
         {
           yaw_rate += 510;
         }*/
-        yaw_act = P*((yaw>>2) - yaw_s);      // yaw/4 to scale down yaw coming from joystick
+        yaw_act = P*((yaw/5) + yaw_s);      // yaw/4 to scale down yaw coming from joystick
         //yaw_prev = yaw_s;
         /*if (check_timer_flag())
         {
@@ -139,6 +150,29 @@ void yaw_controller()
               }
              clear_timer_flag();
         }*/
+        if((new_lift - yaw_act) < MIN_VALUE )
+        {
+          yaw_overflow = MIN_VALUE - (new_lift - yaw_act);
+          yaw_act -= yaw_overflow;
+        }
+        else if((new_lift + yaw_act) < MIN_VALUE )
+        {
+          yaw_overflow = MIN_VALUE - (new_lift + yaw_act);
+          yaw_act += yaw_overflow;
+        }
+
+
+        if((new_lift + yaw_act) > MAX_VALUE )
+        {
+          yaw_overflow = (new_lift + yaw_act) - MAX_VALUE;
+          yaw_act -= yaw_overflow;
+        }
+        else if((new_lift - yaw_act) > MAX_VALUE )
+        {
+          yaw_overflow = (new_lift - yaw_act) - MAX_VALUE;
+          yaw_act += yaw_overflow;
+        }
+        //yaw_act *= -1;
         if (yaw_act !=0)
         {
           printf("yaw_error: %d, converted SR: %d, SR: %d, P: %d \n",
@@ -171,14 +205,15 @@ void yaw_mode()
 void full_mode()
 {
 
-        /*if (outer_counter++ % 4 == 0)
-        {*/
+        if (outer_counter++ % 5 == 0)
+        {
                 angle_controller();
-                yaw_controller();
-        /*}
+                //yaw_controller();
+                yaw_act = 0;//TODO
+        }
 
         rate_controller();
-        update_actuator();*/
+        update_actuator();
       //  outer_counter++;
 }
 
@@ -189,12 +224,59 @@ void rate_controller()
          */
         // Scale sensor values
         // TODO check this works
-        int8_t pitch_rate_s = (int32_t)get_sensor(SP) * 127 / 32768;
-        int8_t roll_rate_s = (int32_t)get_sensor(SQ) * 127 / 32768;
+        int16_t pitch_rate_s = (get_sensor(SP)/10);
+        int16_t roll_rate_s = (get_sensor(SQ)/10);
 
         // Set actuation inputs
         pitch_act = P2 * (pitch_rate_d - pitch_rate_s);
         roll_act = P2 * (roll_rate_d - roll_rate_s);
+        if(roll_act !=0)
+        printf("roll_rate_d: %d | roll_rate_s: %d | SQ: %d\n", roll_rate_d,roll_rate_s,get_sensor(SQ));
+
+        if((new_lift - roll_act) < MIN_VALUE )
+        {
+          roll_overflow = MIN_VALUE - (new_lift - roll_act);
+          roll_act -= roll_overflow;
+        }
+        else if((new_lift + roll_act) < MIN_VALUE )
+        {
+          roll_overflow = MIN_VALUE - (new_lift + roll_act);
+          roll_act += roll_overflow;
+        }
+
+        if((new_lift + roll_act) > MAX_VALUE )
+        {
+          roll_overflow = (new_lift + roll_act) - MAX_VALUE;
+          roll_act -= roll_overflow;
+        }
+        else if((new_lift - roll_act) > MAX_VALUE )
+        {
+          roll_overflow = (new_lift - roll_act) - MAX_VALUE;
+          roll_act += roll_overflow;
+        }
+
+        if((new_lift - pitch_act) < MIN_VALUE )
+        {
+          pitch_overflow = MIN_VALUE - (new_lift - pitch_act);
+          pitch_act -= pitch_overflow;
+        }
+        else if((new_lift + pitch_act) < MIN_VALUE )
+        {
+          pitch_overflow = MIN_VALUE - (new_lift + pitch_act);
+          pitch_act += pitch_overflow;
+        }
+
+        if((new_lift + pitch_act) > MAX_VALUE )
+        {
+          pitch_overflow = (new_lift + pitch_act) - MAX_VALUE;
+          pitch_act -= pitch_overflow;
+        }
+        else if((new_lift - pitch_act) > MAX_VALUE )
+        {
+          pitch_overflow = (new_lift - pitch_act) - MAX_VALUE;
+          pitch_act += pitch_overflow;
+        }
+        pitch_act = 0; //TODO
 }
 
 void angle_controller()
@@ -204,10 +286,11 @@ void angle_controller()
          */
         // Scale sensor va`lues
         // TODO check this works
-        int8_t roll_s = (int32_t)get_sensor(PHI) * 127 / 32768;
+        int8_t roll_s = (int8_t)((int32_t)get_sensor(PHI) * 127 / 32768);
         int8_t pitch_s = (int32_t)get_sensor(THETA) * 127 / 32768;
 
         int16_t roll_err = roll - roll_s;
+        //printf("Roll error: %d\n", roll_err);
         int16_t pitch_err = pitch - pitch_s;
 
         // Set new desired values for the rate_controller()

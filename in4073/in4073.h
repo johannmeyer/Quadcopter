@@ -10,7 +10,7 @@
 
 #ifndef IN4073_H__
 #define IN4073_H__
-//#define FLIGHT
+#define FLIGHT
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -62,7 +62,7 @@ void process_mode(uint8_t current_mode);
 
 // Timers
 //#define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)
-#define TIMER_PERIOD	30
+#define TIMER_PERIOD	50
 void timers_init(void);
 uint32_t get_time_us(void);
 bool check_timer_flag(void);

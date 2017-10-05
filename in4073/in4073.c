@@ -217,8 +217,11 @@ void process_mode(uint8_t current_mode)
 
 void calculate_values()
 {
+
 	new_lift = 3*lift;
-	if(new_lift > 600) new_lift = 600;
+	if(lift>0)
+		new_lift += 100;
+	if(new_lift > MAX_MOTOR) new_lift = MAX_MOTOR;
 }
 
 void battery_monitoring(uint8_t mode)
@@ -268,9 +271,9 @@ int main(void)
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
-	P = 10;
+	P = 19;
  	P1 = 1;
- 	P2 =1;
+ 	P2 = 2;
 
 	while (!demo_done)
 	{
@@ -290,15 +293,16 @@ int main(void)
 					process_mode(prev_mode);
 					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
-					if (counter++%30 == 0)
+					if (counter++%20 == 0)
 					{
 						nrf_gpio_pin_toggle(BLUE);
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						printf("P1 : %d, P2: %d \n", P1, P2);
 						if(isCalibrated())
 				      {
-								printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      printf("%6d %6d %6d | ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      printf("%6d %6d %6d |\n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+					      //printf("Gyro: %6d %6d %6d \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+					      //printf("%6d %6d %6d |\n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
 							}
 				      /*else
 				      {
@@ -334,7 +338,7 @@ int main(void)
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();
-			run_filters_and_control(prev_mode);
+			// run_filters_and_control(prev_mode);
 		}
 	}
 

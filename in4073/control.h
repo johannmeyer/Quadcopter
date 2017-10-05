@@ -1,4 +1,9 @@
 #include <stdint.h>
+
+#define MIN_VALUE 250
+#define MAX_VALUE 900
+#define MAX_MOTOR 1000
+
 void update_motors();
 
 void fp_yaw_control(int16_t roll, int16_t pitch, int16_t yaw, uint16_t lift, uint16_t yawPpar, int16_t senPsi);
