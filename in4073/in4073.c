@@ -268,6 +268,9 @@ int main(void)
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
+	P = 10;
+ 	P1 = 1;
+ 	P2 =1;
 
 	while (!demo_done)
 	{

@@ -119,32 +119,31 @@ void yaw_controller()
         //printf("P in controller:%d\n", P);
         //P=5;
 
-       yaw_rate = yaw_s;// - yaw_prev;
-        if (yaw_rate > 250) // boundary condition for psi values
+       //yaw_rate = yaw_s;// - yaw_prev;
+        /*if (yaw_rate > 250) // boundary condition for psi values
         {
           yaw_rate -= 510;
         }
         else if(yaw_rate < -250)
         {
           yaw_rate += 510;
-        }
-        yaw_act = P*((yaw>>2) - yaw_rate);      // yaw/4 to scale down yaw coming from joystick
+        }*/
+        yaw_act = P*((yaw>>2) - yaw_s);      // yaw/4 to scale down yaw coming from joystick
         //yaw_prev = yaw_s;
         /*if (check_timer_flag())
         {
               if (yaw_rate !=0)
               {
-                printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
-               yaw_act, yaw>>1, yaw_s,yaw_rate,P);
+              printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
+             yaw_act, yaw>>1, yaw_s,yaw_rate,P);
               }
              clear_timer_flag();
-
         }*/
-        /*if (yaw_rate !=0)
+        if (yaw_act !=0)
         {
-          printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
-         yaw_act, yaw>>1, yaw_s,yaw_rate,get_sensor(PSI));
-       }*/
+          printf("yaw_error: %d, converted SR: %d, SR: %d, P: %d \n",
+         yaw_act,  yaw_s, get_sensor(SR), P);
+       }
 }
 
 void run_filters_and_control(uint8_t mode)
