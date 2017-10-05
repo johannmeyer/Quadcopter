@@ -319,9 +319,6 @@ int main(int argc, char **argv)
 								pitch=0;
 								roll=0;
 								yaw=0;
-								P = 10;
-								P1=1;
-								P2=1;
 
 								term_puts("\nTerminal program - Embedded Real-Time Systems\n");
 
