@@ -87,6 +87,7 @@ int term_getchar()
 
 int serial_device = 0;
 int fd_RS232;
+uint8_t p_incrementer = GAIN_NO_INCREMENT;
 
 bool isMode(uint8_t c)
 {
@@ -118,25 +119,23 @@ void get_key(char c)
 			yaw_key = yaw_key - TRIM_VALUE;
 			break;
 		case 'u':
-			P += P_CHANGE;
+			p_incrementer = GAIN_P_INCREMENT;
 			break;
 		case 'j':
-			P -= P_CHANGE;
+			p_incrementer = GAIN_P_DECREMENT;
 			break;
-
 		case 'i':
-
+			p_incrementer = GAIN_P1_INCREMENT;
 			break;
 		case 'k':
-
+			p_incrementer = GAIN_P1_DECREMENT;
 			break;
 		case 'o':
-
+			p_incrementer = GAIN_P2_INCREMENT;
 			break;
 		case 'l':
-
+			p_incrementer = GAIN_P2_DECREMENT;
 			break;
-
 		case 'A':									// up key
 			pitch_key = pitch_key +TRIM_VALUE;
 			break;
@@ -362,15 +361,9 @@ int main(int argc, char **argv)
 																// Reads data sent from the Drone
 																if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
 																}
-																encode(&my_packet, mode, PACKET_TYPE_COMMAND);
+																encode(&my_packet, mode, p_incrementer);
 																rs232_putpacket(&my_packet);
-																encode(&my_packet, mode, PACKET_TYPE_GAINS);
-																rs232_putpacket(&my_packet);
-
-
-
-																	//
-
+																p_incrementer = GAIN_NO_INCREMENT;
 								}
 
 								term_exitio();

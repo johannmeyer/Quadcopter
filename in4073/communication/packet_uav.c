@@ -24,7 +24,7 @@ void decode(core **logUserIn)
            TODO create another dequeue to support sizeof(). e.g. sizeof(body)
          */
         static uint32_t last_received_message = 0;
-        uint8_t read_count = 0;
+        uint8_t         read_count = 0;
 
         // Wait until entire packet has arrived
         while (rx_queue.count >= sizeof(packet))
@@ -55,23 +55,11 @@ void decode(core **logUserIn)
 
                         if (crc == tmp_crc)
                         {
-                                uint8_t packet_type;
-                                decode_header(&header, &mode, &packet_type);
-                                switch (packet_type)
-                                {
-                                case PACKET_TYPE_COMMAND:
-                                        decode_data_command(data, &roll, &pitch,
-                                                            &yaw, &lift);
-                                        //printf("roll:%d\n", roll);
-                                        break;
-                                case PACKET_TYPE_GAINS:
-                                        decode_data_gains(data, &P, &P1, &P2);
-                                        //printf("P:%d\n", P);
-                                        break;
-                                default:
-                                        printf("Unknown Packet Type\n");
-                                        break;
-                                }
+                                decode_header_pc_uav(&header, &mode, &P, &P1,
+                                                     &P2);
+                                decode_data_command(data, &roll, &pitch, &yaw,
+                                                    &lift);
+
                                 // Log the incoming data
                                 memcpy(*logUserIn, &my_packet_core,
                                        sizeof(core));
@@ -96,19 +84,21 @@ void decode(core **logUserIn)
         }
 
         // Checks if cable is disconnected
-        // printf("read_count:%d, no_read_count:%d \n", read_count, no_read_count);
+        // printf("read_count:%d, no_read_count:%d \n", read_count,
+        // no_read_count);
         uint32_t curr_time = get_time_us();
-        int32_t time_diff = curr_time - last_received_message;
-        if ( time_diff > 300000)
+        int32_t  time_diff = curr_time - last_received_message;
+        if (time_diff > 300000)
         {
                 // printf("step2:%ld\n", get_time_us());
                 // no_read_count++;
                 // if (no_read_count >= MAX_NO_DATA_AVAILABLE)
-                if(last_received_message!= 0)
+                if (last_received_message != 0)
                 {
                         mode = PANIC_MODE;
-                        printf("Panic mode TIMEOUT_THRESHOLD reached:%ld\t %ld\t %ld\n", time_diff, curr_time, last_received_message);
-                        //printf("Panic mode TIMEOUT_THRESHOLD reached:%lx\t %lx\t %lx\n", curr_time-last_received_message, curr_time, last_received_message);
+                        printf(
+                            "Panic mode TIMEOUT_THRESHOLD reached:%ld\t %ld\t %ld\n",
+                            time_diff, curr_time, last_received_message);
                 }
         }
         else

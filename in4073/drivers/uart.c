@@ -51,7 +51,6 @@ void UART0_IRQHandler(void)
 
 	if (NRF_UART0->EVENTS_ERROR != 0)
 	{
-		nrf_gpio_pin_toggle(RED); //TODO check this works
 		NRF_UART0->EVENTS_ERROR = 0;
 		printf("uart error: %lu\n", NRF_UART0->ERRORSRC);
 	}
