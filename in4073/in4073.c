@@ -36,7 +36,7 @@ void determine_mode(uint8_t mode)
 			if (prev_mode == PANIC_MODE || prev_mode == CALIBRATION_MODE || prev_mode == SAFE_MODE)
 			{
 				prev_mode = SAFE_MODE;
-				printf("Safe mode1 \n");
+				printf("Safe mode \n");
 			}
 			else
 			{
@@ -201,6 +201,8 @@ void process_mode(uint8_t current_mode)
 			break;
 
 		case HEIGHT_MODE:                 // Height control mode
+
+			height_mode();
 			break;
 
 		case WIRELESS_MODE:                 // Wireless mode
@@ -218,10 +220,13 @@ void process_mode(uint8_t current_mode)
 void calculate_values()
 {
 
-	new_lift = 3*lift;
-	if(lift>0)
-		new_lift += 100;
-	if(new_lift > MAX_MOTOR) new_lift = MAX_MOTOR;
+	new_lift = 5*lift;
+	if(lift>0)																	// make lift non linear
+		new_lift += 50;
+	if(lift > 120)
+		new_lift = 650 + 2*(lift-120);
+	if(new_lift > MAX_LIFT)
+		new_lift = MAX_LIFT;
 }
 
 void battery_monitoring(uint8_t mode)
@@ -266,14 +271,17 @@ int main(void)
   select_log_mode(SHORT_LOGGING);
 
 	uint32_t counter = 0;
+	//int32_t height_value;
   logCore = (core *) malloc(sizeof(core));
 	prev_mode = SAFE_MODE;
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
-	P = 19;
+	height_flag = false;
+	P = 19;							//for yaw control
  	P1 = 1;
  	P2 = 2;
+	P3 = 1;							// for height control
 
 	while (!demo_done)
 	{
@@ -297,13 +305,15 @@ int main(void)
 					{
 						nrf_gpio_pin_toggle(BLUE);
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
-						printf("P1 : %d, P2: %d \n", P1, P2);
-						if(isCalibrated())
+						//printf("P1 : %d, P2: %d \n", P1, P2);
+						/*if(isCalibrated())
 				      {
+								read_baro();
+								height_value = (0.2*(abs(get_sensor(SAX))/100)) + (0.8*(pressure/4));
 								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      //printf("Gyro: %6d %6d %6d \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      //printf("%6d %6d %6d |\n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
-							}
+					      //printf("Gyro: %6d %6d %6d %ld \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
+					      printf("Acc:%6d %6d %6d %ld | %ld \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure/4,height_value);
+							}*/
 				      /*else
 				      {
 								printf("%6d %6d %6d | ", phi, theta, psi);

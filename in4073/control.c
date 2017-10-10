@@ -25,6 +25,7 @@ int16_t yaw_prev, yaw_s;
 int16_t pitch_rate_d, roll_rate_d, yaw_rate;
 int16_t pitch_act, roll_act, yaw_act;
 int16_t yaw_overflow, pitch_overflow, roll_overflow;
+int32_t height_d, height_act;
 /*
 Local Function Prototypes
  */
@@ -32,6 +33,9 @@ void update_actuator();
 void rate_controller();
 void angle_controller();
 void yaw_controller();
+void height_controller();
+int32_t get_baro();
+
 
 void update_actuator()
 {
@@ -39,10 +43,10 @@ void update_actuator()
       // TODO is b still necessary for full control?
       int8_t b = 1;
       //int8_t overflow =0;
-      ae[0] = (new_lift + pitch_act) / b - yaw_act;
-      ae[1] = (new_lift - roll_act) / b + yaw_act;
-      ae[2] = (new_lift - pitch_act) / b - yaw_act;
-      ae[3] = (new_lift + roll_act) / b + yaw_act;
+      ae[0] = (new_lift + pitch_act) / b - yaw_act + height_act;
+      ae[1] = (new_lift - roll_act) / b + yaw_act  + height_act;
+      ae[2] = (new_lift - pitch_act) / b - yaw_act + height_act;
+      ae[3] = (new_lift + roll_act) / b + yaw_act  + height_act;
       for (int i = 0; i < 4; i++)         // Safe check for motor values
       {
               if (ae[i] < 180 && new_lift > 180)      // not allowing motor to stop rotation
@@ -104,41 +108,14 @@ void fp_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw, uint16_t plift,
         ae[3] = fix16_to_int(fix16_add(fix16_add(flift, froll),
                                        fix16_mul(fyawPpar, fyaw_error)));
 }
-/*
-TODO Deprecated
- */
- /*
-void int_yaw_control(int16_t proll, int16_t ppitch, int16_t pyaw,
-                     uint16_t plift, uint16_t yawPpar, int16_t psi_sen)
-{
-        int8_t b = 1;
-        int8_t psi_conv = (int8_t)((psi_sen * 127) / 32768);
-        // dcpsi_s = (int8_t)(((float)dcpsi/32768)*127);
-        // psi_s = psi_s - dcpsi_s;  // value of yaw from calibrated point
-        int8_t yaw_error = (pyaw / 4) - psi_conv;
-        printf("yaw_error: %d, yaw: %d, converted Psi: %d, sensed Psi: %d \n",
-               yaw_error, pyaw, psi_conv, psi_sen);
-        ae[0] = (plift + ppitch) / b - (yawPpar * yaw_error);
-        ae[1] = (plift - proll) / b + (yawPpar * yaw_error);
-        ae[2] = (plift - ppitch) / b - (yawPpar * yaw_error);
-        ae[3] = (plift + proll) / b + (yawPpar * yaw_error);
-}
-*/
+
+
 void yaw_controller()
 {
         yaw_s = (int16_t)((int32_t)(get_sensor(SR) * 255) / 32768);  //can use PSI as well
         //printf("P in controller:%d\n", P);
         //P=5;
 
-       //yaw_rate = yaw_s;// - yaw_prev;
-        /*if (yaw_rate > 250) // boundary condition for psi values
-        {
-          yaw_rate -= 510;
-        }
-        else if(yaw_rate < -250)
-        {
-          yaw_rate += 510;
-        }*/
         yaw_act = P*((yaw/5) + yaw_s);      // yaw/4 to scale down yaw coming from joystick
         //yaw_prev = yaw_s;
         /*if (check_timer_flag())
@@ -194,6 +171,7 @@ void run_filters_and_control(uint8_t mode)
         // control loops and/or filters
 
 }
+
 void yaw_mode()
 {
         yaw_controller();
@@ -217,6 +195,46 @@ void full_mode()
       //  outer_counter++;
 }
 
+void height_mode()
+{
+        height_d = get_baro();
+        height_controller();
+        full_mode();
+
+}
+
+void height_controller()
+{
+        int32_t height_s= get_baro();
+        height_act = -P3 *(height_d - height_s);      // pressure is less at more height
+
+}
+
+int32_t get_baro()
+{
+        int8_t n=15,i=0;
+        int32_t baro_values[n];
+        int32_t avg_pressure=0;
+
+        while(i<n)
+        {
+
+          if (check_sensor_int_flag())
+          {
+            read_baro();
+            baro_values[i]= pressure;
+            avg_pressure += baro_values[i];
+            printf("%ld  ",baro_values[i] );
+            i++;
+          }
+        }
+        avg_pressure = (avg_pressure/n);
+        printf("avg:%ld \n",avg_pressure);
+        return avg_pressure;
+}
+
+
+
 void rate_controller()
 {
         /*
@@ -224,14 +242,12 @@ void rate_controller()
          */
         // Scale sensor values
         // TODO check this works
-        int16_t pitch_rate_s = (get_sensor(SP)/10);
-        int16_t roll_rate_s = (get_sensor(SQ)/10);
+        int16_t pitch_rate_s = (get_sensor(SQ)>>4);
+        int16_t roll_rate_s = (get_sensor(SP)>>4);
 
         // Set actuation inputs
         pitch_act = P2 * (pitch_rate_d - pitch_rate_s);
-        roll_act = P2 * (roll_rate_d - roll_rate_s);
-        if(roll_act !=0)
-        printf("roll_rate_d: %d | roll_rate_s: %d | SQ: %d\n", roll_rate_d,roll_rate_s,get_sensor(SQ));
+        roll_act = roll_rate_d - (P2 * roll_rate_s);
 
         if((new_lift - roll_act) < MIN_VALUE )
         {
@@ -276,7 +292,11 @@ void rate_controller()
           pitch_overflow = (new_lift - pitch_act) - MAX_VALUE;
           pitch_act += pitch_overflow;
         }
-        pitch_act = 0; //TODO
+
+        if(roll_act !=0)
+        printf("roll_angle: %d | roll_rate: %d | roll_act: %d\n", roll_rate_d,roll_rate_s,roll_act);
+
+        pitch_act = 0; //TODO  remove after testing roll
 }
 
 void angle_controller()
@@ -284,9 +304,9 @@ void angle_controller()
         /*
         Johann Meyer
          */
-        // Scale sensor va`lues
+        // Scale sensor values
         // TODO check this works
-        int8_t roll_s = (int8_t)((int32_t)get_sensor(PHI) * 127 / 32768);
+        int16_t roll_s = (int16_t)((int32_t)get_sensor(PHI) * 508 / 32768);
         int8_t pitch_s = (int32_t)get_sensor(THETA) * 127 / 32768;
 
         int16_t roll_err = roll - roll_s;
