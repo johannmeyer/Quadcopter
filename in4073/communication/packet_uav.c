@@ -31,7 +31,6 @@ void decode(core **logUserIn)
         {
 
                 last_received_message = get_time_us();
-                // printf("step1:%ld\n", last_received_message);
                 read_count++;
 
                 uint8_t curr_byte;
@@ -51,9 +50,7 @@ void decode(core **logUserIn)
 
                         // CRC calculation
                         uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
-                        uint8_t crc = crc_core(&my_packet_core);
-                        // TODO change to,
-                        // sizeof(my_packet_core));
+                        uint8_t crc = crc_message((void*) &my_packet_core, sizeof(my_packet_core));
 
                         if (crc == tmp_crc)
                         {
@@ -86,15 +83,10 @@ void decode(core **logUserIn)
         }
 
         // Checks if cable is disconnected
-        // printf("read_count:%d, no_read_count:%d \n", read_count,
-        // no_read_count);
         uint32_t curr_time = get_time_us();
         int32_t  time_diff = curr_time - last_received_message;
         if (time_diff > 300000)
         {
-                // printf("step2:%ld\n", get_time_us());
-                // no_read_count++;
-                // if (no_read_count >= MAX_NO_DATA_AVAILABLE)
                 if (last_received_message != 0)
                 {
                         mode = PANIC_MODE;

@@ -28,12 +28,11 @@ void encode(packet *my_packet, uint8_t mode, uint8_t p_incrementer)
            Construct the Packet
          */
 
+        encode_header_pc_uav(&my_packet_core->header, mode,  p_incrementer);
         // Package core of message for CRC function
         encode_data_command(my_packet_core->body, roll_c, pitch_c, yaw_c,
                             lift_c);
-
-        encode_header_pc_uav(&my_packet_core->header, mode, p_incrementer);
-        uint8_t crc = crc_core(my_packet_core); // TODO update crc to use sizeof
+        uint8_t crc = crc_message((void*) my_packet_core, sizeof(*my_packet_core));
 
         my_packet->start = START_BYTE;
         my_packet->crc = crc;

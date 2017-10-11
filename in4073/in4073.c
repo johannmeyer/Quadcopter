@@ -36,7 +36,7 @@ void determine_mode(uint8_t mode)
 			if (prev_mode == PANIC_MODE || prev_mode == CALIBRATION_MODE || prev_mode == SAFE_MODE)
 			{
 				prev_mode = SAFE_MODE;
-				printf("Safe mode1 \n");
+				printf("Safe mode \n");
 			}
 			else
 			{
@@ -67,9 +67,10 @@ void determine_mode(uint8_t mode)
 		case CALIBRATION_MODE:									// Calibration mode
 			if (prev_mode == SAFE_MODE )
 			{
+				uint32_t time = get_time_us();
 				printf("Calibrating sensors \n");
 				calibrate_sensors();
-				printf("Calibration done \n");
+				printf("Calibration done. Time elapsed: %ld ms\n", (get_time_us()-time)/1000);
 				init_logging(FULL_LOGGING);
 				prev_mode = CALIBRATION_MODE;
 			}
@@ -186,17 +187,22 @@ void process_mode(uint8_t current_mode)
 				//int_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				//fp_yaw_control(roll, pitch, yaw, new_lift, 5, get_sensor(PSI));
 				yaw_mode();
-      //  update_motors();
+        //update_motors();
+
         break;
 
 		case FULL_MODE:									// Full control mode
+
 			full_mode();
+
       break;
 
 		case RAW_MODE:                 // Raw control mode
 			break;
 
 		case HEIGHT_MODE:                 // Height control mode
+
+			height_mode();
 			break;
 
 		case WIRELESS_MODE:                 // Wireless mode
@@ -213,8 +219,14 @@ void process_mode(uint8_t current_mode)
 
 void calculate_values()
 {
-	new_lift = 3*lift;
-	if(new_lift > 600) new_lift = 600;
+
+	new_lift = 5*lift;
+	if(lift>0)																	// make lift non linear
+		new_lift += 50;
+	if(lift > 120)
+		new_lift = 650 + 2*(lift-120);
+	if(new_lift > MAX_LIFT)
+		new_lift = MAX_LIFT;
 }
 
 void battery_monitoring(uint8_t mode)
@@ -259,44 +271,48 @@ int main(void)
   select_log_mode(SHORT_LOGGING);
 
 	uint32_t counter = 0;
+	int32_t height_value;
   logCore = (core *) malloc(sizeof(core));
 	prev_mode = SAFE_MODE;
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
-	P = 10;
-	P1 = 1;
-	P2 =1;
+	height_flag = false;
+	P = 19;							//for yaw control
+ 	P1 = 1;
+ 	P2 = 2;
+	P3 = 1;							// for height control
 
 	while (!demo_done)
 	{
-
   			//printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
         // TODO Process the data e.g. change states
-				decode(&logCore);
-				calculate_values();
-				if (mode != prev_mode)
-				{
-					//printf("Determine mode \n");
-					determine_mode(mode);
-				}
-				process_mode(prev_mode);
-
 
 				if (check_timer_flag())
 				{
+					decode(&logCore);
+					calculate_values();
+					if (mode != prev_mode)
+					{
+						//printf("Determine mode \n");
+						determine_mode(mode);
+					}
+
+					process_mode(prev_mode);
 					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
 					if (counter++%20 == 0)
 					{
 						nrf_gpio_pin_toggle(BLUE);
-						read_baro();
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
+						//printf("P1 : %d, P2: %d \n", P1, P2);
 						if(isCalibrated())
 				      {
+								read_baro();
+								height_value = (0.2*(abs(get_sensor(SAX))/100)) + (0.8*(pressure/4));
 								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-					      printf(" Gyro : %6d %6d %6d | \n", get_sensor(SP), get_sensor(SQ), get_sensor(SR));
-					      //printf(" %6d %6d %6d %ld| \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure);
+					      //printf("Gyro: %6d %6d %6d %ld \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
+					      printf("Acc:%6d %6d %6d %ld | %ld \n", (int16_t) get_sensor(SAX), (int16_t) get_sensor(SAY), (int16_t) get_sensor(SAZ), get_sensor(BARO),height_value);
 							}
 				      /*else
 				      {
@@ -332,7 +348,7 @@ int main(void)
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();
-			run_filters_and_control();
+			// run_filters_and_control(prev_mode);
 		}
 	}
 

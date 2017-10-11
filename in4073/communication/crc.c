@@ -47,7 +47,7 @@ void crc_lut_byte(uint8_t *partial, uint8_t byte)
     *partial = crclut[*partial ^ byte];
 }
 
-uint8_t crc_core(core *pCore)
+uint8_t crc_message(void *message, uint8_t numBytes)
 {
     /*
     The data(core) of the packet are coded per byte using the CRC8 LUT
@@ -58,9 +58,9 @@ uint8_t crc_core(core *pCore)
     int i;
     uint8_t crc = 0;
 
-    uint8_t *nextByte = (uint8_t*) pCore;
+    uint8_t *nextByte = (uint8_t*) message;
 
-    for(i=0; i<sizeof(*pCore); i++)
+    for(i=0; i<numBytes; i++)
     {
         crc_lut_byte(&crc, *(nextByte++));
     }
