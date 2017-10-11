@@ -124,7 +124,7 @@ void yaw_controller()
         if (yaw_act !=0)
         {
           printf("yaw_error: %d, converted SR: %d, SR: %d, P: %d \n",
-         yaw_act,  yaw_s, get_sensor(SR), P);
+         yaw_act,  yaw_s, (int16_t) get_sensor(SR), P);
        }
 }
 

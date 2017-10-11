@@ -271,7 +271,7 @@ int main(void)
   select_log_mode(SHORT_LOGGING);
 
 	uint32_t counter = 0;
-	//int32_t height_value;
+	int32_t height_value;
   logCore = (core *) malloc(sizeof(core));
 	prev_mode = SAFE_MODE;
 	demo_done = false;
@@ -306,14 +306,14 @@ int main(void)
 						nrf_gpio_pin_toggle(BLUE);
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 						//printf("P1 : %d, P2: %d \n", P1, P2);
-						/*if(isCalibrated())
+						if(isCalibrated())
 				      {
 								read_baro();
 								height_value = (0.2*(abs(get_sensor(SAX))/100)) + (0.8*(pressure/4));
 								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
 					      //printf("Gyro: %6d %6d %6d %ld \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
-					      printf("Acc:%6d %6d %6d %ld | %ld \n", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ), pressure/4,height_value);
-							}*/
+					      printf("Acc:%6d %6d %6d %ld | %ld \n", (int16_t) get_sensor(SAX), (int16_t) get_sensor(SAY), (int16_t) get_sensor(SAZ), get_sensor(BARO),height_value);
+							}
 				      /*else
 				      {
 								printf("%6d %6d %6d | ", phi, theta, psi);

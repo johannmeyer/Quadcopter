@@ -20,6 +20,7 @@ struct calibData
 int16_t dcphi = 0, dctheta = 0, dcpsi = 0;
 int16_t dcsp = 0, dcsq = 0, dcsr = 0;
 int16_t dcsax = 0, dcsay = 0, dcsaz = 0;
+int32_t dcbaro = 0;
 
 void init_calibData(calibData *data);
 
@@ -85,6 +86,7 @@ void calibrate_sensors(void)
   //When all the sensors are considered stabilized, the average of the maximum and the minimum value of the
   //buffer is used as the DC offset to be subtracted.
 
+  read_baro();
   int32_t sum[9] = {0};
   uint8_t j;
 
@@ -102,6 +104,7 @@ void calibrate_sensors(void)
   dcsax = sum[6] / BUF_SIZE;
   dcsay = sum[7] / BUF_SIZE;
   dcsaz = sum[8] / BUF_SIZE;
+  dcbaro = pressure;
 
   calibration_flag = true;
 }
@@ -113,10 +116,10 @@ bool isCalibrated(void)
   return calibration_flag;
 }
 
-int16_t get_sensor(uint8_t sensor)
+int32_t get_sensor(uint8_t sensor)
 {
   /*Returns a calibrated sample of the selected sensor*/
-  int16_t senseValue = 0;
+  int32_t senseValue = 0;
 
   switch (sensor)
   {
@@ -154,6 +157,10 @@ int16_t get_sensor(uint8_t sensor)
 
     case PSI:
       senseValue = psi - dcpsi;
+      break;
+
+    case BARO:
+      senseValue = pressure - dcbaro;
       break;
   }
 

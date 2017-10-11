@@ -14,11 +14,12 @@
 #define SAX   7
 #define SAY   8
 #define SAZ   9
+#define BARO  10
 
 void calibrate_sensors(void);
 
 bool isCalibrated(void);
 
-int16_t get_sensor(uint8_t sensor);
+int32_t get_sensor(uint8_t sensor);
 
 #endif //SENSORS_H__
