@@ -282,6 +282,9 @@ int main(void)
  	P1 = 1;
  	P2 = 2;
 	P3 = 1;							// for height control
+	P4 = 1;
+	C1 = 1;							// for Kalman Filter
+	C2 = 1;
 
 	while (!demo_done)
 	{

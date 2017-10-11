@@ -16,6 +16,14 @@
 #define GAIN_P1_DECREMENT 4
 #define GAIN_P2_INCREMENT 5
 #define GAIN_P2_DECREMENT 6
+#define GAIN_P3_INCREMENT 7
+#define GAIN_P3_DECREMENT 8
+#define GAIN_P4_INCREMENT 9
+#define GAIN_P4_DECREMENT 10
+#define GAIN_C1_INCREMENT 11
+#define GAIN_C1_DECREMENT 12
+#define GAIN_C2_INCREMENT 13
+#define GAIN_C2_DECREMENT 14
 
 /*
  Packet Definition PC -> UAV
@@ -24,7 +32,7 @@
 #define MODE_OFFSET 0                 // bit offset
 #define MODE_LENGTH 0b1111            // used for anding
 #define GAIN_INCREMENTER_OFFSET 4     // bit offset
-#define GAIN_INCREMENTER_LENGTH 0b111 // used for anding
+#define GAIN_INCREMENTER_LENGTH 0b1111 // used for anding
 
 /* Only one Packet Type now as Gains are now implemented as incrementers */
 // Packet types
@@ -104,7 +112,8 @@ typedef struct packet
 // PC -> UAV
 void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer);
 void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
-                          uint8_t *P1, uint8_t *P2);
+                          uint8_t *P1, uint8_t *P2, uint8_t *P3, uint8_t *P4,
+                          uint8_t *C1, uint8_t *C2);
 
 void encode_data_command(uint8_t *data, int8_t roll, int8_t pitch, int8_t yaw,
                          uint8_t lift);

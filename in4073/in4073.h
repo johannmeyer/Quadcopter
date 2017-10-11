@@ -55,7 +55,7 @@ int8_t pitch,roll,yaw;
 int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
-uint8_t P, P1, P2,P3;
+uint8_t P, P1, P2, P3, P4, C1, C2;
 void determine_mode(uint8_t mode);
 void process_mode(uint8_t current_mode);
 
