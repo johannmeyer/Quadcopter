@@ -14,6 +14,8 @@
 #include "fixedp.h"
 #include "in4073.h"
 #include "sensors.h"
+#include <stdlib.h>
+#include "filters.h"
 
 
 /*
@@ -24,7 +26,7 @@ uint8_t outer_counter = 0;
 int16_t yaw_prev, yaw_s;
 int16_t pitch_rate_d, roll_rate_d, yaw_rate;
 int16_t pitch_act, roll_act, yaw_act;
-int16_t yaw_overflow, pitch_overflow, roll_overflow;
+int16_t yaw_overflow, pitch_overflow, roll_overflow, height_overflow;
 int32_t height_d, height_act;
 /*
 Local Function Prototypes
@@ -176,29 +178,40 @@ void height_mode()
 
 void height_controller()
 {
+        int16_t height_rate_d;
         int32_t height_s= get_baro();
-        height_act = -P3 *(height_d - height_s);      // pressure is less at more height
+        int16_t height_rate_s = (int16_t)(butter(acc_x,THETA)>>10);
+        height_rate_d = P3 *(height_d - height_s);      // pressure is less at more height
+        height_act = height_rate_d - P4*height_rate_s;
+
+        if((new_lift + height_act) > MAX_VALUE )        //keeping a check on max height
+        {
+          height_overflow = (new_lift + height_act) - MAX_VALUE;
+          height_act -= height_overflow;
+        }
 
 }
 
+
 int32_t get_baro()
 {
-        int8_t n=15,i=0;
-        int32_t baro_values[n];
+        int8_t n=5;
+        static int i=0;
+        static int32_t baro_values[5];
         int32_t avg_pressure=0;
 
-        while(i<n)
-        {
-
-          if (check_sensor_int_flag())
-          {
-            read_baro();
-            baro_values[i]= pressure;
-            avg_pressure += baro_values[i];
-            printf("%ld  ",baro_values[i] );
+            baro_values[i]= get_sensor(BARO);
+            printf("Baro : %ld  ",baro_values[i] );
+            if(i<n)
             i++;
-          }
-        }
+            else
+            i=0;
+
+            for (int j =0; j<n;j++)
+            {
+              avg_pressure += baro_values[j];
+            }
+
         avg_pressure = (avg_pressure/n);
         printf("avg:%ld \n",avg_pressure);
         return avg_pressure;

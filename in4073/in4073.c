@@ -18,6 +18,7 @@
 #include "logging.h"
 #include "sensors.h"
 #include "control.h"
+#include "filters.h"
 #include <stdlib.h>
 
 
@@ -88,6 +89,14 @@ void determine_mode(uint8_t mode)
 			{
 				prev_mode = FULL_MODE;
 			}
+			else if(prev_mode == HEIGHT_MODE && height_lift_flag)
+			{
+				prev_mode = HEIGHT_MODE;
+			}
+			else if(prev_mode == HEIGHT_MODE && !height_lift_flag)
+			{
+				prev_mode = FULL_MODE;
+			}
 			break;
 
 		case RAW_MODE:                 // Raw control mode
@@ -98,9 +107,11 @@ void determine_mode(uint8_t mode)
 			break;
 
 		case HEIGHT_MODE:                 // Height control mode
-			if(prev_mode == HEIGHT_MODE || (prev_mode == SAFE_MODE && isCalibrated() && safe_flag) || prev_mode == FULL_MODE)
+			if(prev_mode == FULL_MODE)
 			{
+				prev_lift = new_lift;
 				prev_mode = HEIGHT_MODE;
+				height_mode_flag = true;
 			}
 			break;
 
@@ -201,8 +212,16 @@ void process_mode(uint8_t current_mode)
 			break;
 
 		case HEIGHT_MODE:                 // Height control mode
+			if(new_lift != prev_lift)
+			{
+				height_lift_flag = false;
+			}
+			else
+			{
+				height_lift_flag = true;
+				height_mode();
+			}
 
-			height_mode();
 			break;
 
 		case WIRELESS_MODE:                 // Wireless mode
@@ -272,12 +291,16 @@ int main(void)
 
 	uint32_t counter = 0;
 	int32_t height_value;
+	int16_t acc_x;
+
   logCore = (core *) malloc(sizeof(core));
 	prev_mode = SAFE_MODE;
 	demo_done = false;
 	exit_mode_flag = false;
 	safe_flag = false;
-	height_flag = false;
+	height_lift_flag = false;
+	height_mode_flag = false;
+
 	P = 19;							//for yaw control
  	P1 = 1;
  	P2 = 2;
@@ -300,7 +323,12 @@ int main(void)
 						//printf("Determine mode \n");
 						determine_mode(mode);
 					}
-
+					if(height_mode_flag && mode == HEIGHT_MODE)
+					{
+						height_mode_flag = false;
+						height_lift_flag = false;
+						prev_mode = FULL_MODE;
+					}
 					process_mode(prev_mode);
 					//printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 
@@ -309,14 +337,16 @@ int main(void)
 						nrf_gpio_pin_toggle(BLUE);
 						printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n", prev_mode, roll,pitch, yaw, lift,ae[0],ae[1],ae[2],ae[3]);
 						//printf("P1 : %d, P2: %d \n", P1, P2);
-						if(isCalibrated())
+						/*if(isCalibrated())
 				      {
 								read_baro();
-								height_value = (0.2*(abs(get_sensor(SAX))/100)) + (0.8*(pressure/4));
+								acc_x = get_sensor(SAX);
+								height_value = (0.3*(abs(butter(acc_x,THETA)>>10)/10)) + (0.7*(abs(get_sensor(BARO))/4));
+								//height_value = (butter(acc_x,THETA)>>10);
 								//printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
 					      //printf("Gyro: %6d %6d %6d %ld \n ", get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
-					      printf("Acc:%6d %6d %6d %ld | %ld \n", (int16_t) get_sensor(SAX), (int16_t) get_sensor(SAY), (int16_t) get_sensor(SAZ), get_sensor(BARO),height_value);
-							}
+					      printf("Acc:%6d %ld | %ld \n",acc_x,height_value,pressure);
+							}*/
 				      /*else
 				      {
 								printf("%6d %6d %6d | ", phi, theta, psi);
@@ -351,6 +381,7 @@ int main(void)
 		if (check_sensor_int_flag())
 		{
 			get_dmp_data();
+			read_baro();
 			// run_filters_and_control(prev_mode);
 		}
 	}

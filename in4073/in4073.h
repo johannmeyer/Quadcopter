@@ -45,12 +45,13 @@
 bool demo_done;
 bool exit_mode_flag;
 bool safe_flag;
-bool height_flag;
+bool height_lift_flag;
+bool height_mode_flag;
 
 // Control
 int8_t yaw_parameter;
 uint8_t mode, current_mode, prev_mode, lift;
-uint16_t new_lift;
+uint16_t new_lift, prev_lift;
 int8_t pitch,roll,yaw;
 int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
