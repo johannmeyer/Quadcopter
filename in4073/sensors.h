@@ -14,15 +14,12 @@
 #define SAX   7
 #define SAY   8
 #define SAZ   9
-
-int16_t dcphi, dctheta, dcpsi;
-int16_t dcsp, dcsq, dcsr;
-int16_t dcsax, dcsay, dcsaz;
+#define BARO  10
 
 void calibrate_sensors(void);
 
 bool isCalibrated(void);
 
-int16_t get_sensor(uint8_t sensor);
+int32_t get_sensor(uint8_t sensor);
 
 #endif //SENSORS_H__

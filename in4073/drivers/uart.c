@@ -62,7 +62,7 @@ void uart_init(void)
 	init_queue(&tx_queue); // Initialize transmit queue
 
 	nrf_gpio_cfg_output(TX_PIN_NUMBER);
-	nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL); 
+	nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
 	NRF_UART0->PSELTXD = TX_PIN_NUMBER;
 	NRF_UART0->PSELRXD = RX_PIN_NUMBER;
 	NRF_UART0->BAUDRATE        = (UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos);

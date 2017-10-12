@@ -5,6 +5,6 @@
 #define PACKET_UAV_H
 
 #include "packet.h"
-int decode(core **logUserIn);
+void decode(core **logUserIn);
 
 #endif // PACKET_UAV_H
