@@ -3,6 +3,7 @@
 
 #define SHORT_LOGGING 0
 #define FULL_LOGGING  1
+#include "packet.h"
 
 void init_logging(uint8_t logMode);
 

@@ -180,7 +180,7 @@ void height_controller()
 {
         int16_t height_rate_d;
         int32_t height_s= get_baro();
-        int16_t height_rate_s = (int16_t)(butter(acc_x,THETA)>>10);
+        int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>10);
         height_rate_d = P3 *(height_d - height_s);      // pressure is less at more height
         height_act = height_rate_d - P4*height_rate_s;
 
