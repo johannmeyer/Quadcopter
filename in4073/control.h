@@ -1,9 +1,9 @@
 #include <stdint.h>
 
 #define MIN_VALUE 250
-#define MAX_VALUE 900
+#define MAX_VALUE 750
 #define MAX_MOTOR 1000
-#define MAX_LIFT 800
+#define MAX_LIFT 700
 
 void update_motors();
 

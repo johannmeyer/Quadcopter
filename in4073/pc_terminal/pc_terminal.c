@@ -136,6 +136,30 @@ void get_key(char c)
 		case 'l':
 			p_incrementer = GAIN_P2_DECREMENT;
 			break;
+		case 't':
+			p_incrementer = GAIN_P3_INCREMENT;
+			break;
+		case 'g':
+			p_incrementer = GAIN_P3_DECREMENT;
+			break;
+		case 'y':
+			p_incrementer = GAIN_P4_INCREMENT;
+			break;
+		case 'h':
+			p_incrementer = GAIN_P4_DECREMENT;
+			break;
+		case 'v':
+			p_incrementer = GAIN_C1_INCREMENT;
+			break;
+		case 'b':
+			p_incrementer = GAIN_C1_DECREMENT;
+			break;
+		case 'n':
+			p_incrementer = GAIN_C2_INCREMENT;
+			break;
+		case 'm':
+			p_incrementer = GAIN_C2_DECREMENT;
+			break;
 		case 'A':									// up key
 			pitch_key = pitch_key +TRIM_VALUE;
 			break;
@@ -305,68 +329,70 @@ int  rs232_putpacket(packet *my_packet)
 
 int main(int argc, char **argv)
 {
-								char c;
-								clock_t start;
-								lift_js= 0;  //-32768 if not using joystick
-								pitch_js=0;
-								roll_js=0;
-								yaw_js=0;
-								lift_key=0;
-								pitch_key=0;
-								roll_key=0;
-								yaw_key=0;
-								lift=0;
-								pitch=0;
-								roll=0;
-								yaw=0;
+			char c;
+			clock_t start;
+			lift_js= 0;  //-32768 if not using joystick
+			pitch_js=0;
+			roll_js=0;
+			yaw_js=0;
+			lift_key=0;
+			pitch_key=0;
+			roll_key=0;
+			yaw_key=0;
+			lift=0;
+			pitch=0;
+			roll=0;
+			yaw=0;
 
-								term_puts("\nTerminal program - Embedded Real-Time Systems\n");
+			term_puts("\nTerminal program - Embedded Real-Time Systems\n");
 
-								term_initio();
-								rs232_open();
-								joystick_open();
-								term_puts("Type ^C to exit\n");
+			term_initio();
+			rs232_open();
+			joystick_open();
+			term_puts("Type ^C to exit\n");
 
-								/*
-								   discard any incoming text
-								 */
-								while ((c = rs232_getchar_nb()) != -1)
-																fputc(c,stderr);
+			/*
+			   discard any incoming text
+			 */
+			while ((c = rs232_getchar_nb()) != -1)
+											fputc(c,stderr);
 
-								/*
-								   send & receive
-								 */
-								packet my_packet;
-								for (;;)
-								{
-																start = clock();
-																while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
-																{
-																// Sends data to the Drone
-																char readChar = -1;
-																if ((readChar = term_getchar_nb()) != -1)
-																{
-																	do {
-																		c = readChar;
-																	} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
-																	get_key(c);
-																}
-																get_joystick_action(&mode, &roll_js, &pitch_js, &yaw_js, &lift_js);
+			/*
+			   send & receive
+			 */
+			packet my_packet;
+			for (;;)
+			{
+						start = clock();
+						while((clock()-start)/(double)CLOCKS_PER_SEC<0.05)
+						{
+									// Sends data to the Drone
+									char readChar = -1;
+									if ((readChar = term_getchar_nb()) != -1)
+									{
+											do {
+												c = readChar;
+											} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
+											get_key(c);
+									}
+									get_joystick_action(&mode, &roll_js, &pitch_js, &yaw_js, &lift_js);
 
-																// combine the keyboard and joystick data
-																combine_values();
-																// Reads data sent from the Drone
-																if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
-																}
-																encode(&my_packet, mode, p_incrementer);
-																rs232_putpacket(&my_packet);
-																p_incrementer = GAIN_NO_INCREMENT;
-								}
+									// combine the keyboard and joystick data
+									combine_values();
+									// Reads data sent from the Drone
+									if ((c = rs232_getchar_nb()) != -1) term_putchar(c);
+						}
+						encode(&my_packet, mode, p_incrementer);
+						rs232_putpacket(&my_packet);
+						// Reset parameters that need to be reset
+						p_incrementer = GAIN_NO_INCREMENT;
+						if (mode == HEIGHT_MODE) mode = FULL_MODE;
+			}
 
-								term_exitio();
-								joystick_close();
-								rs232_close();
-								term_puts("\n<exit>\n");
+			term_exitio();
+			joystick_close();
+			rs232_close();
+			term_puts("\n<exit>\n");
 
-								return 0;
+			return 0;
 }

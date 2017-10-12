@@ -16,7 +16,8 @@ void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer)
 }
 
 void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
-                          uint8_t *P1, uint8_t *P2)
+                          uint8_t *P1, uint8_t *P2, uint8_t *P3, uint8_t *P4,
+                          uint8_t *C1, uint8_t *C2)
 {
         uint8_t data_pointer = *header << MODE_OFFSET;
         *mode = data_pointer & MODE_LENGTH;
@@ -40,7 +41,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P1 += 1;
                 break;
         case GAIN_P1_DECREMENT:
-                if (*P1 != 1)
+                if (*P1 != 0)
                         *P1 -= 1;
                 break;
         case GAIN_P2_INCREMENT:
@@ -48,8 +49,40 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P2 += 1;
                 break;
         case GAIN_P2_DECREMENT:
-                if (*P2 != 1)
+                if (*P2 != 0)
                         *P2 -= 1;
+                break;
+        case GAIN_P3_INCREMENT:
+                if (*P3 != 255)
+                        *P3 += 1;
+                break;
+        case GAIN_P3_DECREMENT:
+                if (*P3 != 0)
+                        *P3 -= 1;
+                break;
+        case GAIN_P4_INCREMENT:
+                if (*P4 != 255)
+                        *P4 += 1;
+                break;
+        case GAIN_P4_DECREMENT:
+                if (*P4 != 0)
+                        *P4 -= 1;
+                break;
+        case GAIN_C1_INCREMENT:
+                if (*C1 != 255)
+                        *C1 += 1;
+                break;
+        case GAIN_C1_DECREMENT:
+                if (*C1 != 1)
+                        *C1 -= 1;
+                break;
+        case GAIN_C2_INCREMENT:
+                if (*C2 != 255)
+                        *C2 += 1;
+                break;
+        case GAIN_C2_DECREMENT:
+                if (*C2 != 1)
+                        *C2 -= 1;
                 break;
         default:
                 printf("GAIN_INCREMENTER code not valid.\n");

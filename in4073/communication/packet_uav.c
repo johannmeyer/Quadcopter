@@ -50,12 +50,14 @@ void decode(core **logUserIn)
 
                         // CRC calculation
                         uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
-                        uint8_t crc = crc_message((void*) &my_packet_core, sizeof(my_packet_core));
+                        uint8_t crc = crc_message((void *)&my_packet_core,
+                                                  sizeof(my_packet_core));
 
                         if (crc == tmp_crc)
                         {
                                 decode_header_pc_uav(&header, &mode, &P, &P1,
-                                                     &P2);
+                                                     &P2, &P3, &P4, &C1, &C2);
+
                                 decode_data_command(data, &roll, &pitch, &yaw,
                                                     &lift);
 
