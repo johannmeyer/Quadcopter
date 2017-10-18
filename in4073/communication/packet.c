@@ -41,7 +41,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P1 += 1;
                 break;
         case GAIN_P1_DECREMENT:
-                if (*P1 != 1)
+                if (*P1 != 0)
                         *P1 -= 1;
                 break;
         case GAIN_P2_INCREMENT:
@@ -49,7 +49,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P2 += 1;
                 break;
         case GAIN_P2_DECREMENT:
-                if (*P2 != 1)
+                if (*P2 != 0)
                         *P2 -= 1;
                 break;
         case GAIN_P3_INCREMENT:
@@ -57,7 +57,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P3 += 1;
                 break;
         case GAIN_P3_DECREMENT:
-                if (*P3 != 1)
+                if (*P3 != 0)
                         *P3 -= 1;
                 break;
         case GAIN_P4_INCREMENT:
@@ -65,7 +65,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P4 += 1;
                 break;
         case GAIN_P4_DECREMENT:
-                if (*P4 != 1)
+                if (*P4 != 0)
                         *P4 -= 1;
                 break;
         case GAIN_C1_INCREMENT:

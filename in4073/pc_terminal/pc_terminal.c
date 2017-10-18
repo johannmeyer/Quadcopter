@@ -136,16 +136,16 @@ void get_key(char c)
 		case 'l':
 			p_incrementer = GAIN_P2_DECREMENT;
 			break;
-		case 'p':
+		case 't':
 			p_incrementer = GAIN_P3_INCREMENT;
 			break;
-		case ';':
+		case 'g':
 			p_incrementer = GAIN_P3_DECREMENT;
 			break;
-		case '[':
+		case 'y':
 			p_incrementer = GAIN_P4_INCREMENT;
 			break;
-		case '\'':
+		case 'h':
 			p_incrementer = GAIN_P4_DECREMENT;
 			break;
 		case 'v':

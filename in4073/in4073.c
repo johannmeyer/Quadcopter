@@ -101,6 +101,7 @@ void determine_mode(uint8_t mode)
                 else if (prev_mode == HEIGHT_MODE && !height_lift_flag)
                 {
                         prev_mode = FULL_MODE;
+                        printf("Full mode entered from lift\n");
                 }
                 break;
 
@@ -118,6 +119,7 @@ void determine_mode(uint8_t mode)
                         prev_lift = new_lift;
                         prev_mode = HEIGHT_MODE;
                         height_mode_flag = true;
+                        printf("Height mode entered \n");
                 }
                 break;
 
@@ -212,7 +214,7 @@ void process_mode(uint8_t current_mode)
 
         case FULL_MODE: // Full control mode
 
-                full_mode();
+                //full_mode();
 
                 break;
 
@@ -223,6 +225,7 @@ void process_mode(uint8_t current_mode)
                 if (new_lift != prev_lift)
                 {
                         height_lift_flag = false;
+                        printf("lift changed \n");
                 }
                 else
                 {
@@ -247,11 +250,11 @@ void process_mode(uint8_t current_mode)
 void calculate_values()
 {
 
-        new_lift = 5 * lift;
+        new_lift = 3 * lift;
         if (lift > 0) // make lift non linear
-                new_lift += 50;
-        if (lift > 120)
-                new_lift = 650 + 2 * (lift - 120);
+                new_lift += 100;
+        if (lift > 100)
+                new_lift = 400 + 2 * (lift - 100);
         if (new_lift > MAX_LIFT)
                 new_lift = MAX_LIFT;
 }
@@ -313,8 +316,8 @@ int main(void)
         height_mode_flag = false;
 
         P = 19; // for yaw control
-        P1 = 1;
-        P2 = 2;
+        P1 = 14;
+        P2 = 21;
         P3 = 1; // for height control
         P4 = 1;
         C1 = 1; // for Kalman Filter
@@ -324,21 +327,23 @@ int main(void)
         {
                 // printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
                 // TODO Process the data e.g. change states
-
+                decode(&logCore);
+                calculate_values();
                 if (check_timer_flag())
                 {
-                        decode(&logCore);
-                        calculate_values();
+                        //int32_t start_time = get_time_us();
+
                         if (mode != prev_mode)
                         {
                                 // printf("Determine mode \n");
                                 determine_mode(mode);
                         }
-                        if (height_mode_flag && mode == HEIGHT_MODE)
+                        else if (height_mode_flag && mode == HEIGHT_MODE)
                         {
                                 height_mode_flag = false;
                                 height_lift_flag = false;
                                 prev_mode = FULL_MODE;
+                                printf("Full mode entered from main \n");
                         }
                         process_mode(prev_mode);
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
@@ -409,7 +414,7 @@ int main(void)
                 {
                         get_dmp_data();
                         read_baro();
-                        // run_filters_and_control(prev_mode);
+                        run_filters_and_control(prev_mode);
                 }
         }
 

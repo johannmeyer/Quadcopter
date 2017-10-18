@@ -12,7 +12,7 @@
 #define WIRELESS_MODE 8
 #define EXIT_MODE 9
 
-#define TRIM_VALUE 200
+#define TRIM_VALUE 1000
 #define P_CHANGE 1
 
 int16_t lift_key, pitch_key, roll_key, yaw_key;

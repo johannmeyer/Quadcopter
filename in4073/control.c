@@ -25,9 +25,10 @@ uint32_t control_counter =0 ;
 uint8_t outer_counter = 0;
 int16_t yaw_prev, yaw_s;
 int16_t pitch_rate_d, roll_rate_d, yaw_rate;
-int16_t pitch_act, roll_act, yaw_act;
+int16_t pitch_act, roll_act, yaw_act, height_act;
 int16_t yaw_overflow, pitch_overflow, roll_overflow, height_overflow;
-int32_t height_d, height_act;
+int32_t height_s, height_d;
+int16_t height_rate_d;
 /*
 Local Function Prototypes
  */
@@ -36,6 +37,7 @@ void rate_controller();
 void angle_controller();
 void yaw_controller();
 void height_controller();
+void height_rate_controller();
 int32_t get_baro();
 
 
@@ -135,10 +137,13 @@ void run_filters_and_control(uint8_t mode)
   switch (mode)
   {
     case FULL_MODE:
-      rate_controller();
-      update_actuator();
+      //rate_controller();
+      //update_actuator();
+      full_mode();
       break;
-
+    default:
+    //printf("not full mode\n");
+    break;
   }
         // fancy stuff here
         // control loops and/or filters
@@ -155,54 +160,75 @@ void yaw_mode()
 
 void full_mode()
 {
-
-        if (outer_counter++ % 5 == 0)
+        //int32_t start_time = get_time_us();
+        if (outer_counter++ % 3 == 0)
         {
                 angle_controller();
-                //yaw_controller();
-                yaw_act = 0;//TODO
+                yaw_controller();
+                //yaw_act = 0;//TODO  remove after testing
         }
 
         rate_controller();
         update_actuator();
+        //printf("%ld\n", get_time_us()-start_time);
       //  outer_counter++;
 }
 
 void height_mode()
 {
-        height_d = get_baro();
-        height_controller();
+        static uint8_t height_counter;
+
+        for (int i =0; i<5; i++)
+        {
+          height_d = get_baro();
+        }
+        if (height_counter++ % 5 == 0)
+        {
+            height_controller();
+        }
+        height_rate_controller();
         full_mode();
 
 }
 
 void height_controller()
 {
-        int16_t height_rate_d;
-        int32_t height_s= get_baro();
-        int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>10);
+
+        height_s= get_baro();
         height_rate_d = P3 *(height_d - height_s);      // pressure is less at more height
-        height_act = height_rate_d - P4*height_rate_s;
+}
+
+void height_rate_controller()
+{
+        height_s= get_baro();             // just to keep values of barometer updated
+        static int16_t prev_height_rate=0;
+        int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>18);
+        prev_height_rate = prev_height_rate + height_rate_s;
+
+        height_act = height_rate_d - P4*(prev_height_rate/100);
 
         if((new_lift + height_act) > MAX_VALUE )        //keeping a check on max height
         {
           height_overflow = (new_lift + height_act) - MAX_VALUE;
           height_act -= height_overflow;
         }
+        if(height_act!=0)
+        printf("height_act : %d, acc_sensor: %d, height_s: %ld, P3: %d, P4: %d",height_act, height_rate_s,height_s, P3, P4);
 
 }
 
-
 int32_t get_baro()
 {
-        int8_t n=5;
-        static int i=0;
-        static int32_t baro_values[5];
-        int32_t avg_pressure=0;
+        //int8_t n=5;
+        //static int i=0;
+      //  static int32_t baro_values[5];
+        int32_t baro_value;
+        static int32_t avg_pressure = 0;
 
-            baro_values[i]= get_sensor(BARO);
-            printf("Baro : %ld  ",baro_values[i] );
-            if(i<n)
+            //baro_values[i]= get_sensor(BARO);
+            baro_value = get_sensor(BARO);
+            printf("Baro : %ld  ",baro_value);
+          /*  if(i<n)
             i++;
             else
             i=0;
@@ -211,8 +237,8 @@ int32_t get_baro()
             {
               avg_pressure += baro_values[j];
             }
-
-        avg_pressure = (avg_pressure/n);
+            */
+        avg_pressure = (4*avg_pressure)/5 + (baro_value/5);
         printf("avg:%ld \n",avg_pressure);
         return avg_pressure;
 }
@@ -226,11 +252,11 @@ void rate_controller()
          */
         // Scale sensor values
         // TODO check this works
-        int16_t pitch_rate_s = (get_sensor(SQ)>>4);
-        int16_t roll_rate_s = (get_sensor(SP)>>4);
+        int16_t pitch_rate_s = (get_sensor(SQ)>>8);
+        int16_t roll_rate_s = (get_sensor(SP)>>8);
 
         // Set actuation inputs
-        pitch_act = P2 * (pitch_rate_d - pitch_rate_s);
+        pitch_act = pitch_rate_d +(P2 * pitch_rate_s);
         roll_act = roll_rate_d - (P2 * roll_rate_s);
 
         if((new_lift - roll_act) < MIN_VALUE )
@@ -278,9 +304,9 @@ void rate_controller()
         }
 
         if(roll_act !=0)
-        printf("roll_angle: %d | roll_rate: %d | roll_act: %d\n", roll_rate_d,roll_rate_s,roll_act);
+        printf("pitch_rate_s: %d | roll_rate_s: %d | P1: %d | P2: %d \n", pitch_rate_s,roll_rate_s, P1, P2);
 
-        pitch_act = 0; //TODO  remove after testing roll
+        //roll_act = 0; //TODO  remove after testing roll
 }
 
 void angle_controller()
@@ -290,14 +316,15 @@ void angle_controller()
          */
         // Scale sensor values
         // TODO check this works
-        int16_t roll_s = (int16_t)((int32_t)get_sensor(PHI) * 508 / 32768);
-        int8_t pitch_s = (int32_t)get_sensor(THETA) * 127 / 32768;
+        int16_t roll_s = (get_sensor(PHI)>>9);
+        int16_t pitch_s = (get_sensor(THETA)>>9);
 
-        int16_t roll_err = roll - roll_s;
+        int16_t roll_err = (roll>>4) - roll_s;
         //printf("Roll error: %d\n", roll_err);
-        int16_t pitch_err = pitch - pitch_s;
+        int16_t pitch_err = (pitch>>4) - pitch_s;
 
         // Set new desired values for the rate_controller()
         pitch_rate_d = P1 * pitch_err;
         roll_rate_d = P1 * roll_err;
+        printf("roll_s: %d | pitch_s: %d\n",roll_s, pitch_s);
 }

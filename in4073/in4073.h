@@ -10,7 +10,7 @@
 
 #ifndef IN4073_H__
 #define IN4073_H__
-//#define FLIGHT
+#define FLIGHT
 
 #include <inttypes.h>
 #include <stdio.h>
