@@ -13,7 +13,7 @@
  */
 
 #include "control.h"
-#include "filters.h"
+//#include "filters.h"
 #include "in4073.h"
 #include "logging.h"
 #include "packet_uav.h"
@@ -349,7 +349,7 @@ int main(void)
                                 prev_mode = FULL_MODE;
                                 printf("Full mode entered from main \n");
                         }
-                        process_mode(prev_mode);
+                        //process_mode(prev_mode);
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
                         // | %d | %d\n", prev_mode, roll,pitch, yaw,
                         // lift,ae[0],ae[1],ae[2],ae[3]);
@@ -367,7 +367,6 @@ int main(void)
 #ifdef FLIGHT
                         battery_monitoring(prev_mode);
 #endif
-                        read_baro();
                         clear_timer_flag();
                 }
                 if (check_sensor_int_flag())
@@ -380,6 +379,7 @@ int main(void)
                     counter = get_time_us() - counter;
                     if(counter>maxCounter && counter < 5000000) maxCounter = counter;
                   }
+                  read_baro();
                   /*if(isCalibrated())
                   {
                     printf("%ld\t", get_time_us());
@@ -394,9 +394,7 @@ int main(void)
                     printf("%6d %6d %6d\t", sax, say, saz);
                     printf("%6d %6d %6d\n", sp, sq, sr);
                   }*/
-                  //read_baro();
                   process_mode(prev_mode);
-                  //run_filters_and_control(prev_mode);
                 }
         }
 

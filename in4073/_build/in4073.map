@@ -1115,7 +1115,7 @@ END GROUP
  *(fs_data)
                 [!provide]                PROVIDE (__stop_fs_data, .)
 
-.text           0x00018000     0xcc94
+.text           0x00018000     0xccac
  *(.Vectors)
  .Vectors       0x00018000       0xc0 _build/gcc_startup_nrf51.o
                 0x00018000                __Vectors
@@ -1146,632 +1146,632 @@ END GROUP
                 0x0001854c      0x1d4 _build/in4073.o
                 0x0001854c                process_mode
  .text.startup.main
-                0x00018720      0x278 _build/in4073.o
+                0x00018720      0x270 _build/in4073.o
                 0x00018720                main
  .text.update_actuator
-                0x00018998      0x124 _build/control.o
-                0x00018998                update_actuator
+                0x00018990      0x124 _build/control.o
+                0x00018990                update_actuator
  .text.update_motors
-                0x00018abc       0x90 _build/control.o
-                0x00018abc                update_motors
+                0x00018ab4       0x90 _build/control.o
+                0x00018ab4                update_motors
  .text.yaw_controller
-                0x00018b4c       0xf0 _build/control.o
-                0x00018b4c                yaw_controller
+                0x00018b44       0xf0 _build/control.o
+                0x00018b44                yaw_controller
  .text.yaw_mode
-                0x00018c3c      0x118 _build/control.o
-                0x00018c3c                yaw_mode
+                0x00018c34      0x118 _build/control.o
+                0x00018c34                yaw_mode
  .text.height_rate_controller
-                0x00018d54       0xe4 _build/control.o
-                0x00018d54                height_rate_controller
+                0x00018d4c      0x104 _build/control.o
+                0x00018d4c                height_rate_controller
  .text.rate_controller
-                0x00018e38      0x180 _build/control.o
-                0x00018e38                rate_controller
+                0x00018e50      0x180 _build/control.o
+                0x00018e50                rate_controller
  .text.full_mode
-                0x00018fb8       0x80 _build/control.o
-                0x00018fb8                full_mode
+                0x00018fd0       0x80 _build/control.o
+                0x00018fd0                full_mode
  .text.height_mode
-                0x00019038      0x154 _build/control.o
-                0x00019038                height_mode
+                0x00019050      0x154 _build/control.o
+                0x00019050                height_mode
  .text.isCalibrated
-                0x0001918c        0xc _build/sensors.o
-                0x0001918c                isCalibrated
+                0x000191a4        0xc _build/sensors.o
+                0x000191a4                isCalibrated
  .text.get_sensor
-                0x00019198      0x100 _build/sensors.o
-                0x00019198                get_sensor
+                0x000191b0      0x100 _build/sensors.o
+                0x000191b0                get_sensor
  .text.insert_data
-                0x00019298      0x170 _build/sensors.o
-                0x00019298                insert_data
+                0x000192b0      0x170 _build/sensors.o
+                0x000192b0                insert_data
  .text.calibrate_sensors
-                0x00019408      0x368 _build/sensors.o
-                0x00019408                calibrate_sensors
+                0x00019420      0x368 _build/sensors.o
+                0x00019420                calibrate_sensors
  .text.calibrate_raw_sensors
-                0x00019770      0x4bc _build/sensors.o
-                0x00019770                calibrate_raw_sensors
+                0x00019788      0x4bc _build/sensors.o
+                0x00019788                calibrate_raw_sensors
  .text.get_filtered_data
-                0x00019c2c       0xfc _build/sensors.o
-                0x00019c2c                get_filtered_data
- .text.butter   0x00019d28       0xac _build/filters.o
-                0x00019d28                butter
- .text.Kalman   0x00019dd4       0x8c _build/filters.o
-                0x00019dd4                Kalman
- .text.fpmult   0x00019e60        0x8 _build/fixedp.o
-                0x00019e60                fpmult
+                0x00019c44       0xfc _build/sensors.o
+                0x00019c44                get_filtered_data
+ .text.butter   0x00019d40       0xac _build/filters.o
+                0x00019d40                butter
+ .text.Kalman   0x00019dec       0x8c _build/filters.o
+                0x00019dec                Kalman
+ .text.fpmult   0x00019e78        0x8 _build/fixedp.o
+                0x00019e78                fpmult
  .text.crc_message
-                0x00019e68       0x20 _build/crc.o
-                0x00019e68                crc_message
+                0x00019e80       0x20 _build/crc.o
+                0x00019e80                crc_message
  .text.decode_header_pc_uav
-                0x00019e88       0x7c _build/packet.o
-                0x00019e88                decode_header_pc_uav
+                0x00019ea0       0x7c _build/packet.o
+                0x00019ea0                decode_header_pc_uav
  .text.decode_data_command
-                0x00019f04       0x18 _build/packet.o
-                0x00019f04                decode_data_command
- .text.decode   0x00019f1c      0x164 _build/packet_uav.o
-                0x00019f1c                decode
+                0x00019f1c       0x18 _build/packet.o
+                0x00019f1c                decode_data_command
+ .text.decode   0x00019f34      0x164 _build/packet_uav.o
+                0x00019f34                decode
  .text.select_log_mode
-                0x0001a080       0x24 _build/logging.o
-                0x0001a080                select_log_mode
+                0x0001a098       0x24 _build/logging.o
+                0x0001a098                select_log_mode
  .text.gpio_init
-                0x0001a0a4       0x8c _build/gpio.o
-                0x0001a0a4                gpio_init
+                0x0001a0bc       0x8c _build/gpio.o
+                0x0001a0bc                gpio_init
  .text.quadrupel_timer_handler
-                0x0001a130        0xc _build/timers.o
-                0x0001a130                quadrupel_timer_handler
+                0x0001a148        0xc _build/timers.o
+                0x0001a148                quadrupel_timer_handler
  .text.TIMER2_IRQHandler
-                0x0001a13c       0xb8 _build/timers.o
-                0x0001a13c                TIMER2_IRQHandler
+                0x0001a154       0xb8 _build/timers.o
+                0x0001a154                TIMER2_IRQHandler
  .text.TIMER1_IRQHandler
-                0x0001a1f4       0xac _build/timers.o
-                0x0001a1f4                TIMER1_IRQHandler
+                0x0001a20c       0xac _build/timers.o
+                0x0001a20c                TIMER1_IRQHandler
  .text.get_time_us
-                0x0001a2a0       0x20 _build/timers.o
-                0x0001a2a0                get_time_us
+                0x0001a2b8       0x20 _build/timers.o
+                0x0001a2b8                get_time_us
  .text.check_timer_flag
-                0x0001a2c0        0xc _build/timers.o
-                0x0001a2c0                check_timer_flag
+                0x0001a2d8        0xc _build/timers.o
+                0x0001a2d8                check_timer_flag
  .text.clear_timer_flag
-                0x0001a2cc        0xc _build/timers.o
-                0x0001a2cc                clear_timer_flag
+                0x0001a2e4        0xc _build/timers.o
+                0x0001a2e4                clear_timer_flag
  .text.timers_init
-                0x0001a2d8      0x1d4 _build/timers.o
-                0x0001a2d8                timers_init
- .text._write   0x0001a4ac       0x84 _build/uart.o
-                0x0001a4ac                _write
+                0x0001a2f0      0x1d4 _build/timers.o
+                0x0001a2f0                timers_init
+ .text._write   0x0001a4c4       0x84 _build/uart.o
+                0x0001a4c4                _write
  .text.UART0_IRQHandler
-                0x0001a530       0x84 _build/uart.o
-                0x0001a530                UART0_IRQHandler
+                0x0001a548       0x84 _build/uart.o
+                0x0001a548                UART0_IRQHandler
  .text.uart_init
-                0x0001a5b4       0xa0 _build/uart.o
-                0x0001a5b4                uart_init
+                0x0001a5cc       0xa0 _build/uart.o
+                0x0001a5cc                uart_init
  .text.init_queue
-                0x0001a654       0x14 _build/queue.o
-                0x0001a654                init_queue
- .text.enqueue  0x0001a668       0x1c _build/queue.o
-                0x0001a668                enqueue
- .text.dequeue  0x0001a684       0x20 _build/queue.o
-                0x0001a684                dequeue
+                0x0001a66c       0x14 _build/queue.o
+                0x0001a66c                init_queue
+ .text.enqueue  0x0001a680       0x1c _build/queue.o
+                0x0001a680                enqueue
+ .text.dequeue  0x0001a69c       0x20 _build/queue.o
+                0x0001a69c                dequeue
  .text.i2c_read
-                0x0001a6a4       0xc0 _build/twi.o
-                0x0001a6a4                i2c_read
+                0x0001a6bc       0xc0 _build/twi.o
+                0x0001a6bc                i2c_read
  .text.i2c_write
-                0x0001a764       0x70 _build/twi.o
-                0x0001a764                i2c_write
+                0x0001a77c       0x70 _build/twi.o
+                0x0001a77c                i2c_write
  .text.SPI0_TWI0_IRQHandler
-                0x0001a7d4       0x70 _build/twi.o
-                0x0001a7d4                SPI0_TWI0_IRQHandler
+                0x0001a7ec       0x70 _build/twi.o
+                0x0001a7ec                SPI0_TWI0_IRQHandler
  .text.twi_init
-                0x0001a844       0x84 _build/twi.o
-                0x0001a844                twi_init
+                0x0001a85c       0x84 _build/twi.o
+                0x0001a85c                twi_init
  .text.ADC_IRQHandler
-                0x0001a8c8       0x24 _build/adc.o
-                0x0001a8c8                ADC_IRQHandler
+                0x0001a8e0       0x24 _build/adc.o
+                0x0001a8e0                ADC_IRQHandler
  .text.adc_init
-                0x0001a8ec       0x3c _build/adc.o
-                0x0001a8ec                adc_init
+                0x0001a904       0x3c _build/adc.o
+                0x0001a904                adc_init
  .text.read_baro
-                0x0001a928      0x1b4 _build/baro.o
-                0x0001a928                read_baro
+                0x0001a940      0x1b4 _build/baro.o
+                0x0001a940                read_baro
  .text.baro_init
-                0x0001aadc       0x34 _build/baro.o
-                0x0001aadc                baro_init
+                0x0001aaf4       0x34 _build/baro.o
+                0x0001aaf4                baro_init
  .text.sd_ble_gap_disconnect
-                0x0001ab10        0x4 _build/ble.o
- .text.sd_ble_gap_ppcp_set
-                0x0001ab14        0x4 _build/ble.o
- .text.sd_ble_gap_device_name_set
-                0x0001ab18        0x4 _build/ble.o
- .text.sd_ble_gap_sec_params_reply
-                0x0001ab1c        0x4 _build/ble.o
- .text.sd_ble_gatts_sys_attr_set
-                0x0001ab20        0x4 _build/ble.o
- .text.sd_ble_enable
-                0x0001ab24        0x4 _build/ble.o
- .text.sd_nvic_EnableIRQ
                 0x0001ab28        0x4 _build/ble.o
- .text.sd_nvic_ClearPendingIRQ
-                0x0001ab2c        0x4 _build/ble.o
- .text.sd_nvic_SetPriority
-                0x0001ab30        0x4 _build/ble.o
- .text.sd_radio_notification_cfg_set
-                0x0001ab34        0x4 _build/ble.o
- .text.conn_params_error_handler
-                0x0001ab38       0x1c _build/ble.o
- .text.nus_data_handler
-                0x0001ab54       0x20 _build/ble.o
- .text.ble_evt_dispatch
-                0x0001ab74       0x94 _build/ble.o
- .text.on_conn_params_evt
-                0x0001ac08       0x38 _build/ble.o
- .text.SWI1_IRQHandler
-                0x0001ac40       0x10 _build/ble.o
-                0x0001ac40                SWI1_IRQHandler
- .text.ble_init
-                0x0001ac50      0x204 _build/ble.o
-                0x0001ac50                ble_init
- .text.spi_flash_init
-                0x0001ae54      0x230 _build/spi_flash.o
-                0x0001ae54                spi_flash_init
- .text.mpu_reset_fifo
-                0x0001b084      0x15c _build/inv_mpu.o
-                0x0001b084                mpu_reset_fifo
- .text.mpu_lp_accel_mode
-                0x0001b1e0      0x1b8 _build/inv_mpu.o
-                0x0001b1e0                mpu_lp_accel_mode
- .text.mpu_get_accel_fsr
-                0x0001b398       0x4c _build/inv_mpu.o
-                0x0001b398                mpu_get_accel_fsr
- .text.mpu_set_lpf
-                0x0001b3e4       0x78 _build/inv_mpu.o
-                0x0001b3e4                mpu_set_lpf
- .text.mpu_set_sample_rate
-                0x0001b45c      0x168 _build/inv_mpu.o
-                0x0001b45c                mpu_set_sample_rate
- .text.mpu_configure_fifo
-                0x0001b5c4       0xd0 _build/inv_mpu.o
-                0x0001b5c4                mpu_configure_fifo
- .text.mpu_set_sensors
-                0x0001b694      0x140 _build/inv_mpu.o
-                0x0001b694                mpu_set_sensors
- .text.mpu_init
-                0x0001b7d4      0x1f4 _build/inv_mpu.o
-                0x0001b7d4                mpu_init
- .text.mpu_read_fifo
-                0x0001b9c8      0x26c _build/inv_mpu.o
-                0x0001b9c8                mpu_read_fifo
- .text.mpu_read_fifo_stream
-                0x0001bc34       0xb0 _build/inv_mpu.o
-                0x0001bc34                mpu_read_fifo_stream
- .text.mpu_set_int_level
-                0x0001bce4       0x10 _build/inv_mpu.o
-                0x0001bce4                mpu_set_int_level
- .text.mpu_set_int_latched
-                0x0001bcf4       0x68 _build/inv_mpu.o
-                0x0001bcf4                mpu_set_int_latched
- .text.mpu_write_mem
-                0x0001bd5c       0x58 _build/inv_mpu.o
-                0x0001bd5c                mpu_write_mem
- .text.mpu_load_firmware
-                0x0001bdb4      0x15c _build/inv_mpu.o
-                0x0001bdb4                mpu_load_firmware
- .text.mpu_set_dmp_state
-                0x0001bf10      0x174 _build/inv_mpu.o
-                0x0001bf10                mpu_set_dmp_state
- .text.dmp_load_motion_driver_firmware
-                0x0001c084       0x1c _build/inv_mpu_dmp_motion_driver.o
-                0x0001c084                dmp_load_motion_driver_firmware
- .text.dmp_set_orientation
-                0x0001c0a0      0x118 _build/inv_mpu_dmp_motion_driver.o
-                0x0001c0a0                dmp_set_orientation
- .text.dmp_set_fifo_rate
-                0x0001c1b8       0x64 _build/inv_mpu_dmp_motion_driver.o
-                0x0001c1b8                dmp_set_fifo_rate
- .text.dmp_set_tap_thresh
-                0x0001c21c      0x164 _build/inv_mpu_dmp_motion_driver.o
-                0x0001c21c                dmp_set_tap_thresh
- .text.dmp_enable_feature
-                0x0001c380      0x28c _build/inv_mpu_dmp_motion_driver.o
-                0x0001c380                dmp_enable_feature
- .text.dmp_read_fifo
-                0x0001c60c      0x20c _build/inv_mpu_dmp_motion_driver.o
-                0x0001c60c                dmp_read_fifo
- .text.inv_orientation_matrix_to_scalar
-                0x0001c818      0x11c _build/ml.o
-                0x0001c818                inv_orientation_matrix_to_scalar
- .text.get_dmp_data
-                0x0001c934      0x218 _build/mpu_wrapper.o
-                0x0001c934                get_dmp_data
- .text.get_raw_sensor_data
-                0x0001cb4c       0x88 _build/mpu_wrapper.o
-                0x0001cb4c                get_raw_sensor_data
- .text.check_sensor_int_flag
-                0x0001cbd4       0x20 _build/mpu_wrapper.o
-                0x0001cbd4                check_sensor_int_flag
- .text.imu_init
-                0x0001cbf4      0x10c _build/mpu_wrapper.o
-                0x0001cbf4                imu_init
- .text.app_error_handler
-                0x0001cd00       0x40 _build/app_error.o
-                0x0001cd00                app_error_handler
- .text.rtc1_stop
-                0x0001cd40       0x78 _build/app_timer.o
- .text.RTC1_IRQHandler
-                0x0001cdb8       0xe0 _build/app_timer.o
-                0x0001cdb8                RTC1_IRQHandler
- .text.SWI0_IRQHandler
-                0x0001ce98      0x4cc _build/app_timer.o
-                0x0001ce98                SWI0_IRQHandler
- .text.app_timer_init
-                0x0001d364       0xe4 _build/app_timer.o
-                0x0001d364                app_timer_init
- .text.app_timer_create
-                0x0001d448       0x34 _build/app_timer.o
-                0x0001d448                app_timer_create
- .text.app_timer_start
-                0x0001d47c       0xec _build/app_timer.o
-                0x0001d47c                app_timer_start
- .text.app_timer_stop
-                0x0001d568       0xc4 _build/app_timer.o
-                0x0001d568                app_timer_stop
- .text.pstorage_access_status_get
-                0x0001d62c       0x28 _build/pstorage.o
-                0x0001d62c                pstorage_access_status_get
- .text.sd_ble_gap_address_get
-                0x0001d654        0x4 _build/ble_advdata.o
- .text.sd_ble_gap_adv_data_set
-                0x0001d658        0x4 _build/ble_advdata.o
- .text.sd_ble_gap_appearance_get
-                0x0001d65c        0x4 _build/ble_advdata.o
- .text.sd_ble_gap_device_name_get
-                0x0001d660        0x4 _build/ble_advdata.o
- .text.sd_ble_uuid_encode
-                0x0001d664        0x4 _build/ble_advdata.o
- .text.uuid_list_sized_encode
-                0x0001d668       0xf8 _build/ble_advdata.o
- .text.adv_data_encode
-                0x0001d760      0x5b8 _build/ble_advdata.o
-                0x0001d760                adv_data_encode
- .text.ble_advdata_set
-                0x0001dd18       0x68 _build/ble_advdata.o
-                0x0001dd18                ble_advdata_set
- .text.sd_ble_gap_adv_start
-                0x0001dd80        0x4 _build/ble_advertising.o
- .text.ble_advertising_start.part.1
-                0x0001dd84      0x2a8 _build/ble_advertising.o
- .text.ble_advertising_init
-                0x0001e02c      0x144 _build/ble_advertising.o
-                0x0001e02c                ble_advertising_init
- .text.ble_advertising_start
-                0x0001e170       0x3c _build/ble_advertising.o
-                0x0001e170                ble_advertising_start
- .text.ble_advertising_on_ble_evt
-                0x0001e1ac       0xec _build/ble_advertising.o
-                0x0001e1ac                ble_advertising_on_ble_evt
- .text.sd_ble_gap_conn_param_update
-                0x0001e298        0x4 _build/ble_conn_params.o
- .text.sd_ble_gap_disconnect
-                0x0001e29c        0x4 _build/ble_conn_params.o
  .text.sd_ble_gap_ppcp_set
-                0x0001e2a0        0x4 _build/ble_conn_params.o
- .text.sd_ble_gap_ppcp_get
-                0x0001e2a4        0x4 _build/ble_conn_params.o
- .text.update_timeout_handler
-                0x0001e2a8       0x78 _build/ble_conn_params.o
- .text.conn_params_negotiation
-                0x0001e320       0x88 _build/ble_conn_params.o
- .text.ble_conn_params_init
-                0x0001e3a8       0x78 _build/ble_conn_params.o
-                0x0001e3a8                ble_conn_params_init
- .text.ble_conn_params_on_ble_evt
-                0x0001e420       0xac _build/ble_conn_params.o
-                0x0001e420                ble_conn_params_on_ble_evt
- .text.sd_ble_gatts_service_add
-                0x0001e4cc        0x4 _build/ble_nus.o
- .text.sd_ble_gatts_characteristic_add
-                0x0001e4d0        0x4 _build/ble_nus.o
- .text.sd_ble_uuid_vs_add
-                0x0001e4d4        0x4 _build/ble_nus.o
- .text.ble_nus_on_ble_evt
-                0x0001e4d8       0x60 _build/ble_nus.o
-                0x0001e4d8                ble_nus_on_ble_evt
- .text.ble_nus_init
-                0x0001e538      0x208 _build/ble_nus.o
-                0x0001e538                ble_nus_init
+                0x0001ab2c        0x4 _build/ble.o
+ .text.sd_ble_gap_device_name_set
+                0x0001ab30        0x4 _build/ble.o
+ .text.sd_ble_gap_sec_params_reply
+                0x0001ab34        0x4 _build/ble.o
+ .text.sd_ble_gatts_sys_attr_set
+                0x0001ab38        0x4 _build/ble.o
+ .text.sd_ble_enable
+                0x0001ab3c        0x4 _build/ble.o
  .text.sd_nvic_EnableIRQ
-                0x0001e740        0x4 _build/softdevice_handler.o
+                0x0001ab40        0x4 _build/ble.o
+ .text.sd_nvic_ClearPendingIRQ
+                0x0001ab44        0x4 _build/ble.o
+ .text.sd_nvic_SetPriority
+                0x0001ab48        0x4 _build/ble.o
+ .text.sd_radio_notification_cfg_set
+                0x0001ab4c        0x4 _build/ble.o
+ .text.conn_params_error_handler
+                0x0001ab50       0x1c _build/ble.o
+ .text.nus_data_handler
+                0x0001ab6c       0x20 _build/ble.o
+ .text.ble_evt_dispatch
+                0x0001ab8c       0x94 _build/ble.o
+ .text.on_conn_params_evt
+                0x0001ac20       0x38 _build/ble.o
+ .text.SWI1_IRQHandler
+                0x0001ac58       0x10 _build/ble.o
+                0x0001ac58                SWI1_IRQHandler
+ .text.ble_init
+                0x0001ac68      0x204 _build/ble.o
+                0x0001ac68                ble_init
+ .text.spi_flash_init
+                0x0001ae6c      0x230 _build/spi_flash.o
+                0x0001ae6c                spi_flash_init
+ .text.mpu_reset_fifo
+                0x0001b09c      0x15c _build/inv_mpu.o
+                0x0001b09c                mpu_reset_fifo
+ .text.mpu_lp_accel_mode
+                0x0001b1f8      0x1b8 _build/inv_mpu.o
+                0x0001b1f8                mpu_lp_accel_mode
+ .text.mpu_get_accel_fsr
+                0x0001b3b0       0x4c _build/inv_mpu.o
+                0x0001b3b0                mpu_get_accel_fsr
+ .text.mpu_set_lpf
+                0x0001b3fc       0x78 _build/inv_mpu.o
+                0x0001b3fc                mpu_set_lpf
+ .text.mpu_set_sample_rate
+                0x0001b474      0x168 _build/inv_mpu.o
+                0x0001b474                mpu_set_sample_rate
+ .text.mpu_configure_fifo
+                0x0001b5dc       0xd0 _build/inv_mpu.o
+                0x0001b5dc                mpu_configure_fifo
+ .text.mpu_set_sensors
+                0x0001b6ac      0x140 _build/inv_mpu.o
+                0x0001b6ac                mpu_set_sensors
+ .text.mpu_init
+                0x0001b7ec      0x1f4 _build/inv_mpu.o
+                0x0001b7ec                mpu_init
+ .text.mpu_read_fifo
+                0x0001b9e0      0x26c _build/inv_mpu.o
+                0x0001b9e0                mpu_read_fifo
+ .text.mpu_read_fifo_stream
+                0x0001bc4c       0xb0 _build/inv_mpu.o
+                0x0001bc4c                mpu_read_fifo_stream
+ .text.mpu_set_int_level
+                0x0001bcfc       0x10 _build/inv_mpu.o
+                0x0001bcfc                mpu_set_int_level
+ .text.mpu_set_int_latched
+                0x0001bd0c       0x68 _build/inv_mpu.o
+                0x0001bd0c                mpu_set_int_latched
+ .text.mpu_write_mem
+                0x0001bd74       0x58 _build/inv_mpu.o
+                0x0001bd74                mpu_write_mem
+ .text.mpu_load_firmware
+                0x0001bdcc      0x15c _build/inv_mpu.o
+                0x0001bdcc                mpu_load_firmware
+ .text.mpu_set_dmp_state
+                0x0001bf28      0x174 _build/inv_mpu.o
+                0x0001bf28                mpu_set_dmp_state
+ .text.dmp_load_motion_driver_firmware
+                0x0001c09c       0x1c _build/inv_mpu_dmp_motion_driver.o
+                0x0001c09c                dmp_load_motion_driver_firmware
+ .text.dmp_set_orientation
+                0x0001c0b8      0x118 _build/inv_mpu_dmp_motion_driver.o
+                0x0001c0b8                dmp_set_orientation
+ .text.dmp_set_fifo_rate
+                0x0001c1d0       0x64 _build/inv_mpu_dmp_motion_driver.o
+                0x0001c1d0                dmp_set_fifo_rate
+ .text.dmp_set_tap_thresh
+                0x0001c234      0x164 _build/inv_mpu_dmp_motion_driver.o
+                0x0001c234                dmp_set_tap_thresh
+ .text.dmp_enable_feature
+                0x0001c398      0x28c _build/inv_mpu_dmp_motion_driver.o
+                0x0001c398                dmp_enable_feature
+ .text.dmp_read_fifo
+                0x0001c624      0x20c _build/inv_mpu_dmp_motion_driver.o
+                0x0001c624                dmp_read_fifo
+ .text.inv_orientation_matrix_to_scalar
+                0x0001c830      0x11c _build/ml.o
+                0x0001c830                inv_orientation_matrix_to_scalar
+ .text.get_dmp_data
+                0x0001c94c      0x218 _build/mpu_wrapper.o
+                0x0001c94c                get_dmp_data
+ .text.get_raw_sensor_data
+                0x0001cb64       0x88 _build/mpu_wrapper.o
+                0x0001cb64                get_raw_sensor_data
+ .text.check_sensor_int_flag
+                0x0001cbec       0x20 _build/mpu_wrapper.o
+                0x0001cbec                check_sensor_int_flag
+ .text.imu_init
+                0x0001cc0c      0x10c _build/mpu_wrapper.o
+                0x0001cc0c                imu_init
+ .text.app_error_handler
+                0x0001cd18       0x40 _build/app_error.o
+                0x0001cd18                app_error_handler
+ .text.rtc1_stop
+                0x0001cd58       0x78 _build/app_timer.o
+ .text.RTC1_IRQHandler
+                0x0001cdd0       0xe0 _build/app_timer.o
+                0x0001cdd0                RTC1_IRQHandler
+ .text.SWI0_IRQHandler
+                0x0001ceb0      0x4cc _build/app_timer.o
+                0x0001ceb0                SWI0_IRQHandler
+ .text.app_timer_init
+                0x0001d37c       0xe4 _build/app_timer.o
+                0x0001d37c                app_timer_init
+ .text.app_timer_create
+                0x0001d460       0x34 _build/app_timer.o
+                0x0001d460                app_timer_create
+ .text.app_timer_start
+                0x0001d494       0xec _build/app_timer.o
+                0x0001d494                app_timer_start
+ .text.app_timer_stop
+                0x0001d580       0xc4 _build/app_timer.o
+                0x0001d580                app_timer_stop
+ .text.pstorage_access_status_get
+                0x0001d644       0x28 _build/pstorage.o
+                0x0001d644                pstorage_access_status_get
+ .text.sd_ble_gap_address_get
+                0x0001d66c        0x4 _build/ble_advdata.o
+ .text.sd_ble_gap_adv_data_set
+                0x0001d670        0x4 _build/ble_advdata.o
+ .text.sd_ble_gap_appearance_get
+                0x0001d674        0x4 _build/ble_advdata.o
+ .text.sd_ble_gap_device_name_get
+                0x0001d678        0x4 _build/ble_advdata.o
+ .text.sd_ble_uuid_encode
+                0x0001d67c        0x4 _build/ble_advdata.o
+ .text.uuid_list_sized_encode
+                0x0001d680       0xf8 _build/ble_advdata.o
+ .text.adv_data_encode
+                0x0001d778      0x5b8 _build/ble_advdata.o
+                0x0001d778                adv_data_encode
+ .text.ble_advdata_set
+                0x0001dd30       0x68 _build/ble_advdata.o
+                0x0001dd30                ble_advdata_set
+ .text.sd_ble_gap_adv_start
+                0x0001dd98        0x4 _build/ble_advertising.o
+ .text.ble_advertising_start.part.1
+                0x0001dd9c      0x2a8 _build/ble_advertising.o
+ .text.ble_advertising_init
+                0x0001e044      0x144 _build/ble_advertising.o
+                0x0001e044                ble_advertising_init
+ .text.ble_advertising_start
+                0x0001e188       0x3c _build/ble_advertising.o
+                0x0001e188                ble_advertising_start
+ .text.ble_advertising_on_ble_evt
+                0x0001e1c4       0xec _build/ble_advertising.o
+                0x0001e1c4                ble_advertising_on_ble_evt
+ .text.sd_ble_gap_conn_param_update
+                0x0001e2b0        0x4 _build/ble_conn_params.o
+ .text.sd_ble_gap_disconnect
+                0x0001e2b4        0x4 _build/ble_conn_params.o
+ .text.sd_ble_gap_ppcp_set
+                0x0001e2b8        0x4 _build/ble_conn_params.o
+ .text.sd_ble_gap_ppcp_get
+                0x0001e2bc        0x4 _build/ble_conn_params.o
+ .text.update_timeout_handler
+                0x0001e2c0       0x78 _build/ble_conn_params.o
+ .text.conn_params_negotiation
+                0x0001e338       0x88 _build/ble_conn_params.o
+ .text.ble_conn_params_init
+                0x0001e3c0       0x78 _build/ble_conn_params.o
+                0x0001e3c0                ble_conn_params_init
+ .text.ble_conn_params_on_ble_evt
+                0x0001e438       0xac _build/ble_conn_params.o
+                0x0001e438                ble_conn_params_on_ble_evt
+ .text.sd_ble_gatts_service_add
+                0x0001e4e4        0x4 _build/ble_nus.o
+ .text.sd_ble_gatts_characteristic_add
+                0x0001e4e8        0x4 _build/ble_nus.o
+ .text.sd_ble_uuid_vs_add
+                0x0001e4ec        0x4 _build/ble_nus.o
+ .text.ble_nus_on_ble_evt
+                0x0001e4f0       0x60 _build/ble_nus.o
+                0x0001e4f0                ble_nus_on_ble_evt
+ .text.ble_nus_init
+                0x0001e550      0x208 _build/ble_nus.o
+                0x0001e550                ble_nus_init
+ .text.sd_nvic_EnableIRQ
+                0x0001e758        0x4 _build/softdevice_handler.o
  .text.sd_evt_get
-                0x0001e744        0x4 _build/softdevice_handler.o
+                0x0001e75c        0x4 _build/softdevice_handler.o
  .text.sd_softdevice_enable
-                0x0001e748        0x4 _build/softdevice_handler.o
+                0x0001e760        0x4 _build/softdevice_handler.o
  .text.sd_ble_evt_get
-                0x0001e74c        0x4 _build/softdevice_handler.o
+                0x0001e764        0x4 _build/softdevice_handler.o
  .text.softdevice_assertion_handler
-                0x0001e750        0xc _build/softdevice_handler.o
-                0x0001e750                softdevice_assertion_handler
+                0x0001e768        0xc _build/softdevice_handler.o
+                0x0001e768                softdevice_assertion_handler
  .text.intern_softdevice_events_execute.part.0
-                0x0001e75c       0xec _build/softdevice_handler.o
+                0x0001e774       0xec _build/softdevice_handler.o
  .text.softdevice_handler_init
-                0x0001e848       0x4c _build/softdevice_handler.o
-                0x0001e848                softdevice_handler_init
+                0x0001e860       0x4c _build/softdevice_handler.o
+                0x0001e860                softdevice_handler_init
  .text.softdevice_ble_evt_handler_set
-                0x0001e894       0x14 _build/softdevice_handler.o
-                0x0001e894                softdevice_ble_evt_handler_set
+                0x0001e8ac       0x14 _build/softdevice_handler.o
+                0x0001e8ac                softdevice_ble_evt_handler_set
  .text.SWI2_IRQHandler
-                0x0001e8a8       0x34 _build/softdevice_handler.o
-                0x0001e8a8                SWI2_IRQHandler
- .text          0x0001e8dc       0x54 _build/gcc_startup_nrf51.o
-                0x0001e8dc                Reset_Handler
-                0x0001e924                NMI_Handler
-                0x0001e926                HardFault_Handler
-                0x0001e928                SVC_Handler
-                0x0001e92a                PendSV_Handler
-                0x0001e92c                SysTick_Handler
-                0x0001e92e                RTC0_IRQHandler
-                0x0001e92e                GPIOTE_IRQHandler
-                0x0001e92e                POWER_CLOCK_IRQHandler
-                0x0001e92e                RADIO_IRQHandler
-                0x0001e92e                LPCOMP_IRQHandler
-                0x0001e92e                SWI4_IRQHandler
-                0x0001e92e                TEMP_IRQHandler
-                0x0001e92e                QDEC_IRQHandler
-                0x0001e92e                SWI5_IRQHandler
-                0x0001e92e                TIMER0_IRQHandler
-                0x0001e92e                ECB_IRQHandler
-                0x0001e92e                Default_Handler
-                0x0001e92e                SWI3_IRQHandler
-                0x0001e92e                CCM_AAR_IRQHandler
-                0x0001e92e                WDT_IRQHandler
-                0x0001e92e                RNG_IRQHandler
-                0x0001e92e                SPI1_TWI1_IRQHandler
- .text.fabs     0x0001e930        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_fabs.o)
-                0x0001e930                fabs
- .text.asin     0x0001e938       0xc4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
-                0x0001e938                asin
- .text.atan2    0x0001e9fc        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_atan2.o)
-                0x0001e9fc                atan2
+                0x0001e8c0       0x34 _build/softdevice_handler.o
+                0x0001e8c0                SWI2_IRQHandler
+ .text          0x0001e8f4       0x54 _build/gcc_startup_nrf51.o
+                0x0001e8f4                Reset_Handler
+                0x0001e93c                NMI_Handler
+                0x0001e93e                HardFault_Handler
+                0x0001e940                SVC_Handler
+                0x0001e942                PendSV_Handler
+                0x0001e944                SysTick_Handler
+                0x0001e946                RTC0_IRQHandler
+                0x0001e946                GPIOTE_IRQHandler
+                0x0001e946                POWER_CLOCK_IRQHandler
+                0x0001e946                RADIO_IRQHandler
+                0x0001e946                LPCOMP_IRQHandler
+                0x0001e946                SWI4_IRQHandler
+                0x0001e946                TEMP_IRQHandler
+                0x0001e946                QDEC_IRQHandler
+                0x0001e946                SWI5_IRQHandler
+                0x0001e946                TIMER0_IRQHandler
+                0x0001e946                ECB_IRQHandler
+                0x0001e946                Default_Handler
+                0x0001e946                SWI3_IRQHandler
+                0x0001e946                CCM_AAR_IRQHandler
+                0x0001e946                WDT_IRQHandler
+                0x0001e946                RNG_IRQHandler
+                0x0001e946                SPI1_TWI1_IRQHandler
+ .text.fabs     0x0001e948        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_fabs.o)
+                0x0001e948                fabs
+ .text.asin     0x0001e950       0xc4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
+                0x0001e950                asin
+ .text.atan2    0x0001ea14        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_atan2.o)
+                0x0001ea14                atan2
  .text.__ieee754_asin
-                0x0001ea04      0x3cc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_asin.o)
-                0x0001ea04                __ieee754_asin
+                0x0001ea1c      0x3cc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_asin.o)
+                0x0001ea1c                __ieee754_asin
  .text.__ieee754_atan2
-                0x0001edd0      0x178 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_atan2.o)
-                0x0001edd0                __ieee754_atan2
+                0x0001ede8      0x178 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_atan2.o)
+                0x0001ede8                __ieee754_atan2
  .text.__ieee754_sqrt
-                0x0001ef48      0x1ec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_sqrt.o)
-                0x0001ef48                __ieee754_sqrt
- .text.atan     0x0001f134      0x33c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
-                0x0001f134                atan
- .text.matherr  0x0001f470        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_matherr.o)
-                0x0001f470                matherr
- .text.nan      0x0001f474        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_nan.o)
-                0x0001f474                nan
- .text          0x0001f480      0x114 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
-                0x0001f480                __udivsi3
-                0x0001f480                __aeabi_uidiv
-                0x0001f58c                __aeabi_uidivmod
- .text          0x0001f594      0x1d4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_divsi3.o)
-                0x0001f594                __aeabi_idiv
-                0x0001f594                __divsi3
-                0x0001f760                __aeabi_idivmod
- .text          0x0001f768        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
-                0x0001f768                __aeabi_ldiv0
-                0x0001f768                __aeabi_idiv0
- .text          0x0001f76c       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpdf2.o)
-                0x0001f76c                __aeabi_cdrcmple
-                0x0001f77c                __aeabi_cdcmple
-                0x0001f77c                __aeabi_cdcmpeq
-                0x0001f78c                __aeabi_dcmpeq
-                0x0001f798                __aeabi_dcmplt
-                0x0001f7ac                __aeabi_dcmple
-                0x0001f7c0                __aeabi_dcmpgt
-                0x0001f7d4                __aeabi_dcmpge
- .text          0x0001f7e8       0x74 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpsf2.o)
-                0x0001f7e8                __aeabi_cfrcmple
-                0x0001f7f0                __aeabi_cfcmple
-                0x0001f7f0                __aeabi_cfcmpeq
-                0x0001f800                __aeabi_fcmpeq
-                0x0001f80c                __aeabi_fcmplt
-                0x0001f820                __aeabi_fcmple
-                0x0001f834                __aeabi_fcmpgt
-                0x0001f848                __aeabi_fcmpge
- .text          0x0001f85c       0x58 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_muldi3.o)
-                0x0001f85c                __aeabi_lmul
-                0x0001f85c                __muldi3
- .text          0x0001f8b4       0x30 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_fixunssfsi.o)
-                0x0001f8b4                __aeabi_f2uiz
-                0x0001f8b4                __fixunssfsi
- .text          0x0001f8e4      0x2ec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(addsf3.o)
-                0x0001f8e4                __aeabi_fadd
- .text          0x0001fbd0      0x234 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
-                0x0001fbd0                __aeabi_fdiv
- .text          0x0001fe04       0x50 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqsf2.o)
-                0x0001fe04                __nesf2
-                0x0001fe04                __eqsf2
- .text          0x0001fe54       0x88 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gesf2.o)
-                0x0001fe54                __gtsf2
-                0x0001fe54                __gesf2
- .text          0x0001fedc       0x88 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(lesf2.o)
-                0x0001fedc                __lesf2
-                0x0001fedc                __ltsf2
- .text          0x0001ff64      0x228 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
-                0x0001ff64                __aeabi_fmul
- .text          0x0002018c      0x30c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subsf3.o)
-                0x0002018c                __aeabi_fsub
- .text          0x00020498       0x44 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixsfsi.o)
-                0x00020498                __aeabi_f2iz
- .text          0x000204dc       0x90 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatsisf.o)
-                0x000204dc                __aeabi_i2f
- .text          0x0002056c       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatunsisf.o)
-                0x0002056c                __aeabi_ui2f
- .text          0x000205e8      0x658 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(adddf3.o)
-                0x000205e8                __aeabi_dadd
- .text          0x00020c40      0x62c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
-                0x00020c40                __aeabi_ddiv
- .text          0x0002126c       0x80 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqdf2.o)
-                0x0002126c                __eqdf2
-                0x0002126c                __nedf2
- .text          0x000212ec       0xc8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gedf2.o)
-                0x000212ec                __gtdf2
-                0x000212ec                __gedf2
- .text          0x000213b4       0xd4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(ledf2.o)
-                0x000213b4                __ltdf2
-                0x000213b4                __ledf2
- .text          0x00021488      0x4f4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
-                0x00021488                __aeabi_dmul
- .text          0x0002197c      0x6a8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subdf3.o)
-                0x0002197c                __aeabi_dsub
- .text          0x00022024       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(unorddf2.o)
-                0x00022024                __aeabi_dcmpun
- .text          0x00022064       0x6c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixdfsi.o)
-                0x00022064                __aeabi_d2iz
- .text          0x000220d0       0xa8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(extendsfdf2.o)
-                0x000220d0                __aeabi_f2d
- .text          0x00022178       0x3c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_clzsi2.o)
-                0x00022178                __clzsi2
- .text.__errno  0x000221b4        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-errno.o)
-                0x000221b4                __errno
- .text.malloc   0x000221c0       0x14 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
-                0x000221c0                malloc
- .text.free     0x000221d4       0x14 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
-                0x000221d4                free
- .text.memcmp   0x000221e8       0x1e /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcmp.o)
-                0x000221e8                memcmp
- .text.memcpy   0x00022206       0x12 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcpy-stub.o)
-                0x00022206                memcpy
- .text._free_r  0x00022218       0x98 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-freer.o)
-                0x00022218                _free_r
+                0x0001ef60      0x1ec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-e_sqrt.o)
+                0x0001ef60                __ieee754_sqrt
+ .text.atan     0x0001f14c      0x33c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+                0x0001f14c                atan
+ .text.matherr  0x0001f488        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_matherr.o)
+                0x0001f488                matherr
+ .text.nan      0x0001f48c        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_nan.o)
+                0x0001f48c                nan
+ .text          0x0001f498      0x114 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                0x0001f498                __udivsi3
+                0x0001f498                __aeabi_uidiv
+                0x0001f5a4                __aeabi_uidivmod
+ .text          0x0001f5ac      0x1d4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_divsi3.o)
+                0x0001f5ac                __aeabi_idiv
+                0x0001f5ac                __divsi3
+                0x0001f778                __aeabi_idivmod
+ .text          0x0001f780        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+                0x0001f780                __aeabi_ldiv0
+                0x0001f780                __aeabi_idiv0
+ .text          0x0001f784       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpdf2.o)
+                0x0001f784                __aeabi_cdrcmple
+                0x0001f794                __aeabi_cdcmple
+                0x0001f794                __aeabi_cdcmpeq
+                0x0001f7a4                __aeabi_dcmpeq
+                0x0001f7b0                __aeabi_dcmplt
+                0x0001f7c4                __aeabi_dcmple
+                0x0001f7d8                __aeabi_dcmpgt
+                0x0001f7ec                __aeabi_dcmpge
+ .text          0x0001f800       0x74 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_arm_cmpsf2.o)
+                0x0001f800                __aeabi_cfrcmple
+                0x0001f808                __aeabi_cfcmple
+                0x0001f808                __aeabi_cfcmpeq
+                0x0001f818                __aeabi_fcmpeq
+                0x0001f824                __aeabi_fcmplt
+                0x0001f838                __aeabi_fcmple
+                0x0001f84c                __aeabi_fcmpgt
+                0x0001f860                __aeabi_fcmpge
+ .text          0x0001f874       0x58 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_muldi3.o)
+                0x0001f874                __aeabi_lmul
+                0x0001f874                __muldi3
+ .text          0x0001f8cc       0x30 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_fixunssfsi.o)
+                0x0001f8cc                __aeabi_f2uiz
+                0x0001f8cc                __fixunssfsi
+ .text          0x0001f8fc      0x2ec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(addsf3.o)
+                0x0001f8fc                __aeabi_fadd
+ .text          0x0001fbe8      0x234 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
+                0x0001fbe8                __aeabi_fdiv
+ .text          0x0001fe1c       0x50 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqsf2.o)
+                0x0001fe1c                __nesf2
+                0x0001fe1c                __eqsf2
+ .text          0x0001fe6c       0x88 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gesf2.o)
+                0x0001fe6c                __gtsf2
+                0x0001fe6c                __gesf2
+ .text          0x0001fef4       0x88 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(lesf2.o)
+                0x0001fef4                __lesf2
+                0x0001fef4                __ltsf2
+ .text          0x0001ff7c      0x228 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
+                0x0001ff7c                __aeabi_fmul
+ .text          0x000201a4      0x30c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subsf3.o)
+                0x000201a4                __aeabi_fsub
+ .text          0x000204b0       0x44 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixsfsi.o)
+                0x000204b0                __aeabi_f2iz
+ .text          0x000204f4       0x90 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatsisf.o)
+                0x000204f4                __aeabi_i2f
+ .text          0x00020584       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(floatunsisf.o)
+                0x00020584                __aeabi_ui2f
+ .text          0x00020600      0x658 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(adddf3.o)
+                0x00020600                __aeabi_dadd
+ .text          0x00020c58      0x62c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
+                0x00020c58                __aeabi_ddiv
+ .text          0x00021284       0x80 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(eqdf2.o)
+                0x00021284                __eqdf2
+                0x00021284                __nedf2
+ .text          0x00021304       0xc8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(gedf2.o)
+                0x00021304                __gtdf2
+                0x00021304                __gedf2
+ .text          0x000213cc       0xd4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(ledf2.o)
+                0x000213cc                __ltdf2
+                0x000213cc                __ledf2
+ .text          0x000214a0      0x4f4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
+                0x000214a0                __aeabi_dmul
+ .text          0x00021994      0x6a8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(subdf3.o)
+                0x00021994                __aeabi_dsub
+ .text          0x0002203c       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(unorddf2.o)
+                0x0002203c                __aeabi_dcmpun
+ .text          0x0002207c       0x6c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(fixdfsi.o)
+                0x0002207c                __aeabi_d2iz
+ .text          0x000220e8       0xa8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(extendsfdf2.o)
+                0x000220e8                __aeabi_f2d
+ .text          0x00022190       0x3c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_clzsi2.o)
+                0x00022190                __clzsi2
+ .text.__errno  0x000221cc        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-errno.o)
+                0x000221cc                __errno
+ .text.malloc   0x000221d8       0x14 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
+                0x000221d8                malloc
+ .text.free     0x000221ec       0x14 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-malloc.o)
+                0x000221ec                free
+ .text.memcmp   0x00022200       0x1e /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcmp.o)
+                0x00022200                memcmp
+ .text.memcpy   0x0002221e       0x12 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memcpy-stub.o)
+                0x0002221e                memcpy
+ .text._free_r  0x00022230       0x98 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-freer.o)
+                0x00022230                _free_r
  .text._malloc_r
-                0x000222b0       0xc0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-mallocr.o)
-                0x000222b0                _malloc_r
- .text.printf   0x00022370       0x34 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-printf.o)
-                0x00022370                printf
-                0x00022370                iprintf
- .text._sbrk_r  0x000223a4       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sbrkr.o)
-                0x000223a4                _sbrk_r
- .text.sprintf  0x000223c8       0x44 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sprintf.o)
-                0x000223c8                sprintf
-                0x000223c8                siprintf
- .text          0x0002240c        0xe /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-strlen.o)
-                0x0002240c                strlen
- *fill*         0x0002241a        0x2 
+                0x000222c8       0xc0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-mallocr.o)
+                0x000222c8                _malloc_r
+ .text.printf   0x00022388       0x34 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-printf.o)
+                0x00022388                printf
+                0x00022388                iprintf
+ .text._sbrk_r  0x000223bc       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sbrkr.o)
+                0x000223bc                _sbrk_r
+ .text.sprintf  0x000223e0       0x44 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-sprintf.o)
+                0x000223e0                sprintf
+                0x000223e0                siprintf
+ .text          0x00022424        0xe /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-strlen.o)
+                0x00022424                strlen
+ *fill*         0x00022432        0x2 
  .text._cleanup_r
-                0x0002241c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x0002241c                _cleanup_r
+                0x00022434       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00022434                _cleanup_r
  .text.std.isra.0
-                0x0002242c       0x48 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00022444       0x48 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
  .text.__sfmoreglue
-                0x00022474       0x2c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00022474                __sfmoreglue
- .text.__sinit  0x000224a0       0x68 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x000224a0                __sinit
- .text.__sfp    0x00022508       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00022508                __sfp
+                0x0002248c       0x2c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x0002248c                __sfmoreglue
+ .text.__sinit  0x000224b8       0x68 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x000224b8                __sinit
+ .text.__sfp    0x00022520       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00022520                __sfp
  .text._fwalk_reent
-                0x00022584       0x42 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fwalk.o)
-                0x00022584                _fwalk_reent
+                0x0002259c       0x42 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fwalk.o)
+                0x0002259c                _fwalk_reent
  .text.__malloc_lock
-                0x000225c6        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
-                0x000225c6                __malloc_lock
+                0x000225de        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
+                0x000225de                __malloc_lock
  .text.__malloc_unlock
-                0x000225c8        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
-                0x000225c8                __malloc_unlock
- *fill*         0x000225ca        0x2 
+                0x000225e0        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-mlock.o)
+                0x000225e0                __malloc_unlock
+ *fill*         0x000225e2        0x2 
  .text.__ssputs_r
-                0x000225cc       0xc4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
-                0x000225cc                __ssputs_r
+                0x000225e4       0xc4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x000225e4                __ssputs_r
  .text._svfprintf_r
-                0x00022690      0x1fc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
-                0x00022690                _svfprintf_r
-                0x00022690                _svfiprintf_r
+                0x000226a8      0x1fc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x000226a8                _svfprintf_r
+                0x000226a8                _svfiprintf_r
  .text.__sfputc_r
-                0x0002288c       0x2a /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x000228a4       0x2a /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
  .text.__sfputs_r
-                0x000228b6       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
-                0x000228b6                __sfputs_r
- *fill*         0x000228da        0x2 
+                0x000228ce       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x000228ce                __sfputs_r
+ *fill*         0x000228f2        0x2 
  .text._vfprintf_r
-                0x000228dc      0x238 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
-                0x000228dc                _vfiprintf_r
-                0x000228dc                _vfprintf_r
+                0x000228f4      0x238 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x000228f4                _vfiprintf_r
+                0x000228f4                _vfprintf_r
  .text._printf_common
-                0x00022b14       0xdc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00022b14                _printf_common
+                0x00022b2c       0xdc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00022b2c                _printf_common
  .text._printf_i
-                0x00022bf0      0x244 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00022bf0                _printf_i
- .text.__sread  0x00022e34       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00022e34                __sread
+                0x00022c08      0x244 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00022c08                _printf_i
+ .text.__sread  0x00022e4c       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00022e4c                __sread
  .text.__swrite
-                0x00022e5c       0x38 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00022e5c                __swrite
- .text.__sseek  0x00022e94       0x2c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00022e94                __sseek
+                0x00022e74       0x38 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00022e74                __swrite
+ .text.__sseek  0x00022eac       0x2c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00022eac                __sseek
  .text.__sclose
-                0x00022ec0        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
-                0x00022ec0                __sclose
+                0x00022ed8        0xc /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-stdio.o)
+                0x00022ed8                __sclose
  .text.__swbuf_r
-                0x00022ecc       0xb0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wbuf.o)
-                0x00022ecc                __swbuf_r
+                0x00022ee4       0xb0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wbuf.o)
+                0x00022ee4                __swbuf_r
  .text._write_r
-                0x00022f7c       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-writer.o)
-                0x00022f7c                _write_r
+                0x00022f94       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-writer.o)
+                0x00022f94                _write_r
  .text.__swsetup_r
-                0x00022fa4       0xec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wsetup.o)
-                0x00022fa4                __swsetup_r
+                0x00022fbc       0xec /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-wsetup.o)
+                0x00022fbc                __swsetup_r
  .text._close_r
-                0x00023090       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-closer.o)
-                0x00023090                _close_r
+                0x000230a8       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-closer.o)
+                0x000230a8                _close_r
  .text.__sflush_r
-                0x000230b4      0x10c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
-                0x000230b4                __sflush_r
+                0x000230cc      0x10c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
+                0x000230cc                __sflush_r
  .text._fflush_r
-                0x000231c0       0x58 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
-                0x000231c0                _fflush_r
+                0x000231d8       0x58 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fflush.o)
+                0x000231d8                _fflush_r
  .text._lseek_r
-                0x00023218       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-lseekr.o)
-                0x00023218                _lseek_r
+                0x00023230       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-lseekr.o)
+                0x00023230                _lseek_r
  .text.__swhatbuf_r
-                0x00023240       0x4c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
-                0x00023240                __swhatbuf_r
+                0x00023258       0x4c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
+                0x00023258                __swhatbuf_r
  .text.__smakebuf_r
-                0x0002328c       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
-                0x0002328c                __smakebuf_r
- .text.memchr   0x00023308       0x16 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memchr-stub.o)
-                0x00023308                memchr
- .text.memmove  0x0002331e       0x2a /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memmove.o)
-                0x0002331e                memmove
+                0x000232a4       0x7c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-makebuf.o)
+                0x000232a4                __smakebuf_r
+ .text.memchr   0x00023320       0x16 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memchr-stub.o)
+                0x00023320                memchr
+ .text.memmove  0x00023336       0x2a /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-memmove.o)
+                0x00023336                memmove
  .text._realloc_r
-                0x00023348       0x4c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-reallocr.o)
-                0x00023348                _realloc_r
- .text._read_r  0x00023394       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-readr.o)
-                0x00023394                _read_r
+                0x00023360       0x4c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-reallocr.o)
+                0x00023360                _realloc_r
+ .text._read_r  0x000233ac       0x28 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-readr.o)
+                0x000233ac                _read_r
  .text._fstat_r
-                0x000233bc       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fstatr.o)
-                0x000233bc                _fstat_r
+                0x000233d4       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-fstatr.o)
+                0x000233d4                _fstat_r
  .text._isatty_r
-                0x000233e0       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-isattyr.o)
-                0x000233e0                _isatty_r
+                0x000233f8       0x24 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-isattyr.o)
+                0x000233f8                _isatty_r
  .text._malloc_usable_size_r
-                0x00023404       0x16 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-msizer.o)
-                0x00023404                _malloc_usable_size_r
- *fill*         0x0002341a        0x2 
- .text._close   0x0002341c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(close.o)
-                0x0002341c                _close
- .text._fstat   0x0002342c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(fstat.o)
-                0x0002342c                _fstat
- .text._isatty  0x0002343c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(isatty.o)
-                0x0002343c                _isatty
- .text._lseek   0x0002344c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(lseek.o)
-                0x0002344c                _lseek
- .text._read    0x0002345c       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(read.o)
-                0x0002345c                _read
- .text._sbrk    0x0002346c       0x1c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(sbrk.o)
-                0x0002346c                _sbrk
+                0x0002341c       0x16 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-msizer.o)
+                0x0002341c                _malloc_usable_size_r
+ *fill*         0x00023432        0x2 
+ .text._close   0x00023434       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(close.o)
+                0x00023434                _close
+ .text._fstat   0x00023444       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(fstat.o)
+                0x00023444                _fstat
+ .text._isatty  0x00023454       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(isatty.o)
+                0x00023454                _isatty
+ .text._lseek   0x00023464       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(lseek.o)
+                0x00023464                _lseek
+ .text._read    0x00023474       0x10 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(read.o)
+                0x00023474                _read
+ .text._sbrk    0x00023484       0x1c /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libnosys.a(sbrk.o)
+                0x00023484                _sbrk
  *(.init)
- .init          0x00023488        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00023488                _init
- .init          0x0002348c        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .init          0x000234a0        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x000234a0                _init
+ .init          0x000234a4        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *(.fini)
- .fini          0x00023494        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x00023494                _fini
- .fini          0x00023498        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .fini          0x000234ac        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x000234ac                _fini
+ .fini          0x000234b0        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -1784,131 +1784,131 @@ END GROUP
  *(.dtors)
  *(.rodata*)
  .rodata.str1.1
-                0x000234a0        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
- *fill*         0x000234a2        0x2 
+                0x000234b8        0x2 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
+ *fill*         0x000234ba        0x2 
  .rodata._global_impure_ptr
-                0x000234a4        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
-                0x000234a4                _global_impure_ptr
+                0x000234bc        0x4 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-impure.o)
+                0x000234bc                _global_impure_ptr
  .rodata.determine_mode
-                0x000234a8       0x28 _build/in4073.o
+                0x000234c0       0x28 _build/in4073.o
  .rodata.process_mode
-                0x000234d0       0x28 _build/in4073.o
+                0x000234e8       0x28 _build/in4073.o
  .rodata.str1.4
-                0x000234f8      0x166 _build/in4073.o
- *fill*         0x0002365e        0x2 
+                0x00023510      0x166 _build/in4073.o
+ *fill*         0x00023676        0x2 
  .rodata.str1.4
-                0x00023660       0xe2 _build/control.o
- *fill*         0x00023742        0x2 
+                0x00023678       0xe2 _build/control.o
+ *fill*         0x0002375a        0x2 
  .rodata.get_sensor
-                0x00023744       0x2c _build/sensors.o
+                0x0002375c       0x2c _build/sensors.o
  .rodata.crclut
-                0x00023770      0x100 _build/crc.o
-                0x00023770                crclut
+                0x00023788      0x100 _build/crc.o
+                0x00023788                crclut
  .rodata.decode_header_pc_uav
-                0x00023870       0x20 _build/packet.o
+                0x00023888       0x20 _build/packet.o
  .rodata.str1.4
-                0x00023890       0x50 _build/packet_uav.o
+                0x000238a8       0x50 _build/packet_uav.o
  .rodata.str1.4
-                0x000238e0      0x289 _build/logging.o
- *fill*         0x00023b69        0x3 
- .rodata.quadrupel_timer.7147
-                0x00023b6c        0x4 _build/timers.o
- .rodata.str1.4
-                0x00023b70       0x11 _build/uart.o
+                0x000238f8      0x289 _build/logging.o
  *fill*         0x00023b81        0x3 
+ .rodata.quadrupel_timer.7147
+                0x00023b84        0x4 _build/timers.o
  .rodata.str1.4
-                0x00023b84       0x38 _build/twi.o
+                0x00023b88       0x11 _build/uart.o
+ *fill*         0x00023b99        0x3 
  .rodata.str1.4
-                0x00023bbc       0x12 _build/ble.o
- *fill*         0x00023bce        0x2 
- .rodata.test   0x00023bd0       0x28 _build/inv_mpu.o
-                0x00023bd0                test
+                0x00023b9c       0x38 _build/twi.o
  .rodata.str1.4
-                0x00023bf8       0xa6 _build/inv_mpu.o
- *fill*         0x00023c9e        0x2 
- .rodata.hw     0x00023ca0        0xc _build/inv_mpu.o
-                0x00023ca0                hw
- .rodata.reg    0x00023cac       0x1e _build/inv_mpu.o
-                0x00023cac                reg
- *fill*         0x00023cca        0x2 
- .rodata        0x00023ccc       0x4b _build/inv_mpu_dmp_motion_driver.o
- *fill*         0x00023d17        0x1 
+                0x00023bd4       0x12 _build/ble.o
+ *fill*         0x00023be6        0x2 
+ .rodata.test   0x00023be8       0x28 _build/inv_mpu.o
+                0x00023be8                test
+ .rodata.str1.4
+                0x00023c10       0xa6 _build/inv_mpu.o
+ *fill*         0x00023cb6        0x2 
+ .rodata.hw     0x00023cb8        0xc _build/inv_mpu.o
+                0x00023cb8                hw
+ .rodata.reg    0x00023cc4       0x1e _build/inv_mpu.o
+                0x00023cc4                reg
+ *fill*         0x00023ce2        0x2 
+ .rodata        0x00023ce4       0x4b _build/inv_mpu_dmp_motion_driver.o
+ *fill*         0x00023d2f        0x1 
  .rodata.dmp_memory
-                0x00023d18      0xbf6 _build/inv_mpu_dmp_motion_driver.o
- *fill*         0x0002490e        0x2 
+                0x00023d30      0xbf6 _build/inv_mpu_dmp_motion_driver.o
+ *fill*         0x00024926        0x2 
  .rodata.str1.4
-                0x00024910      0x12a _build/mpu_wrapper.o
- *fill*         0x00024a3a        0x2 
+                0x00024928      0x12a _build/mpu_wrapper.o
+ *fill*         0x00024a52        0x2 
  .rodata.str1.4
-                0x00024a3c       0x27 _build/app_error.o
- *fill*         0x00024a63        0x1 
+                0x00024a54       0x27 _build/app_error.o
+ *fill*         0x00024a7b        0x1 
  .rodata.m_conn_params_timer_id
-                0x00024a64        0x4 _build/ble_conn_params.o
- .rodata        0x00024a68       0x10 _build/ble_nus.o
+                0x00024a7c        0x4 _build/ble_conn_params.o
+ .rodata        0x00024a80       0x10 _build/ble_nus.o
  .rodata.str1.4
-                0x00024a78        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
+                0x00024a90        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-w_asin.o)
                                   0x9 (size before relaxing)
  .rodata.atanlo
-                0x00024a80       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+                0x00024a98       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
  .rodata.atanhi
-                0x00024aa0       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
- .rodata        0x00024ac0       0x80 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
- .rodata        0x00024b40       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
- .rodata        0x00024b80       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
- .rodata        0x00024bc0       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
+                0x00024ab8       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a(lib_a-s_atan.o)
+ .rodata        0x00024ad8       0x80 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divsf3.o)
+ .rodata        0x00024b58       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(mulsf3.o)
+ .rodata        0x00024b98       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(divdf3.o)
+ .rodata        0x00024bd8       0x40 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(muldf3.o)
  .rodata.__sf_fake_stdin
-                0x00024c00       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00024c00                __sf_fake_stdin
+                0x00024c18       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00024c18                __sf_fake_stdin
  .rodata.__sf_fake_stdout
-                0x00024c20       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00024c20                __sf_fake_stdout
+                0x00024c38       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00024c38                __sf_fake_stdout
  .rodata.__sf_fake_stderr
-                0x00024c40       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
-                0x00024c40                __sf_fake_stderr
+                0x00024c58       0x20 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-findfp.o)
+                0x00024c58                __sf_fake_stderr
  .rodata.str1.1
-                0x00024c60       0x11 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
+                0x00024c78       0x11 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-svfprintf.o)
  .rodata.str1.1
-                0x00024c71       0x11 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
+                0x00024c89       0x11 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf.o)
  .rodata.str1.1
-                0x00024c71       0x22 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00024c89       0x22 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc_nano.a(lib_a-nano-vfprintf_i.o)
  *(.eh_frame*)
- *fill*         0x00024c93        0x1 
- .eh_frame      0x00024c94        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
-                0x00024c94                . = ALIGN (0x4)
+ *fill*         0x00024cab        0x1 
+ .eh_frame      0x00024cac        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+                0x00024cac                . = ALIGN (0x4)
 
-.glue_7         0x00024c94        0x0
- .glue_7        0x00024c94        0x0 linker stubs
+.glue_7         0x00024cac        0x0
+ .glue_7        0x00024cac        0x0 linker stubs
 
-.glue_7t        0x00024c94        0x0
- .glue_7t       0x00024c94        0x0 linker stubs
+.glue_7t        0x00024cac        0x0
+ .glue_7t       0x00024cac        0x0 linker stubs
 
-.vfp11_veneer   0x00024c94        0x0
- .vfp11_veneer  0x00024c94        0x0 linker stubs
+.vfp11_veneer   0x00024cac        0x0
+ .vfp11_veneer  0x00024cac        0x0 linker stubs
 
-.v4_bx          0x00024c94        0x0
- .v4_bx         0x00024c94        0x0 linker stubs
+.v4_bx          0x00024cac        0x0
+ .v4_bx         0x00024cac        0x0 linker stubs
 
-.iplt           0x00024c94        0x0
- .iplt          0x00024c94        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x00024cac        0x0
+ .iplt          0x00024cac        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.ARM.extab      0x00024c94        0x0
+.ARM.extab      0x00024cac        0x0
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00024c94                . = ALIGN (0x4)
-                0x00024c94                __exidx_start = .
+                0x00024cac                . = ALIGN (0x4)
+                0x00024cac                __exidx_start = .
 
-.ARM.exidx      0x00024c94        0x8
+.ARM.exidx      0x00024cac        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x00024c94        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
- .ARM.exidx     0x00024c9c        0x0 _build/gcc_startup_nrf51.o
+ .ARM.exidx     0x00024cac        0x8 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x00024cb4        0x0 _build/gcc_startup_nrf51.o
                                   0x8 (size before relaxing)
-                0x00024c9c                . = ALIGN (0x4)
-                0x00024c9c                __exidx_end = .
-                0x00024c9c                __etext = .
+                0x00024cb4                . = ALIGN (0x4)
+                0x00024cb4                __exidx_end = .
+                0x00024cb4                __etext = .
 
-.rel.dyn        0x00024c9c        0x0
- .rel.iplt      0x00024c9c        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x00024cb4        0x0
+ .rel.iplt      0x00024cb4        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.data           0x20002000       0xb4 load address 0x00024c9c
+.data           0x20002000       0xb4 load address 0x00024cb4
                 0x20002000                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -1957,10 +1957,10 @@ END GROUP
                 0x200020b4                . = ALIGN (0x4)
                 0x200020b4                __data_end__ = .
 
-.igot.plt       0x200020b4        0x0 load address 0x00024d50
+.igot.plt       0x200020b4        0x0 load address 0x00024d68
  .igot.plt      0x200020b4        0x0 /home/constantinos/gitCode/Quadcopter/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x200020b4      0xaa0 load address 0x00024d50
+.bss            0x200020b4      0xaa0 load address 0x00024d68
                 0x200020b4                . = ALIGN (0x4)
                 0x200020b4                __bss_start__ = .
  *(.bss*)

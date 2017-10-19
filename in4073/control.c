@@ -202,7 +202,7 @@ void height_controller()
 
 void height_rate_controller()
 {
-        height_s= get_baro();             // just to keep values of barometer updated
+        height_s = get_baro();             // just to keep values of barometer updated
         static int16_t prev_height_rate=0;
         int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>18);
         prev_height_rate = prev_height_rate + height_rate_s;
@@ -213,6 +213,11 @@ void height_rate_controller()
         {
           height_overflow = (new_lift + height_act) - MAX_VALUE;
           height_act -= height_overflow;
+        }
+        if((new_lift + height_act) < MIN_VALUE )        //keeping a check on min height
+        {
+          height_overflow = MIN_VALUE - (new_lift + height_act);
+          height_act += height_overflow;
         }
         if(height_act!=0)
         printf("height_act : %d, acc_sensor: %d, height_s: %ld, P3: %d, P4: %d",height_act, height_rate_s,height_s, P3, P4);
