@@ -104,7 +104,35 @@ void decode(core **logUserIn)
 }
 
 // TODO
-// void encode(core)
-// {
-//
-// }
+void encode(packet *my_packet, uint8_t packet_type)
+{
+        core *my_packet_core = &my_packet->packet_core;
+
+        /*
+          Construct Body
+         */
+        switch (packet_type)
+        {
+        case PACKET_TYPE_GAINS1:
+                encode_data_gains1(my_packet_core->body, P, P1, P2);
+                break;
+        case PACKET_TYPE_GAINS2:
+                encode_data_gains2(my_packet_core->body, P3, P4, C1, C2);
+                break;
+            default:
+                printf("Packet type not mapped.\n");
+                break;
+        }
+
+        /*
+           Construct the Packet
+         */
+
+        encode_header_uav_pc(&my_packet_core->header, mode, packet_type);
+
+        uint8_t crc =
+            crc_message((void *)my_packet_core, sizeof(*my_packet_core));
+
+        my_packet->start = START_BYTE;
+        my_packet->crc = crc;
+}

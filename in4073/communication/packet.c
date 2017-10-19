@@ -129,20 +129,6 @@ void decode_data_command(uint8_t *data, int8_t *roll, int8_t *pitch,
         *lift = data[LIFT_OFFSET];
 }
 
-// // PACKET_TYPE_GAINS
-// void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2)
-// {
-//         data[P_GAIN_OFFSET] = P;
-//         data[P1_GAIN_OFFSET] = P1;
-//         data[P2_GAIN_OFFSET] = P2;
-// }
-//
-// void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2)
-// {
-//         *P = data[P_GAIN_OFFSET];
-//         *P1 = data[P1_GAIN_OFFSET];
-//         *P2 = data[P2_GAIN_OFFSET];
-// }
 
 /*
 UAV -> PC
@@ -202,4 +188,36 @@ void decode_data_accel(uint8_t *data, int8_t *sx, int8_t *sy, int8_t *sz)
         *sx = data[SX_OFFSET];
         *sy = data[SY_OFFSET];
         *sz = data[SZ_OFFSET];
+}
+
+// PACKET_TYPE_GAINS1
+void encode_data_gains1(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2)
+{
+        data[P_OFFSET] = P;
+        data[P1_OFFSET] = P1;
+        data[P2_OFFSET] = P2;
+}
+
+void decode_data_gains1(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2)
+{
+        *P = data[P_OFFSET];
+        *P1 = data[P1_OFFSET];
+        *P2 = data[P2_OFFSET];
+}
+
+// PACKET_TYPE_GAINS2
+void encode_data_gains2(uint8_t *data, uint8_t P3, uint8_t P4, uint8_t C1, uint8_t C2)
+{
+        data[P3_OFFSET] = P3;
+        data[P4_OFFSET] = P4;
+        data[C1_OFFSET] = C1;
+        data[C2_OFFSET] = C2;
+}
+
+void decode_data_gains2(uint8_t *data, uint8_t *P3, uint8_t *P4, uint8_t *C1, uint8_t *C2)
+{
+        *P3 = data[P3_OFFSET];
+        *P4 = data[P4_OFFSET];
+        *C1 = data[C1_OFFSET];
+        *C2 = data[C2_OFFSET];
 }

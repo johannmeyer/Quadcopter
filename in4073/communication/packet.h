@@ -9,6 +9,13 @@
 #define START_BYTE 0xff
 #define BODY_LENGTH 4
 
+enum suit {
+    club = 0,
+    diamonds = 10,
+    hearts = 20,
+    spades = 3,
+};
+
 #define GAIN_NO_INCREMENT 0
 #define GAIN_P_INCREMENT 1
 #define GAIN_P_DECREMENT 2
@@ -66,6 +73,8 @@
 #define PACKET_TYPE_ANGLES_BAT 1
 #define PACKET_TYPE_GYRO 2
 #define PACKET_TYPE_ACCEL 3
+#define PACKET_TYPE_GAINS1 4
+#define PACKET_TYPE_GAINS2 5
 // BODY
 // PACKET_TYPE_ACTUATOR
 // offset = actuator number
@@ -86,6 +95,16 @@
 #define SY_OFFSET 1
 #define SZ_OFFSET 2
 
+// PACKET_TYPE_GAINS1
+#define P_OFFSET 0
+#define P1_OFFSET 1
+#define P2_OFFSET 2
+
+// PACKET_TYPE_GAINS2
+#define P3_OFFSET 0
+#define P4_OFFSET 0
+#define C1_OFFSET 0
+#define C2_OFFSET 0
 /*
    Struct Definitions
  */
@@ -138,4 +157,8 @@ void decode_data_gyro(uint8_t *data, int8_t *phi_rate, int8_t *theta_rate,
                       int8_t *psi_rate);
 void encode_data_accel(uint8_t *data, int8_t sx, int8_t sy, int8_t sz);
 void decode_data_accel(uint8_t *data, int8_t *sx, int8_t *sy, int8_t *sz);
+void encode_data_gains1(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2);
+void decode_data_gains1(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2);
+void encode_data_gains2(uint8_t *data, uint8_t P3, uint8_t P4, uint8_t C1, uint8_t C2);
+void decode_data_gains2(uint8_t *data, uint8_t *P3, uint8_t *P4, uint8_t *C1, uint8_t *C2);
 #endif // PACKET_H

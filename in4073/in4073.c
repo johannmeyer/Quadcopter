@@ -323,6 +323,8 @@ int main(void)
         C1 = 1; // for Kalman Filter
         C2 = 1;
 
+        packet my_packet;
+
         while (!demo_done)
         {
                 // printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
@@ -357,6 +359,10 @@ int main(void)
                                     "Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n",
                                     prev_mode, roll, pitch, yaw, lift, ae[0],
                                     ae[1], ae[2], ae[3]);
+                                encode(&my_packet, PACKET_TYPE_GAINS1);
+                                enqueue_packet(&tx_queue, (uint8_t *)&my_packet, sizeof(my_packet));
+                                encode(&my_packet, PACKET_TYPE_GAINS2);
+                                enqueue_packet(&tx_queue, (uint8_t *)&my_packet, sizeof(my_packet));
                                 // printf("P1 : %d, P2: %d \n", P1, P2);
                                 /*if(isCalibrated())
                       {
