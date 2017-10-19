@@ -45,24 +45,24 @@
 bool demo_done;
 bool exit_mode_flag;
 bool safe_flag;
+bool height_lift_flag;
+bool height_mode_flag;
 
 // Control
 int8_t yaw_parameter;
 uint8_t mode, current_mode, prev_mode, lift;
 uint16_t new_lift, prev_lift;
 int8_t pitch,roll,yaw;
-int8_t prev_pitch,prev_roll,prev_yaw;
-int16_t pitch_delta, roll_delta, yaw_delta, lift_delta;
 int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
-uint8_t P, P1, P2;
+uint8_t P, P1, P2, P3, P4, C1, C2;
 void determine_mode(uint8_t mode);
 void process_mode(uint8_t current_mode);
 
 // Timers
 //#define TIMER_PERIOD	50 //50ms=20Hz (MAX 23bit, 4.6h)
-#define TIMER_PERIOD	30
+#define TIMER_PERIOD	50
 void timers_init(void);
 uint32_t get_time_us(void);
 bool check_timer_flag(void);

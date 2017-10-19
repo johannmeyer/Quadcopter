@@ -5,6 +5,7 @@
 #include "crc.h"
 #include "in4073.h"
 #include "packet_uav.h"
+#include "logging.h"
 #include <string.h>
 
 // Determines packet loss limits between receives and disconnection limits
@@ -31,7 +32,6 @@ void decode(core **logUserIn)
         {
 
                 last_received_message = get_time_us();
-                // printf("step1:%ld\n", last_received_message);
                 read_count++;
 
                 uint8_t curr_byte;
@@ -51,12 +51,13 @@ void decode(core **logUserIn)
 
                         // CRC calculation
                         uint8_t tmp_crc = (uint8_t)dequeue(&rx_queue);
-                        uint8_t crc = crc_message((void*) &my_packet_core, sizeof(my_packet_core));
+                        uint8_t crc = crc_message((void *)&my_packet_core, sizeof(my_packet_core));
 
                         if (crc == tmp_crc)
                         {
                                 decode_header_pc_uav(&header, &mode, &P, &P1,
-                                                     &P2);
+                                                     &P2, &P3, &P4, &C1, &C2);
+
                                 decode_data_command(data, &roll, &pitch, &yaw,
                                                     &lift);
 
@@ -84,15 +85,10 @@ void decode(core **logUserIn)
         }
 
         // Checks if cable is disconnected
-        // printf("read_count:%d, no_read_count:%d \n", read_count,
-        // no_read_count);
         uint32_t curr_time = get_time_us();
         int32_t  time_diff = curr_time - last_received_message;
         if (time_diff > 300000)
         {
-                // printf("step2:%ld\n", get_time_us());
-                // no_read_count++;
-                // if (no_read_count >= MAX_NO_DATA_AVAILABLE)
                 if (last_received_message != 0)
                 {
                         mode = PANIC_MODE;
@@ -108,7 +104,71 @@ void decode(core **logUserIn)
 }
 
 // TODO
-// void encode(core)
-// {
-//
-// }
+void encode(packet *my_packet, uint8_t packet_type, uint8_t logging_mode, uint8_t* entry)
+{
+  /*core *my_packet_core = &my_packet->packet_core;
+
+  switch(logging_mode)
+  {
+    case SHORT_LOGGING:
+    {
+      shortEntry *outEntry = (shortEntry*) entry;
+
+      encode_header_uav_pc(&my_packet_core->header, data->mode, packet_type);
+
+      switch (packet_type)
+      {
+        case PACKET_TYPE_ACTUATOR:
+        {
+          encode_data_motor(my_packet_core->body, data->actuators);
+          break;
+        }
+        case PACKET_TYPE_ANGLES_BAT:
+        {
+          encode_data_angles_bat(my_packet_core->body, data->phi, data->theta, data->psi, 0);
+          break;
+        }
+        default:
+        {
+          assert(false);
+          break;
+        }
+      }
+      break;
+    }
+
+    case FULL_LOGGING:
+    {
+      logEntry *outEntry = (logEntry*) data;
+
+      encode_header_uav_pc(&my_packet_core->header, data->mode, packet_type);
+
+      switch (packet_type)
+      {
+        case PACKET_TYPE_ACTUATOR:
+        {
+          encode_data_motor(my_packet_core->body, data->actuators);
+          break;
+        }
+        case PACKET_TYPE_ANGLES_BAT:
+        {
+          encode_data_angles_bat(my_packet_core->body, data->phi, data->theta, data->psi, 0);
+          break;
+        }
+        default:
+        {
+          assert(false);
+          break;
+        }
+      }
+
+      break;
+    }
+
+    case SENSOR_LOGGING:
+    {
+      sensorEntry *outEntry = (sensorEntry*) data;
+      break;
+    }
+  }*/
+}
