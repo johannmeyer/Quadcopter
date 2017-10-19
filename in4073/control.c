@@ -132,7 +132,7 @@ void yaw_controller()
        }
 }
 
-void run_filters_and_control(uint8_t mode)
+/*void run_filters_and_control(uint8_t mode)
 {
   switch (mode)
   {
@@ -150,7 +150,7 @@ void run_filters_and_control(uint8_t mode)
         // fancy stuff here
         // control loops and/or filters
 
-}
+}*/
 
 void yaw_mode()
 {

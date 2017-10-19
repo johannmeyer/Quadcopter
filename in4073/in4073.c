@@ -217,12 +217,13 @@ void process_mode(uint8_t current_mode)
 
         case FULL_MODE: // Full control mode
 
-                //full_mode();
+                full_mode();
 
                 break;
 
         case RAW_MODE: // Raw control mode
-                break;
+              full_mode();
+              break;
 
         case HEIGHT_MODE: // Height control mode
                 if (new_lift != prev_lift)
@@ -394,7 +395,8 @@ int main(void)
                     printf("%6d %6d %6d\n", sp, sq, sr);
                   }*/
                   //read_baro();
-                  run_filters_and_control(prev_mode);
+                  process_mode(prev_mode);
+                  //run_filters_and_control(prev_mode);
                 }
         }
 

@@ -6,8 +6,8 @@ typedef struct calibData calibData;
 
 #define BUF_SIZE  80
 #define ACC_TOLERANCE 150
-#define GYRO_TOLERANCE 10
-#define ANGLE_TOLERANCE 50
+#define GYRO_TOLERANCE 20
+#define ANGLE_TOLERANCE 60
 
 struct calibData
 {
@@ -73,8 +73,8 @@ void calibrate_sensors()
       newSensorValues[7] = say;
       newSensorValues[8] = saz;
 
-      for(i=0; i<9; i++) printf("%d\t", newSensorValues[i]);
-      printf("\n");
+      /*for(i=0; i<9; i++) printf("%d\t", newSensorValues[i]);
+      printf("\n");*/
 
       for(i=0; i<6; i++)
       {
