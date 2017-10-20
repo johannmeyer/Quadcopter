@@ -89,6 +89,17 @@ int serial_device = 0;
 int fd_RS232;
 uint8_t p_incrementer = GAIN_NO_INCREMENT;
 
+
+
+/*------------------------------------------------------------------
+ *  Function Name: isMode
+ *  Made by: Ishu Goel
+ *  Description: This function checks if the char received from the
+ *  keyboard is a number between 0 and 8 which specifies the mode in
+ *  which drone will run.
+ *------------------------------------------------------------------
+ */
+
 bool isMode(uint8_t c)
 {
 	if (c	>= '0' && c <= '8')			// check if number is between 0 and 8
@@ -99,6 +110,17 @@ bool isMode(uint8_t c)
 		return false;
 	}
 }
+
+/*------------------------------------------------------------------
+ *  Function Name: get_key
+ *  Made by: Ishu Goel
+ *  Description: In this function keyboard keys are mapped to their
+ *  specific functions as mentioned in the interface requirements.
+ *  Function takes keyboard input as argument and perform the required
+*   task.
+ *------------------------------------------------------------------
+ */
+
 
 void get_key(char c)
 {
@@ -189,6 +211,15 @@ void get_key(char c)
 				}
 	}
 }
+
+
+/*------------------------------------------------------------------
+ *  Function Name: combine_values
+ *  Made by: Ishu Goel
+ *  Description: This function combines the values of lift, pitch, roll
+ *  and yaw received from both keyboard and joystick.
+ *------------------------------------------------------------------
+ */
 
 void combine_values()
 {

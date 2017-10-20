@@ -27,6 +27,17 @@ core *logCore;
  * process_key -- process command keys
  *------------------------------------------------------------------
  */
+
+ /*------------------------------------------------------------------
+  *  Function Name: determine_mode
+  *  Made by: Ishu Goel
+  *  Description: This function acts as Finite State Machine and
+  *  update the current mode of the drone. It takes value of mode
+  *  received from PC as input and allows change in mode only when
+  *  the required conditions are met.
+  *------------------------------------------------------------------
+  */
+
 void determine_mode(uint8_t mode)
 {
 
@@ -134,9 +145,8 @@ void determine_mode(uint8_t mode)
                 }
                 break;
 
-        case EXIT_MODE:
+        case EXIT_MODE:   //Exit the program
                 process_mode(PANIC_MODE);
-                // demo_done = true;
                 prev_mode = EXIT_MODE;
                 break;
 
@@ -144,6 +154,15 @@ void determine_mode(uint8_t mode)
                 nrf_gpio_pin_toggle(RED);
         }
 }
+
+
+/*------------------------------------------------------------------
+ *  Function Name: process_mode
+ *  Made by: Ishu Goel
+ *  Description: This function runs the mode provided as argument.
+ *  Working of all the modes is described in this function.
+ *------------------------------------------------------------------
+ */
 
 void process_mode(uint8_t current_mode)
 {
@@ -199,19 +218,13 @@ void process_mode(uint8_t current_mode)
                 break;
 
         case CALIBRATION_MODE: // Calibration mode
-                // bool isCalibrated() function is used to check calibration
-                // status
+
                 prev_mode = CALIBRATION_MODE;
                 break;
 
         case YAW_MODE: // Yaw control mode
 
-                // int_yaw_control(roll, pitch, yaw, new_lift, 5,
-                // get_sensor(PSI));
-                // fp_yaw_control(roll, pitch, yaw, new_lift, 5,
-                // get_sensor(PSI));
                 yaw_mode();
-                // update_motors();
 
                 break;
 
@@ -251,16 +264,25 @@ void process_mode(uint8_t current_mode)
         }
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: calculate_values
+ *  Made by: Ishu Goel
+ *  Description: This function takes value of lift provided from PC
+ *  as input and converts it into non-linear curve for better control
+ *  of drone from joystick.
+ *------------------------------------------------------------------
+ */
+
 void calculate_values()
 {
 
-        new_lift = 0;//3 * (uint16_t)lift;
+        new_lift = 0;
         if (lift > 100)
                 new_lift = 400 + 2 * ((uint16_t)lift - 100);
-        else if (lift > 0) // make lift non linear
+        else if (lift > 0) // make lift non-linear
                 new_lift = 3 * (uint16_t)lift + 100;
 
-        if (new_lift > MAX_LIFT)
+        if (new_lift > MAX_LIFT)    // limit max value of lift
                 new_lift = MAX_LIFT;
 }
 
@@ -309,8 +331,6 @@ int main(void)
         select_log_mode(SENSOR_LOGGING);
 
         uint32_t counter = 0, maxCounter=0;
-        // int32_t height_value;
-        // int16_t acc_x;
 
         logCore = (core *)malloc(sizeof(core));
         prev_mode = SAFE_MODE;
@@ -330,7 +350,6 @@ int main(void)
 
         while (!demo_done)
         {
-                // printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
                 // TODO Process the data e.g. change states
                 decode(&logCore);
                 calculate_values();
@@ -340,7 +359,6 @@ int main(void)
 
                         if (mode != prev_mode)
                         {
-                                // printf("Determine mode \n");
                                 determine_mode(mode);
                         }
                         else if (height_mode_flag && mode == HEIGHT_MODE)
@@ -350,7 +368,7 @@ int main(void)
                                 prev_mode = FULL_MODE;
                                 printf("Full mode entered from main \n");
                         }
-                        //process_mode(prev_mode);
+
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
                         // | %d | %d\n", prev_mode, roll,pitch, yaw,
                         // lift,ae[0],ae[1],ae[2],ae[3]);

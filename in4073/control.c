@@ -40,28 +40,29 @@ void height_controller();
 void height_rate_controller();
 int32_t get_baro();
 
+/*------------------------------------------------------------------
+ *  Function Name: update_actuator
+ *  Made by: Ishu Goel
+ *  Description: This function updates the value of actuators after the
+ *  correction from roll, pitch, yaw and height is updated from their
+ *  respective functions.
+ *------------------------------------------------------------------
+ */
 
 void update_actuator()
 {
       // Apply actuation
-      // TODO is b still necessary for full control?
-      int8_t b = 1;
-      //int8_t overflow =0;
-      ae[0] = (new_lift + pitch_act) / b - yaw_act + height_act;
-      ae[1] = (new_lift - roll_act) / b + yaw_act  + height_act;
-      ae[2] = (new_lift - pitch_act) / b - yaw_act + height_act;
-      ae[3] = (new_lift + roll_act) / b + yaw_act  + height_act;
+      ae[0] = new_lift + pitch_act - yaw_act + height_act;
+      ae[1] = new_lift - roll_act  + yaw_act  + height_act;
+      ae[2] = new_lift - pitch_act - yaw_act + height_act;
+      ae[3] = new_lift + roll_act  + yaw_act  + height_act;
       for (int i = 0; i < 4; i++)         // Safe check for motor values
       {
               if (ae[i] < 180 && new_lift > 180)      // not allowing motor to stop rotation
                 {
-                        //overflow = 180 - ae[i];
                         ae[i] = 180;
                 }
-              /*  else if(overflow > 0 && ae[i] > 180 && new_lift > 180)
-                {
-                        ae[i] -= overflow;
-                }*/
+
               if(new_lift < 160)  // if lift is not provided, do not respond to yaw error
               ae[i] = 0;
       }
@@ -85,23 +86,23 @@ void update_motors(void)
         motor[3] = ae[3];
 }
 
+
+/*------------------------------------------------------------------
+ *  Function Name: yaw_controller
+ *  Made by: Ishu Goel
+ *  Description: This function runs the control loop for yaw control.
+ *  It measures the rate of yaw received from gyro sensor and subtracts
+ *  it from the yaw rate received from joystick. The yaw correction is
+ *  calculated after multiplying the difference with the P gain.
+ *------------------------------------------------------------------
+ */
 void yaw_controller()
 {
         yaw_s = (int16_t)((int32_t)(get_sensor(SR) * 255) / 32768);  //can use PSI as well
-        //printf("P in controller:%d\n", P);
-        //P=5;
+        //printf("P in yaw controller:%d\n", P);
 
-        yaw_act = P*((yaw/5) + yaw_s);      // yaw/4 to scale down yaw coming from joystick
-        //yaw_prev = yaw_s;
-        /*if (check_timer_flag())
-        {
-              if (yaw_rate !=0)
-              {
-              printf("yaw_error: %d, yaw: %d, converted Psi: %d, yaw_rate: %d yaw: %d \n",
-             yaw_act, yaw>>1, yaw_s,yaw_rate,P);
-              }
-             clear_timer_flag();
-        }*/
+        yaw_act = P*((yaw/5) + yaw_s);      // yaw/5 to scale down yaw coming from joystick
+
         if((new_lift - yaw_act) < MIN_VALUE  && new_lift > MIN_VALUE )
         {
           yaw_overflow = MIN_VALUE - (new_lift - yaw_act);
@@ -152,6 +153,15 @@ void yaw_controller()
 
 }*/
 
+/*------------------------------------------------------------------
+ *  Function Name: yaw_mode
+ *  Made by: Ishu Goel
+ *  Description: This function runs when yaw mode is received from the
+ *  PC. It calls the yaw_controller function keeping roll and pitch values
+ *  same as received from the PC.
+ *------------------------------------------------------------------
+ */
+
 void yaw_mode()
 {
         yaw_controller();
@@ -176,11 +186,21 @@ void full_mode()
       //  outer_counter++;
 }
 
+
+/*------------------------------------------------------------------
+ *  Function Name: height_mode
+ *  Made by: Ishu Goel
+ *  Description: This function runs the height control loop. It first
+ *  stores the desired height and run height_rate_controller(inner loop)
+ *  function at higher frequency than height_controller(outer_loop) function.
+ *  In height mode, the functionalities of full mode are run as well.
+ *------------------------------------------------------------------
+ */
 void height_mode()
 {
         static uint8_t height_counter;
 
-        for (int i =0; i<5; i++)
+        for (int i =0; i<5; i++)      // to get proper average of barometer values in first time
         {
           height_d = get_baro();
         }
@@ -193,13 +213,32 @@ void height_mode()
 
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: height_controller
+ *  Made by: Ishu Goel
+ *  Description: This function runs the outer control loop of height control.
+ *  It takes the value of barometer and subtracts it from the desired value
+ *  of height. The desired height rate is calculated after multiplying
+ *  the difference with the P gain.
+ *------------------------------------------------------------------
+ */
 void height_controller()
 {
 
         height_s= get_baro();
-        height_rate_d = -P3 *(height_d - height_s);      // pressure is less at more height
+        height_rate_d = P3 *(height_d - height_s);      // pressure is less at more height
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: height_rate_controller
+ *  Made by: Ishu Goel
+ *  Description: This function runs the inner control loop of height control.
+ *  It takes the filtered values of accelerometer and integrate it to get the
+ *  rate of height. The height correction is calculated by subtracting the
+ *  desired height rate from the scaled value of height rate obtained from
+ *  accelerometer.
+ *------------------------------------------------------------------
+ */
 void height_rate_controller()
 {
         height_s = get_baro();             // just to keep values of barometer updated
@@ -226,27 +265,22 @@ void height_rate_controller()
 
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: get_baro
+ *  Made by: Ishu Goel
+ *  Description: This function calculates the moving average of barometer
+ *  values.
+ *------------------------------------------------------------------
+ */
+
 int32_t get_baro()
 {
-        //int8_t n=5;
-        //static int i=0;
-      //  static int32_t baro_values[5];
         int32_t baro_value;
         static int32_t avg_pressure = 0;
 
-            //baro_values[i]= get_sensor(BARO);
-            baro_value = get_sensor(BARO);
-            printf("Baro : %ld  ",baro_value);
-          /*  if(i<n)
-            i++;
-            else
-            i=0;
+        baro_value = get_sensor(BARO);
+        printf("Baro : %ld  ",baro_value);
 
-            for (int j =0; j<n;j++)
-            {
-              avg_pressure += baro_values[j];
-            }
-            */
         avg_pressure = (4*avg_pressure)/5 + (baro_value/5);
         printf("avg:%ld \n",avg_pressure);
         return avg_pressure;
