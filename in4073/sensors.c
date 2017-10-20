@@ -1,15 +1,17 @@
 #include "sensors.h"
+#include "filters.h"
 #include "in4073.h"
 
 typedef struct calibData calibData;
 
 #define BUF_SIZE  80
-#define ACC_TOLERANCE 120
-#define GYRO_TOLERANCE 10
+#define ACC_TOLERANCE 150
+#define GYRO_TOLERANCE 20
+#define ANGLE_TOLERANCE 60
 
 struct calibData
 {
-  int16_t mat[BUF_SIZE];
+  int32_t mat[BUF_SIZE];
   uint8_t next_pos;
   uint8_t max_pos;
   uint8_t min_pos;
@@ -22,24 +24,27 @@ int16_t dcsp = 0, dcsq = 0, dcsr = 0;
 int16_t dcsax = 0, dcsay = 0, dcsaz = 0;
 int32_t dcbaro = 0;
 
+fp fpsax, fpsay, fpsaz;
+fp fpdcsax = 0, fpdcsay = 0, fpdcsaz = 0;
+
 void init_calibData(calibData *data);
 
 void maxElem(calibData *data);
 
 void minElem(calibData *data);
 
-void insert_data(calibData *data, int16_t newValue, uint8_t tolerance);
+void insert_data(calibData *data, int16_t newValue, uint32_t tolerance);
 
 bool calibration_flag = false;
 
-void calibrate_sensors(void)
+void calibrate_sensors()
 {
   /*Use a set of measurements from each sensor to detect when it stabilizes and evaluate its DC offset*/
 
   uint8_t i;
   uint8_t discardedSamp = 0;
   calibData calibArray[9];
-  uint16_t newSensorValues[9];
+  int16_t newSensorValues[9];
 
   for(i=0; i<9; i++)
   {
@@ -62,11 +67,14 @@ void calibrate_sensors(void)
       newSensorValues[1] = theta;
       newSensorValues[2] = psi;
       newSensorValues[3] = sp;
-      newSensorValues[4] = sr;
-      newSensorValues[5] = sq;
+      newSensorValues[4] = sq;
+      newSensorValues[5] = sr;
       newSensorValues[6] = sax;
       newSensorValues[7] = say;
       newSensorValues[8] = saz;
+
+      /*for(i=0; i<9; i++) printf("%d\t", newSensorValues[i]);
+      printf("\n");*/
 
       for(i=0; i<6; i++)
       {
@@ -104,6 +112,128 @@ void calibrate_sensors(void)
   dcsax = sum[6] / BUF_SIZE;
   dcsay = sum[7] / BUF_SIZE;
   dcsaz = sum[8] / BUF_SIZE;
+  dcbaro = pressure;
+
+  calibration_flag = true;
+}
+
+
+void calibrate_raw_sensors(void)
+{
+  uint8_t i;
+  uint8_t discardedSamp = 0;
+  calibData calibArray[9];
+  int16_t newSensorValues[9];
+  int32_t sum[9] = {0};
+  uint8_t j;
+
+  for(i=0; i<9; i++)
+  {
+    //initialize the struct containing the initialization data for each sensor.
+    init_calibData(&calibArray[i]);
+  }
+
+  //The process of the identification of the object continues until the dc offset can be determined for all the sensors
+  while(!calibArray[3].ready | !calibArray[4].ready  | !calibArray[5].ready | !calibArray[6].ready | !calibArray[7].ready | !calibArray[8].ready)
+  {
+    //Polling until a sample is successfully acquired.
+    while(!check_sensor_int_flag());
+    get_raw_sensor_data();
+
+    fpsax = butter(sax, THETA);
+    fpsay = butter(say, PHI);
+    fpsaz = butter(saz, PSI);
+    sax = fp2int(fpsax, FPQ(10));
+    say = fp2int(fpsay, FPQ(10));
+    saz = fp2int(fpsaz, FPQ(10));
+
+    if(discardedSamp++ == 9)
+    {
+
+      newSensorValues[3] = sp;
+      newSensorValues[4] = sq;
+      newSensorValues[5] = sr;
+      newSensorValues[6] = sax;
+      newSensorValues[7] = say;
+      newSensorValues[8] = saz;
+
+      for(i=3; i<6; i++)
+      {
+        //The new sensor value and the biggest difference tolerated between the max and the min value of the
+        //sensor buffer, for the sensor to be consider stabilized is passed.
+        insert_data(&calibArray[i], newSensorValues[i], GYRO_TOLERANCE);
+      }
+      for(i=6; i<9; i++)
+      {
+        insert_data(&calibArray[i], newSensorValues[i], ACC_TOLERANCE);
+      }
+
+      /*for(i=3; i<9; i++) printf("%d\t", newSensorValues[i]);
+
+      printf("\n");*/
+
+      discardedSamp=0;
+    }
+  }
+
+
+  for(i=3; i<9; i++)
+  {
+    for(j=0; j<BUF_SIZE; j++) sum[i] += calibArray[i].mat[j];
+  }
+
+  dcsp = sum[3] / BUF_SIZE;
+  dcsq = sum[4] / BUF_SIZE;
+  dcsr = sum[5] / BUF_SIZE;
+  dcsax = sum[6] / BUF_SIZE;
+  dcsay = sum[7] / BUF_SIZE;
+  dcsaz = sum[8] / BUF_SIZE;
+  fpdcsax = int2fp(dcsax, FPQ(10));
+  fpdcsay = int2fp(dcsay, FPQ(10));
+  fpdcsaz = int2fp(dcsaz, FPQ(10));
+
+  while(!calibArray[0].ready | !calibArray[1].ready)
+  {
+
+    //Polling until a sample is successfully acquired.
+    while(!check_sensor_int_flag());
+    get_raw_sensor_data();
+
+    fpsax = butter(sax, THETA);
+    fpsay = butter(say, PHI);
+    fpsaz = butter(saz, PSI);
+
+    newSensorValues[0] = fp2int(Kalman(fpsay - fpdcsay, get_sensor(SP), PHI), FPQ(10));
+    newSensorValues[1] = fp2int(Kalman(fpsax - fpdcsax, get_sensor(SQ), THETA), FPQ(10));
+
+    if(discardedSamp++ == 9)
+    {
+      //printf("sphi:%d\tsp:%d\tstheta:%d\tsq:%d\n", fp2int(fpsay - int2fp(dcsay, FPQ(10)), FPQ(10)), get_sensor(SP), fp2int(fpsax - int2fp(dcsax, FPQ(10)), FPQ(10)), get_sensor(SQ));
+      /*for(i=0; i<3; i++) printf("%d\t", newSensorValues[i]);
+      printf("\n");*/
+
+      for(i=0; i<2; i++)
+      {
+        //The new sensor value and the biggest difference tolerated between the max and the min value of the
+        //sensor buffer, for the sensor to be consider stabilized is passed.
+        insert_data(&calibArray[i], newSensorValues[i], ANGLE_TOLERANCE);
+      }
+
+      discardedSamp=0;
+    }
+  }
+
+  read_baro();
+
+
+  for(i=0; i<2; i++)
+  {
+    for(j=0; j<BUF_SIZE; j++) sum[i] += calibArray[i].mat[j];
+  }
+
+  dcphi = sum[0] / BUF_SIZE;
+  dctheta = sum[1] / BUF_SIZE;
+  dcpsi = dcsaz;
   dcbaro = pressure;
 
   calibration_flag = true;
@@ -221,7 +351,7 @@ void minElem(calibData *data)
   }
 }
 
-void insert_data(calibData *data, int16_t newValue, uint8_t tolerance)
+void insert_data(calibData *data, int16_t newValue, uint32_t tolerance)
 {
   /*A new sensor sample is stored in the buffer, updating the structure member affected by it*/
 
@@ -260,5 +390,23 @@ void insert_data(calibData *data, int16_t newValue, uint8_t tolerance)
   //printf("%ld | count = %ld | buf[%d] = %d | max[%d] = %d | min[%d] = %d\n", get_time_us(), data->count, data->next_pos, data->mat[data->next_pos], data->max_pos, data->mat[data->max_pos], data->min_pos, data->mat[data->min_pos]);
   //The index for the next element is handled in a way to produce a cyclic buffer functionality.
   if(++data->next_pos >= BUF_SIZE) data->next_pos -= BUF_SIZE;
+
+}
+
+void get_filtered_data(void)
+{
+  get_raw_sensor_data();
+
+  fpsax = butter(sax, THETA);
+  fpsay = butter(say, PHI);
+  fpsaz = butter(saz, PSI);
+
+  sax = fp2int(fpsax, FPQ(10));
+  say = fp2int(fpsay, FPQ(10));
+  saz = fp2int(fpsaz, FPQ(10));
+
+  phi = fp2int(Kalman(fpsay - fpdcsay, get_sensor(SP), PHI), FPQ(10));
+  theta = fp2int(Kalman(fpsax - fpdcsax, get_sensor(SQ), THETA), FPQ(10));
+  psi = get_sensor(SAZ);
 
 }

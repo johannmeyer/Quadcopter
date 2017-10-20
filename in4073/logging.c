@@ -3,52 +3,12 @@
 #include "packet.h"
 #include "logging.h"
 
-typedef struct sensData sensData;
-
-struct sensData
-{
-  int16_t phi;
-  int16_t theta;
-  int16_t psi;
-  int16_t sp;
-  int16_t sq;
-  int16_t sr;
-  int16_t sax;
-  int16_t say;
-  int16_t saz;
-  uint16_t bat;
-  int32_t temp;
-  int32_t press;
-};
-
-typedef struct logEntry logEntry;
-
-struct logEntry
-{
-    uint32_t time;
-    uint8_t mode;
-    core lastUserInp;
-    int16_t actuators[4];
-    sensData sensors;
-};
-
-typedef struct shortEntry shortEntry;
-
-struct shortEntry
-{
-  uint32_t time;
-  uint8_t mode;
-  int16_t actuators[4];
-  int16_t phi;
-  int16_t theta;
-  int16_t psi;
-};
-
 static uint32_t nextAddress = 0;
 static uint16_t logNum = 0;
-static bool shortLogging = false;
+static uint8_t logMode = 0;
+static bool logFull = false;
 
-void init_logging(uint8_t logMode)
+void init_logging(uint8_t mode)
 {
   if(!flash_chip_erase())
 	{
@@ -57,54 +17,56 @@ void init_logging(uint8_t logMode)
 	}
   nextAddress = 0;
   logNum = 0;
-  if(logMode == SHORT_LOGGING) shortLogging = true;
-  else shortLogging = false;
+  logMode = mode;
+  logFull = false;
 }
 
-void select_log_mode(uint8_t logMode)
+void select_log_mode(uint8_t mode)
 {
   if(logNum > 0)
   {
     printf("Log entries already exist in memory. Call \"init_logging\" to erase memory and change logging mode\n");
-    if(shortLogging) printf("Current logging mode is: Short Logging\n");
-    else printf("Current logging mode is: Full Logging\n");
+    return;
   }
-  if(logMode == SHORT_LOGGING) shortLogging = true;
-  else shortLogging = false;
+  logMode = mode;
 }
 
 void write_short_log(uint32_t logTime, uint8_t logMode, const int16_t* logAct, int16_t logPhi, int16_t logTheta, int16_t logPsi)
 {
-  if(!shortLogging)
+  if(!logFull)
   {
-    printf("Full Logging mode is selected, cannot write short log entry\n");
-    return;
-  }
-
-  if(nextAddress + sizeof(shortEntry) > 0x01FFFF)
-  {
-      printf("Flash full, logging failed\n");
+    if(logMode != SHORT_LOGGING)
+    {
+      printf("Another logging mode is selected, cannot write short log entry\n");
       return;
+    }
+
+    if(nextAddress + sizeof(shortEntry) > 0x01FFFF)
+    {
+        printf("Flash full, logging failed\n");
+        logFull = true;
+        return;
+    }
+
+    shortEntry newEntry;
+    newEntry.time = logTime;
+    newEntry.mode = logMode;
+    memcpy(newEntry.actuators, logAct, 4 * sizeof(int16_t));
+    newEntry.phi = logPhi;
+    newEntry.theta = logTheta;
+    newEntry.psi = logPsi;
+
+    //Log is written to the SPI flash memory.
+    if(!flash_write_bytes(nextAddress, (uint8_t *) &newEntry, sizeof(shortEntry)))
+    {
+        printf("Log write failed for address %lx\n", nextAddress);
+        return;
+    }
+
+    //The address of the next entry is calculated and the number of saved log entries is updated.
+    nextAddress += sizeof(shortEntry);
+    logNum++;
   }
-
-  shortEntry newEntry;
-  newEntry.time = logTime;
-  newEntry.mode = logMode;
-  memcpy(newEntry.actuators, logAct, 4 * sizeof(int16_t));
-  newEntry.phi = logPhi;
-  newEntry.theta = logTheta;
-  newEntry.psi = logPsi;
-
-  //Log is written to the SPI flash memory.
-  if(!flash_write_bytes(nextAddress, (uint8_t *) &newEntry, sizeof(shortEntry)))
-  {
-      printf("Log write failed for address %lx\n", nextAddress);
-      return;
-  }
-
-  //The address of the next entry is calculated and the number of saved log entries is updated.
-  nextAddress += sizeof(shortEntry);
-  logNum++;
 
 }
 
@@ -115,47 +77,90 @@ void write_log_entry(uint32_t logTime, uint8_t logMode, const core *logUser, con
    /*Creates and writes a log entry to the SPI flash memory if empty slots are found.
    (by Kostas)
    */
-
-   if(shortLogging)
+   if(!logFull)
    {
-     printf("Short logging mode is selected, cannot write full log entry\n");
-     return;
-   }
-    if(nextAddress + sizeof(logEntry) > 0x01FFFF)
-    {
-        printf("Flash full, logging failed\n");
-        return;
-    }
+     if(logMode != FULL_LOGGING)
+     {
+       printf("Another logging mode is selected, cannot write full log entry\n");
+       return;
+     }
+      if(nextAddress + sizeof(logEntry) > 0x01FFFF)
+      {
+          printf("Flash full, logging failed\n");
+          logFull = true;
+          return;
+      }
 
-    logEntry newEntry;
-    //A log entry is filled with the data to be written.
+      logEntry newEntry;
+      //A log entry is filled with the data to be written.
+      newEntry.time = logTime;
+      newEntry.mode = logMode;
+      memcpy(&newEntry.lastUserInp, logUser, sizeof(core));
+      memcpy(newEntry.actuators, logAct, 4 * sizeof(int16_t));
+      newEntry.sensors.phi = logPhi;
+      newEntry.sensors.theta = logTheta;
+      newEntry.sensors.psi = logPsi;
+      newEntry.sensors.sp = logSp;
+      newEntry.sensors.sq = logSq;
+      newEntry.sensors.sr = logSr;
+      newEntry.sensors.sax = logSax;
+      newEntry.sensors.say = logSay;
+      newEntry.sensors.saz = logSaz;
+      newEntry.sensors.bat = logBat;
+      newEntry.sensors.temp = logTemp;
+      newEntry.sensors.press = logPress;
+
+      //Log is written to the SPI flash memory.
+      if(!flash_write_bytes(nextAddress, (uint8_t *) &newEntry, sizeof(logEntry)))
+      {
+          printf("Log write failed for address %lx\n", nextAddress);
+          return;
+      }
+
+      //The address of the next entry is calculated and the number of saved log entries is updated.
+      nextAddress += sizeof(logEntry);
+      logNum++;
+  }
+}
+
+void write_sensor_log(uint32_t logTime, uint8_t logMode, int16_t logSp, int16_t logSq, int16_t logSr,
+  int16_t logSax, int16_t logSay, int16_t logSaz)
+{
+  if(!logFull)
+  {
+    if(logMode != SENSOR_LOGGING)
+    {
+      printf("Another logging mode is selected, cannot write a sensor log entry\n");
+      return;
+    }
+    if(nextAddress + sizeof(sensorEntry) > 0x01FFFF)
+    {
+       printf("Flash full, logging failed\n");
+       logFull = true;
+       return;
+    }
+    sensorEntry newEntry;
+
     newEntry.time = logTime;
     newEntry.mode = logMode;
-    memcpy(&newEntry.lastUserInp, logUser, sizeof(core));
-    memcpy(newEntry.actuators, logAct, 4 * sizeof(int16_t));
-    newEntry.sensors.phi = logPhi;
-    newEntry.sensors.theta = logTheta;
-    newEntry.sensors.psi = logPsi;
-    newEntry.sensors.sp = logSp;
-    newEntry.sensors.sq = logSq;
-    newEntry.sensors.sr = logSr;
-    newEntry.sensors.sax = logSax;
-    newEntry.sensors.say = logSay;
-    newEntry.sensors.saz = logSaz;
-    newEntry.sensors.bat = logBat;
-    newEntry.sensors.temp = logTemp;
-    newEntry.sensors.press = logPress;
+    newEntry.sax = logSax;
+    newEntry.say = logSay;
+    newEntry.saz = logSaz;
+    newEntry.sp = logSp;
+    newEntry.sq = logSq;
+    newEntry.sr = logSr;
 
     //Log is written to the SPI flash memory.
-    if(!flash_write_bytes(nextAddress, (uint8_t *) &newEntry, sizeof(logEntry)))
+    if(!flash_write_bytes(nextAddress, (uint8_t *) &newEntry, sizeof(sensorEntry)))
     {
         printf("Log write failed for address %lx\n", nextAddress);
         return;
     }
 
     //The address of the next entry is calculated and the number of saved log entries is updated.
-    nextAddress += sizeof(logEntry);
+    nextAddress += sizeof(sensorEntry);
     logNum++;
+  }
 }
 
 void print_log_entry(uint16_t entryNo)
@@ -168,37 +173,61 @@ void print_log_entry(uint16_t entryNo)
         return;
     }
 
-    if(shortLogging)
+    switch(logMode)
     {
-      shortEntry readEntry;
-
-      if(!flash_read_bytes(entryNo * sizeof(shortEntry), (uint8_t *) &readEntry, sizeof(shortEntry)))
+      case SHORT_LOGGING:
       {
-          printf("Failed to read the requested entry\n");
-          return;
+        shortEntry readEntry;
+
+        if(!flash_read_bytes(entryNo * sizeof(shortEntry), (uint8_t *) &readEntry, sizeof(shortEntry)))
+        {
+            printf("Failed to read the requested entry\n");
+            return;
+        }
+
+        printf("%10ld | m%d | ", readEntry.time, readEntry.mode);
+        printf("%3d %3d %3d %3d | ", readEntry.actuators[0], readEntry.actuators[1], readEntry.actuators[2], readEntry.actuators[3]);
+        printf("%6d %6d %6d\n", readEntry.phi, readEntry.theta, readEntry.psi);
+        break;
       }
 
-      printf("%10ld | m%d | ", readEntry.time, readEntry.mode);
-      printf("%3d %3d %3d %3d | ", readEntry.actuators[0], readEntry.actuators[1], readEntry.actuators[2], readEntry.actuators[3]);
-      printf("%6d %6d %6d\n", readEntry.phi, readEntry.theta, readEntry.psi);
-
-    }
-    else
-    {
-      logEntry readEntry;
-
-      if(!flash_read_bytes(entryNo * sizeof(logEntry), (uint8_t *) &readEntry, sizeof(logEntry)))
+      case FULL_LOGGING:
       {
-          printf("Failed to read the requested entry\n");
-          return;
+        logEntry readEntry;
+
+        if(!flash_read_bytes(entryNo * sizeof(logEntry), (uint8_t *) &readEntry, sizeof(logEntry)))
+        {
+            printf("Failed to read the requested entry\n");
+            return;
+        }
+
+        printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header & MODE_LENGTH, readEntry.lastUserInp.body[ROLL_OFFSET], readEntry.lastUserInp.body[PITCH_OFFSET], readEntry.lastUserInp.body[YAW_OFFSET], readEntry.lastUserInp.body[LIFT_OFFSET]);
+        printf("%3d %3d %3d %3d | ", readEntry.actuators[0], readEntry.actuators[1], readEntry.actuators[2], readEntry.actuators[3]);
+        printf("%6d %6d %6d | ", readEntry.sensors.phi, readEntry.sensors.theta, readEntry.sensors.psi);
+        printf("%6d %6d %6d | ", readEntry.sensors.sp, readEntry.sensors.sq, readEntry.sensors.sr);
+        printf("%6d %6d %6d | ", readEntry.sensors.sax, readEntry.sensors.say, readEntry.sensors.saz);
+        printf("%4d | %4ld | %6ld \n", readEntry.sensors.bat, readEntry.sensors.temp, readEntry.sensors.press);
+        break;
       }
 
-      printf("%10ld | m%d | %x %x %x %x %x | ", readEntry.time, readEntry.mode, readEntry.lastUserInp.header & MODE_LENGTH, readEntry.lastUserInp.body[ROLL_OFFSET], readEntry.lastUserInp.body[PITCH_OFFSET], readEntry.lastUserInp.body[YAW_OFFSET], readEntry.lastUserInp.body[LIFT_OFFSET]);
-      printf("%3d %3d %3d %3d | ", readEntry.actuators[0], readEntry.actuators[1], readEntry.actuators[2], readEntry.actuators[3]);
-      printf("%6d %6d %6d | ", readEntry.sensors.phi, readEntry.sensors.theta, readEntry.sensors.psi);
-      printf("%6d %6d %6d | ", readEntry.sensors.sp, readEntry.sensors.sq, readEntry.sensors.sr);
-      printf("%6d %6d %6d | ", readEntry.sensors.sax, readEntry.sensors.say, readEntry.sensors.saz);
-      printf("%4d | %4ld | %6ld \n", readEntry.sensors.bat, readEntry.sensors.temp, readEntry.sensors.press);
+      case SENSOR_LOGGING:
+      {
+        sensorEntry readEntry;
+
+        if(!flash_read_bytes(entryNo * sizeof(sensorEntry), (uint8_t *) &readEntry, sizeof(sensorEntry)))
+        {
+            printf("Failed to read the requested entry\n");
+            return;
+        }
+
+        printf("%10ld | %d | %6d %6d %6d | ", readEntry.time, readEntry.mode, readEntry.sax, readEntry.say, readEntry.saz);
+        printf("%6d %6d %6d\n", readEntry.sp, readEntry.sq, readEntry.sr);
+        break;
+
+      default:
+        printf("Invalid logging mode selected\n");
+      }
+
     }
 
 }

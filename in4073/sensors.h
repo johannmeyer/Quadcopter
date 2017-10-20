@@ -18,8 +18,12 @@
 
 void calibrate_sensors(void);
 
+void calibrate_raw_sensors(void);
+
 bool isCalibrated(void);
 
 int32_t get_sensor(uint8_t sensor);
+
+void get_filtered_data(void);
 
 #endif //SENSORS_H__

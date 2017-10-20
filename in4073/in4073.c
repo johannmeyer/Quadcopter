@@ -13,7 +13,7 @@
  */
 
 #include "control.h"
-#include "filters.h"
+//#include "filters.h"
 #include "in4073.h"
 #include "logging.h"
 #include "packet_uav.h"
@@ -69,12 +69,11 @@ void determine_mode(uint8_t mode)
         case CALIBRATION_MODE: // Calibration mode
                 if (prev_mode == SAFE_MODE)
                 {
+                        imu_init(true, 100);
                         uint32_t time = get_time_us();
                         printf("Calibrating sensors \n");
                         calibrate_sensors();
-                        printf("Calibration done. Time elapsed: %ld ms\n",
-                               (get_time_us() - time) / 1000);
-                        init_logging(FULL_LOGGING);
+                        printf("Calibration done. Time elapsed: %ld ms\n", (get_time_us() - time) / 1000);
                         prev_mode = CALIBRATION_MODE;
                 }
                 break;
@@ -106,10 +105,14 @@ void determine_mode(uint8_t mode)
                 break;
 
         case RAW_MODE: // Raw control mode
-                if (prev_mode == RAW_MODE ||
-                    (prev_mode == SAFE_MODE && isCalibrated() && safe_flag))
+                if ((prev_mode == RAW_MODE || prev_mode == SAFE_MODE) && safe_flag)
                 {
-                        prev_mode = RAW_MODE;
+                  imu_init(false, 100);
+                  uint32_t time = get_time_us();
+                  printf("Calibrating sensors \n");
+                  calibrate_raw_sensors();
+                  printf("Calibration done. Time elapsed: %ld ms\n", (get_time_us() - time) / 1000);
+                  prev_mode = RAW_MODE;
                 }
                 break;
 
@@ -214,12 +217,13 @@ void process_mode(uint8_t current_mode)
 
         case FULL_MODE: // Full control mode
 
-                //full_mode();
+                full_mode();
 
                 break;
 
         case RAW_MODE: // Raw control mode
-                break;
+              full_mode();
+              break;
 
         case HEIGHT_MODE: // Height control mode
                 if (new_lift != prev_lift)
@@ -250,11 +254,12 @@ void process_mode(uint8_t current_mode)
 void calculate_values()
 {
 
-        new_lift = 3 * lift;
-        if (lift > 0) // make lift non linear
-                new_lift += 100;
+        new_lift = 0;//3 * (uint16_t)lift;
         if (lift > 100)
-                new_lift = 400 + 2 * (lift - 100);
+                new_lift = 400 + 2 * ((uint16_t)lift - 100);
+        else if (lift > 0) // make lift non linear
+                new_lift = 3 * (uint16_t)lift + 100;
+
         if (new_lift > MAX_LIFT)
                 new_lift = MAX_LIFT;
 }
@@ -301,9 +306,9 @@ int main(void)
         baro_init();
         spi_flash_init();
         ble_init();
-        select_log_mode(SHORT_LOGGING);
+        select_log_mode(SENSOR_LOGGING);
 
-        uint32_t counter = 0;
+        uint32_t counter = 0, maxCounter=0;
         // int32_t height_value;
         // int16_t acc_x;
 
@@ -316,10 +321,10 @@ int main(void)
         height_mode_flag = false;
 
         P = 19; // for yaw control
-        P1 = 14;
-        P2 = 21;
-        P3 = 1; // for height control
-        P4 = 1;
+        P1 = 13;
+        P2 = 15;
+        P3 = 20; // for height control
+        P4 = 0;
         C1 = 1; // for Kalman Filter
         C2 = 1;
 
@@ -345,81 +350,58 @@ int main(void)
                                 prev_mode = FULL_MODE;
                                 printf("Full mode entered from main \n");
                         }
-                        process_mode(prev_mode);
+                        //process_mode(prev_mode);
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
                         // | %d | %d\n", prev_mode, roll,pitch, yaw,
                         // lift,ae[0],ae[1],ae[2],ae[3]);
 
-                        if (counter++ % 20 == 0)
+                        if (counter++ % 5 == 0)
                         {
-                                nrf_gpio_pin_toggle(BLUE);
-                                printf(
-                                    "Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n",
+                          nrf_gpio_pin_toggle(BLUE);
+                          printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n",
                                     prev_mode, roll, pitch, yaw, lift, ae[0],
                                     ae[1], ae[2], ae[3]);
-                                // printf("P1 : %d, P2: %d \n", P1, P2);
-                                /*if(isCalibrated())
-                      {
-                                                read_baro();
-                                                acc_x = get_sensor(SAX);
-                                                height_value =
-                      (0.3*(abs(butter(acc_x,THETA)>>10)/10)) +
-                      (0.7*(abs(get_sensor(BARO))/4));
-                                                //height_value =
-                      (butter(acc_x,THETA)>>10);
-                                                //printf("%6d %6d %6d | ",
-                      get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-                              //printf("Gyro: %6d %6d %6d %ld \n ",
-                      get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
-                              printf("Acc:%6d %ld | %ld
-                      \n",acc_x,height_value,pressure);
-                                        }*/
-                                /*else
-                                {
-                                                          printf("%6d %6d %6d |
-                                ", phi, theta, psi);
-                                        printf("%6d %6d %6d | ", sp, sq, sr);
-                                        printf("%6d %6d %6d | ", sax, say, saz);
-                                                          printf("\n");
-                                }*/
+                          printf("P1 : %d, P2: %d\n", P1, P2);
                         }
 
 // TODO Separate flight mode in the Makefile
 #ifdef FLIGHT
                         battery_monitoring(prev_mode);
 #endif
-                        read_baro();
-
-                        /*if(isCalibrated())
-                          {
-                                                    printf("%6d %6d %6d | ",
-                          get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
-                                  printf("%6d %6d %6d | ", get_sensor(SP),
-                          get_sensor(SQ), get_sensor(SR));
-                                  printf("%6d %6d %6d | ", get_sensor(SAX),
-                          get_sensor(SAY), get_sensor(SAZ));
-                                                    printf("\n");
-                          }
-                          else
-                          {
-                                                    printf("%6d %6d %6d | ",
-                          phi, theta, psi);
-                                  printf("%6d %6d %6d | ", sp, sq, sr);
-                                  printf("%6d %6d %6d | ", sax, say, saz);
-                                                    printf("\n");
-                          }*/
                         clear_timer_flag();
                 }
                 if (check_sensor_int_flag())
                 {
-                        get_dmp_data();
-                        read_baro();
-                        run_filters_and_control(prev_mode);
+                  if(prev_mode != RAW_MODE) get_dmp_data();
+                  else
+                  {
+                    counter = get_time_us();
+                    get_filtered_data();
+                    counter = get_time_us() - counter;
+                    if(counter>maxCounter && counter < 5000000) maxCounter = counter;
+                  }
+                  read_baro();
+                  /*if(isCalibrated())
+                  {
+                    printf("%ld\t", get_time_us());
+                    printf("%6d %6d %6d | ", get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+                    printf("%6d %6d %6d\t", get_sensor(SAX), get_sensor(SAY), get_sensor(SAZ));
+                    printf("%6d %6d %6d\n",get_sensor(SP), get_sensor(SQ), get_sensor(SR));
+                  }
+                  else
+                  {
+                    printf("%ld\t", get_time_us());
+                    printf("%6d %6d %6d | ", phi, theta, psi);
+                    printf("%6d %6d %6d\t", sax, say, saz);
+                    printf("%6d %6d %6d\n", sp, sq, sr);
+                  }*/
+                  process_mode(prev_mode);
                 }
         }
 
         free(logCore);
 
+        printf("MaxFilter time:%ld\n", maxCounter);
         printf("\n\t Goodbye \n\n");
         nrf_delay_ms(100);
 

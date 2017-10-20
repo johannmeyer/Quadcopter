@@ -43,3 +43,48 @@ fp butter(int16_t newSample, uint8_t sensorId)
 	}
 	return 0;
 }
+
+//C1 = 16, C2 = 524288;
+
+fp Kalman(fp sOrient, int16_t sRate, uint8_t sensorId)
+{
+	static fp phiRate = 0, thetaRate = 0;
+	static fp phiBias20 = 0, thetaBias20 = 0;
+	static fp phiOrient = 0, thetaOrient = 0;
+	static fp phiFpsRate = 0;
+	static fp thetaFpsRate = 0;
+	fp error = 0;
+
+	if (sensorId == PHI)
+	{
+		phiRate = phiFpsRate - fpchangeQ(phiBias20, FPQ(20), FPQ(10));
+
+		phiOrient = phiOrient + (phiRate >> 3) - (phiRate >> 6);
+
+		error = phiOrient - sOrient;
+
+		phiOrient = phiOrient - (error >> 4);
+
+		phiBias20 = phiBias20 + (error >> 6) + (error >> 9);
+
+		phiFpsRate = int2fp(sRate, FPQ(10));
+
+		return phiOrient;
+	}
+	else
+	{
+		thetaRate = thetaFpsRate - fpchangeQ(thetaBias20, FPQ(20), FPQ(10));
+
+		thetaOrient = thetaOrient - ((thetaRate >> 3) - (thetaRate >> 6));
+
+		error = thetaOrient- sOrient;
+
+		thetaOrient = thetaOrient - (error >> 4);
+
+		thetaBias20 = thetaBias20 + (error >> 6) + (error >> 9);
+
+		thetaFpsRate = int2fp(sRate, FPQ(10));
+
+		return thetaOrient;
+	}
+}

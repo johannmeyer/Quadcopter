@@ -102,37 +102,37 @@ void yaw_controller()
               }
              clear_timer_flag();
         }*/
-        if((new_lift - yaw_act) < MIN_VALUE )
+        if((new_lift - yaw_act) < MIN_VALUE  && new_lift > MIN_VALUE )
         {
           yaw_overflow = MIN_VALUE - (new_lift - yaw_act);
           yaw_act -= yaw_overflow;
         }
-        else if((new_lift + yaw_act) < MIN_VALUE )
+        else if((new_lift + yaw_act) < MIN_VALUE && new_lift > MIN_VALUE)
         {
           yaw_overflow = MIN_VALUE - (new_lift + yaw_act);
           yaw_act += yaw_overflow;
         }
 
 
-        if((new_lift + yaw_act) > MAX_VALUE )
+        if((new_lift + yaw_act) > MAX_VALUE && new_lift > MIN_VALUE)
         {
           yaw_overflow = (new_lift + yaw_act) - MAX_VALUE;
           yaw_act -= yaw_overflow;
         }
-        else if((new_lift - yaw_act) > MAX_VALUE )
+        else if((new_lift - yaw_act) > MAX_VALUE && new_lift > MIN_VALUE)
         {
           yaw_overflow = (new_lift - yaw_act) - MAX_VALUE;
           yaw_act += yaw_overflow;
         }
         //yaw_act *= -1;
-        if (yaw_act !=0)
+        /*if (yaw_act !=0)
         {
           printf("yaw_error: %d, converted SR: %d, SR: %d, P: %d \n",
          yaw_act,  yaw_s, (int16_t) get_sensor(SR), P);
-       }
+       }*/
 }
 
-void run_filters_and_control(uint8_t mode)
+/*void run_filters_and_control(uint8_t mode)
 {
   switch (mode)
   {
@@ -141,6 +141,8 @@ void run_filters_and_control(uint8_t mode)
       //update_actuator();
       full_mode();
       break;
+    case RAW_MODE:
+      full_mode();
     default:
     //printf("not full mode\n");
     break;
@@ -148,7 +150,7 @@ void run_filters_and_control(uint8_t mode)
         // fancy stuff here
         // control loops and/or filters
 
-}
+}*/
 
 void yaw_mode()
 {
@@ -182,7 +184,7 @@ void height_mode()
         {
           height_d = get_baro();
         }
-        if (height_counter++ % 5 == 0)
+        if (height_counter++ % 3 == 0)
         {
             height_controller();
         }
@@ -195,25 +197,32 @@ void height_controller()
 {
 
         height_s= get_baro();
-        height_rate_d = P3 *(height_d - height_s);      // pressure is less at more height
+        height_rate_d = -P3 *(height_d - height_s);      // pressure is less at more height
 }
 
 void height_rate_controller()
 {
-        height_s= get_baro();             // just to keep values of barometer updated
+        height_s = get_baro();             // just to keep values of barometer updated
         static int16_t prev_height_rate=0;
-        int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>18);
+        int16_t height_rate_s = (int16_t)(butter(get_sensor(SAX),THETA)>>18);// 10 initially
         prev_height_rate = prev_height_rate + height_rate_s;
 
         height_act = height_rate_d - P4*(prev_height_rate/100);
 
-        if((new_lift + height_act) > MAX_VALUE )        //keeping a check on max height
+        if((new_lift + height_act) > MAX_VALUE && new_lift > MIN_VALUE )        //keeping a check on max height
         {
           height_overflow = (new_lift + height_act) - MAX_VALUE;
           height_act -= height_overflow;
         }
-        if(height_act!=0)
-        printf("height_act : %d, acc_sensor: %d, height_s: %ld, P3: %d, P4: %d",height_act, height_rate_s,height_s, P3, P4);
+        if((new_lift + height_act) < MIN_VALUE && new_lift > MIN_VALUE)        //keeping a check on min height
+        {
+          height_overflow = MIN_VALUE - (new_lift + height_act);
+          height_act += height_overflow;
+        }
+      //  if(height_act!=0)
+      static int count = 0;
+      if (count++%10)
+        printf("height_act : %d, acc_sensor: %d, height_s: %ld, P3: %d, P4: %d \n",height_act, height_rate_s,height_s, P3, P4);
 
 }
 
@@ -258,53 +267,56 @@ void rate_controller()
         // Set actuation inputs
         pitch_act = pitch_rate_d +(P2 * pitch_rate_s);
         roll_act = roll_rate_d - (P2 * roll_rate_s);
-
-        if((new_lift - roll_act) < MIN_VALUE )
+      //  printf("start new_lift : %d |pitch_act: %d | roll_act: %d | P1: %d | P2: %d \n",new_lift, pitch_act,roll_act, P1, P2);
+        if((new_lift - roll_act) < MIN_VALUE && new_lift > MIN_VALUE)
         {
           roll_overflow = MIN_VALUE - (new_lift - roll_act);
           roll_act -= roll_overflow;
         }
-        else if((new_lift + roll_act) < MIN_VALUE )
+        else if((new_lift + roll_act) < MIN_VALUE && new_lift > MIN_VALUE)
         {
           roll_overflow = MIN_VALUE - (new_lift + roll_act);
           roll_act += roll_overflow;
         }
 
-        if((new_lift + roll_act) > MAX_VALUE )
+        if((new_lift + roll_act) > MAX_VALUE && new_lift > MIN_VALUE)
         {
           roll_overflow = (new_lift + roll_act) - MAX_VALUE;
           roll_act -= roll_overflow;
         }
-        else if((new_lift - roll_act) > MAX_VALUE )
+        else if((new_lift - roll_act) > MAX_VALUE && new_lift > MIN_VALUE )
         {
           roll_overflow = (new_lift - roll_act) - MAX_VALUE;
           roll_act += roll_overflow;
         }
 
-        if((new_lift - pitch_act) < MIN_VALUE )
+        if((new_lift - pitch_act) < MIN_VALUE && new_lift > MIN_VALUE )
         {
           pitch_overflow = MIN_VALUE - (new_lift - pitch_act);
           pitch_act -= pitch_overflow;
         }
-        else if((new_lift + pitch_act) < MIN_VALUE )
+        else if((new_lift + pitch_act) < MIN_VALUE && new_lift > MIN_VALUE )
         {
           pitch_overflow = MIN_VALUE - (new_lift + pitch_act);
           pitch_act += pitch_overflow;
         }
 
-        if((new_lift + pitch_act) > MAX_VALUE )
+        if((new_lift + pitch_act) > MAX_VALUE && new_lift > MIN_VALUE)
         {
           pitch_overflow = (new_lift + pitch_act) - MAX_VALUE;
           pitch_act -= pitch_overflow;
         }
-        else if((new_lift - pitch_act) > MAX_VALUE )
+        else if((new_lift - pitch_act) > MAX_VALUE && new_lift > MIN_VALUE)
         {
           pitch_overflow = (new_lift - pitch_act) - MAX_VALUE;
           pitch_act += pitch_overflow;
         }
 
-        if(roll_act !=0)
-        printf("pitch_rate_s: %d | roll_rate_s: %d | P1: %d | P2: %d \n", pitch_rate_s,roll_rate_s, P1, P2);
+        // if(roll_act !=0)
+        // printf("pitch_rate_s: %d | roll_rate_s: %d | P1: %d | P2: %d \n", pitch_rate_s,roll_rate_s, P1, P2);
+
+        //printf("end pitch_act: %d | roll_act: %d | P1: %d | P2: %d \n", pitch_act,roll_act, P1, P2);
+
 
         //roll_act = 0; //TODO  remove after testing roll
 }
@@ -326,5 +338,5 @@ void angle_controller()
         // Set new desired values for the rate_controller()
         pitch_rate_d = P1 * pitch_err;
         roll_rate_d = P1 * roll_err;
-        printf("roll_s: %d | pitch_s: %d\n",roll_s, pitch_s);
+        // printf("roll_s: %d | pitch_s: %d\n",roll_s, pitch_s);
 }
