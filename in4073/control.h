@@ -2,8 +2,8 @@
 
 #define MIN_VALUE 250
 #define MAX_VALUE 750
-#define MAX_MOTOR 1000
-#define MAX_LIFT 700
+#define MAX_MOTOR 800
+#define MAX_LIFT 600
 
 void update_motors();
 

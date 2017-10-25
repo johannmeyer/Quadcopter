@@ -132,7 +132,7 @@ void determine_mode(uint8_t mode)
                 {
                         prev_lift = new_lift;
                         prev_mode = HEIGHT_MODE;
-                        height_mode_flag = true;
+                        height_mode_flag = true;      //to check the toggle of 7 key
                         printf("Height mode entered \n");
                 }
                 break;
@@ -176,7 +176,7 @@ void process_mode(uint8_t current_mode)
                 update_motors();
                 if (lift == 0 && roll == 0 && pitch == 0 && yaw == 0)
                 {
-                        safe_flag = true;
+                        safe_flag = true;         //Safety condition to prevent change of mode if any user input of motor rotation is provided
                 }
                 else
                 {
@@ -186,7 +186,7 @@ void process_mode(uint8_t current_mode)
 
         case PANIC_MODE: // Panic mode
                 printf("Panic mode reached\n");
-                while (ae[0] > 0 || ae[1] > 0 || ae[2] > 0 || ae[3] > 0)
+                while (ae[0] > 0 || ae[1] > 0 || ae[2] > 0 || ae[3] > 0)    //reduce motor speed untill they are at standstill
                 {
                         if (check_timer_flag()) // timer of 50ms
                         {
@@ -199,19 +199,19 @@ void process_mode(uint8_t current_mode)
                         }
                 }
                 safe_flag = false;
-                prev_mode = SAFE_MODE;
+                prev_mode = SAFE_MODE;      // switch to safe mode after motors have stopped
                 break;
 
         case MANUAL_MODE: // Manual mode
                           // Lift, pitch, roll and yaw
                 d = 2;
-                ae[0] = new_lift + pitch - yaw * d;
+                ae[0] = new_lift + pitch - yaw * d;   // take inputs from user and apply directly
                 ae[1] = new_lift - roll + yaw * d;
                 ae[2] = new_lift - pitch - yaw * d;
                 ae[3] = new_lift + roll + yaw * d;
                 for (int i = 0; i < 4; i++)
                 {
-                        if (ae[i] < 180 && new_lift > 180)
+                        if (ae[i] < 180 && new_lift > 180)    // safety check to keep motors running
                                 ae[i] = 180;
                 }
                 update_motors();

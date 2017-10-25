@@ -103,7 +103,7 @@ void yaw_controller()
 
         yaw_act = P*((yaw/5) + yaw_s);      // yaw/5 to scale down yaw coming from joystick
 
-        if((new_lift - yaw_act) < MIN_VALUE  && new_lift > MIN_VALUE )
+        if((new_lift - yaw_act) < MIN_VALUE  && new_lift > MIN_VALUE )  // to check overflow caused by yaw correction
         {
           yaw_overflow = MIN_VALUE - (new_lift - yaw_act);
           yaw_act -= yaw_overflow;
@@ -202,14 +202,14 @@ void height_mode()
 
         for (int i =0; i<5; i++)      // to get proper average of barometer values in first time
         {
-          height_d = get_baro();
+          height_d = get_baro();        // desired height of drone
         }
         if (height_counter++ % 3 == 0)
         {
-            height_controller();
+            height_controller();      // outer control loop is run at low frequency
         }
         height_rate_controller();
-        full_mode();
+        full_mode();                // excpet height evrything works as full mode
 
 }
 
@@ -281,7 +281,7 @@ int32_t get_baro()
         baro_value = get_sensor(BARO);
         printf("Baro : %ld  ",baro_value);
 
-        avg_pressure = (4*avg_pressure)/5 + (baro_value/5);
+        avg_pressure = (4*avg_pressure)/5 + (baro_value/5);   // Moving average of 5 Barometer values
         printf("avg:%ld \n",avg_pressure);
         return avg_pressure;
 }

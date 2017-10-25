@@ -135,10 +135,10 @@ void get_key(char c)
 			lift_key =0;
 			break;
 		case 'q':
-			yaw_key = yaw_key + TRIM_VALUE;
+			yaw_key = yaw_key - TRIM_VALUE;
 			break;
 		case 'w':
-			yaw_key = yaw_key - TRIM_VALUE;
+			yaw_key = yaw_key + TRIM_VALUE;
 			break;
 		case 'u':
 			p_incrementer = GAIN_P_INCREMENT;
@@ -170,31 +170,20 @@ void get_key(char c)
 		case 'h':
 			p_incrementer = GAIN_P4_DECREMENT;
 			break;
-		case 'v':
-			p_incrementer = GAIN_C1_INCREMENT;
-			break;
-		case 'b':
-			p_incrementer = GAIN_C1_DECREMENT;
-			break;
-		case 'n':
-			p_incrementer = GAIN_C2_INCREMENT;
-			break;
-		case 'm':
-			p_incrementer = GAIN_C2_DECREMENT;
-			break;
-		case 'A':									// up key
-			pitch_key = pitch_key +TRIM_VALUE;
-			break;
 
-		case 'B':									// down key
+		case 'A':									// up key
 			pitch_key = pitch_key - TRIM_VALUE;
 			break;
 
+		case 'B':									// down key
+			pitch_key = pitch_key + TRIM_VALUE;
+			break;
+
 		case 'C':									// right key
-			roll_key = roll_key + TRIM_VALUE;
+			roll_key = roll_key - TRIM_VALUE;
 			break;
 		case 'D':									// left key
-			roll_key = roll_key - TRIM_VALUE;
+			roll_key = roll_key + TRIM_VALUE;
 			break;
 
 		case 27:
