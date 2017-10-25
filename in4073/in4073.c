@@ -99,8 +99,7 @@ void determine_mode(uint8_t mode)
 
         case FULL_MODE: // Full control mode
                 if (prev_mode == FULL_MODE ||
-                    (prev_mode == SAFE_MODE && isCalibrated() && safe_flag) ||
-                    prev_mode == YAW_MODE)
+                    (prev_mode == SAFE_MODE && isCalibrated() && safe_flag))
                 {
                         prev_mode = FULL_MODE;
                 }
