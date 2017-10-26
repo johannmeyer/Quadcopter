@@ -1,3 +1,4 @@
+/*Written by Konstantinos-P. Metaxas*/
 #ifndef FIXEDP_H
 
 #define FIXEDP_H
@@ -8,6 +9,7 @@ typedef int32_t fp;
 
 #define FPQ(n)	((int)n)
 
+//The fixed-point representation of constants can be computed during compilation to save CPU time.
 #define FPCONST(num, q) ( (fp) (((double)num) * (1<<(int) q) >=0) ? ((double)num) * (1<<(int) q) + 0.5 : ((double)num) * (1<<(int) q) - 0.5 )
 
 inline fp int2fp(int num, uint8_t q) {	return num << q; };
@@ -31,12 +33,10 @@ fp fpchangeQDO(fp num, uint8_t initQ, uint8_t desQ);
 
 fp fpmult(fp num1, fp num2, uint8_t q);
 fp fpmultDetQ(fp num1, fp num2, uint8_t initQ, uint8_t desQ);
-fp fpdiv(fp num1, fp num2, uint8_t q);
 fp fpaddDO(fp num1, fp num2, uint8_t q);
 fp fpsubDO(fp num1, fp num2, uint8_t q);
 fp fpmultDO(fp num1, fp num2, uint8_t q);
 fp fpmultDetQDO(fp num1, fp num2, uint8_t initQ, uint8_t desQ);
-fp fpdivDO(fp num1, fp num2, uint8_t q);
 
 
-#endif // !FIXEDP_H
+#endif //FIXEDP_H

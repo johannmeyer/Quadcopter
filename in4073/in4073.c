@@ -13,13 +13,15 @@
  */
 
 #include "control.h"
-//#include "filters.h"
 #include "in4073.h"
 #include "logging.h"
 #include "packet_uav.h"
 #include "sensors.h"
 #include <stdint.h>
 #include <stdlib.h>
+
+#define BATTERY_LOW      1100 //11V in cV
+#define BATTERY_CRITICAL 1050 //10.5V in cV
 
 core *logCore;
 
@@ -285,30 +287,49 @@ void calculate_values()
                 new_lift = MAX_LIFT;
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: battery_monitoring
+ *  Made by: Konstantinos-P. Metaxas
+ *  Description: This function is called periodically to monitor the
+ *  remaining capacity of the battery, inform the user when it is low
+ *  and immediately enter PANIC_MODE when it is critical.
+ *------------------------------------------------------------------
+ */
+
 void battery_monitoring(uint8_t mode)
 {
         adc_request_sample();
 
-        if ((bat_volt < 1100) && (mode > 0))
+        if ((bat_volt < BATTERY_LOW) && (mode > 0))
         {
                 // TODO Warnings to be sent as messages instead of prints.
                 printf("Battery level is low(%d mV). Land the drone!\n",
                        bat_volt);
-                if (bat_volt <= 1050)
+                if (bat_volt <= BATTERY_CRITICAL)
                 {
-                        mode = PANIC_MODE;
                         process_mode(PANIC_MODE);
                 }
         }
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: isCharged
+ *  Made by: Konstantinos-P. Metaxas
+ *  Description: This function is called when a new mode is requested
+ *  to prevent the drone entering an energy consuming mode when the
+ *  battery is low.
+ *------------------------------------------------------------------
+ */
+
 bool isCharged(void)
 {
+  #ifdef FLIGHT
         adc_request_sample();
         // TODO duplicate of battery_monitoring()?
-        if (bat_volt < 11000)
+        if (bat_volt < BATTERY_LOW)
                 return false;
         else
+  #endif
                 return true;
 }
 
@@ -380,8 +401,6 @@ int main(void)
                                     ae[1], ae[2], ae[3]);
                           printf("P1 : %d, P2: %d\n", P1, P2);
                         }
-
-// TODO Separate flight mode in the Makefile
 #ifdef FLIGHT
                         battery_monitoring(prev_mode);
 #endif

@@ -1,3 +1,5 @@
+/*Written by Konstantinos-P. Metaxas*/
+
 #include "crc.h"
 #include "lut.h"
 
@@ -7,10 +9,9 @@ void crc_basic_byte(uint8_t *partial, uint8_t byte)
 {
     /*
     Codes a byte adding any coded more significant bytes using the 'init' argument.
-	For the most significant byte the initial value(crc) should be 0,
-	while for the following bytes, it should be the result of the previous byte.
-	The CRC8 coding algorithm is used to produce the look-up table before compilation.
-	(by Kostas)
+	  For the most significant byte the initial value(crc) should be 0,
+	  while for the following bytes, it should be the result of the previous byte.
+	  The CRC8 coding algorithm is used to produce the look-up table before compilation.
     */
 
     register uint8_t gen = CODEWORD;
@@ -38,10 +39,9 @@ void crc_lut_byte(uint8_t *partial, uint8_t byte)
 {
     /*
     Codes a byte adding any coded more significant bytes using the 'crc' argument.
-	For the most significant byte the initial value(crc) should be 0,
-	while for the following bytes, it should be the result of the previous byte.
-	A pre-compiled look-up table is used for speed since there are only 256 possible values.
-	(by Kostas)
+	  For the most significant byte the initial value(crc) should be 0,
+	  while for the following bytes, it should be the result of the previous byte.
+	  A pre-compiled look-up table is used for speed since there are only 256 possible values.
     */
 
     *partial = crclut[*partial ^ byte];
@@ -52,7 +52,6 @@ uint8_t crc_message(void *message, uint8_t numBytes)
     /*
     The data(core) of the packet are coded per byte using the CRC8 LUT
     for error detection purposes.
-    (by Kostas)
     */
 
     int i;

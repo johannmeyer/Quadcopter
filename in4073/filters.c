@@ -1,7 +1,10 @@
+/*Written by Konstantinos-P. Metaxas*/
 #include "filters.h"
 #include "sensors.h"
 
-
+//Low-pass 2nd order Butterworth filter with F/Fs= 0.1
+//b0=0.03125, b1=0.0625, b2=0.03125
+//a0=1, a1=-1.375, a2=0.53125
 fp butter(int16_t newSample, uint8_t sensorId)
 {
 	const fp a1 = FPCONST(-1.375, FPQ(10));
@@ -44,7 +47,7 @@ fp butter(int16_t newSample, uint8_t sensorId)
 	return 0;
 }
 
-//C1 = 16, C2 = 524288;
+//Kalman filter with C1=16, C2=524288, p2phi=0.109375.
 
 fp Kalman(fp sOrient, int16_t sRate, uint8_t sensorId)
 {
