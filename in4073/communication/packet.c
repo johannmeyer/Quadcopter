@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 // HEADER
 void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer)
 {
@@ -16,8 +15,7 @@ void encode_header_pc_uav(uint8_t *header, uint8_t mode, uint8_t p_incrementer)
 }
 
 void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
-                          uint8_t *P1, uint8_t *P2, uint8_t *P3, uint8_t *P4,
-                          uint8_t *C1, uint8_t *C2)
+                          uint8_t *P1, uint8_t *P2, uint8_t *P3, uint8_t *P4)
 {
         uint8_t data_pointer = *header << MODE_OFFSET;
         *mode = data_pointer & MODE_LENGTH;
@@ -29,7 +27,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
         case GAIN_NO_INCREMENT:
                 break;
         case GAIN_P_INCREMENT:
-                if (*P != 255)
+                if (*P != 254)
                         *P += 1;
                 break;
         case GAIN_P_DECREMENT:
@@ -37,7 +35,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P -= 1;
                 break;
         case GAIN_P1_INCREMENT:
-                if (*P1 != 255)
+                if (*P1 != 254)
                         *P1 += 1;
                 break;
         case GAIN_P1_DECREMENT:
@@ -45,7 +43,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P1 -= 1;
                 break;
         case GAIN_P2_INCREMENT:
-                if (*P2 != 255)
+                if (*P2 != 254)
                         *P2 += 1;
                 break;
         case GAIN_P2_DECREMENT:
@@ -53,7 +51,7 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P2 -= 1;
                 break;
         case GAIN_P3_INCREMENT:
-                if (*P3 != 255)
+                if (*P3 != 254)
                         *P3 += 1;
                 break;
         case GAIN_P3_DECREMENT:
@@ -61,28 +59,12 @@ void decode_header_pc_uav(uint8_t *header, uint8_t *mode, uint8_t *P,
                         *P3 -= 1;
                 break;
         case GAIN_P4_INCREMENT:
-                if (*P4 != 255)
+                if (*P4 != 254)
                         *P4 += 1;
                 break;
         case GAIN_P4_DECREMENT:
                 if (*P4 != 0)
                         *P4 -= 1;
-                break;
-        case GAIN_C1_INCREMENT:
-                if (*C1 != 255)
-                        *C1 += 1;
-                break;
-        case GAIN_C1_DECREMENT:
-                if (*C1 != 1)
-                        *C1 -= 1;
-                break;
-        case GAIN_C2_INCREMENT:
-                if (*C2 != 255)
-                        *C2 += 1;
-                break;
-        case GAIN_C2_DECREMENT:
-                if (*C2 != 1)
-                        *C2 -= 1;
                 break;
         default:
                 printf("GAIN_INCREMENTER code not valid.\n");
@@ -129,21 +111,6 @@ void decode_data_command(uint8_t *data, int8_t *roll, int8_t *pitch,
         *lift = data[LIFT_OFFSET];
 }
 
-// // PACKET_TYPE_GAINS
-// void encode_data_gains(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2)
-// {
-//         data[P_GAIN_OFFSET] = P;
-//         data[P1_GAIN_OFFSET] = P1;
-//         data[P2_GAIN_OFFSET] = P2;
-// }
-//
-// void decode_data_gains(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2)
-// {
-//         *P = data[P_GAIN_OFFSET];
-//         *P1 = data[P1_GAIN_OFFSET];
-//         *P2 = data[P2_GAIN_OFFSET];
-// }
-
 /*
 UAV -> PC
  */
@@ -154,22 +121,18 @@ void encode_data_motor(uint8_t *data, int8_t *ae) { memcpy(data, ae, 4); }
 void decode_data_motor(uint8_t *data, int8_t *ae) { memcpy(ae, data, 4); }
 
 // PACKET_TYPE_ANGLES_BAT
-void encode_data_angles_bat(uint8_t *data, int8_t phi, int8_t theta, int8_t psi,
-                            uint8_t battery)
+void encode_data_angles(uint8_t *data, int8_t phi, int8_t theta, int8_t psi)
 {
         data[PHI_OFFSET] = (uint8_t)phi;
         data[THETA_OFFSET] = (uint8_t)theta;
         data[PSI_OFFSET] = (uint8_t)psi;
-        data[BATTERY_OFFSET] = battery;
 }
 
-void decode_data_angles_bat(uint8_t *data, int8_t *phi, int8_t *theta,
-                            int8_t *psi, uint8_t *battery)
+void decode_data_angles(uint8_t *data, int8_t *phi, int8_t *theta, int8_t *psi)
 {
         *phi = data[PHI_OFFSET];
         *theta = data[THETA_OFFSET];
         *psi = data[PSI_OFFSET];
-        *battery = data[BATTERY_OFFSET];
 }
 
 // PACKET_TYPE_GYRO
@@ -202,4 +165,36 @@ void decode_data_accel(uint8_t *data, int8_t *sx, int8_t *sy, int8_t *sz)
         *sx = data[SX_OFFSET];
         *sy = data[SY_OFFSET];
         *sz = data[SZ_OFFSET];
+}
+
+// PACKET_TYPE_GAINS1
+void encode_data_gains1(uint8_t *data, uint8_t P, uint8_t P1, uint8_t P2,
+                        uint8_t battery)
+{
+        data[P_OFFSET] = P;
+        data[P1_OFFSET] = P1;
+        data[P2_OFFSET] = P2;
+        data[BATTERY_OFFSET] = battery;
+}
+
+void decode_data_gains1(uint8_t *data, uint8_t *P, uint8_t *P1, uint8_t *P2,
+                        uint8_t *battery)
+{
+        *P = data[P_OFFSET];
+        *P1 = data[P1_OFFSET];
+        *P2 = data[P2_OFFSET];
+        *battery = data[BATTERY_OFFSET];
+}
+
+// PACKET_TYPE_GAINS2
+void encode_data_gains2(uint8_t *data, uint8_t P3, uint8_t P4)
+{
+        data[P3_OFFSET] = P3;
+        data[P4_OFFSET] = P4;
+}
+
+void decode_data_gains2(uint8_t *data, uint8_t *P3, uint8_t *P4)
+{
+        *P3 = data[P3_OFFSET];
+        *P4 = data[P4_OFFSET];
 }

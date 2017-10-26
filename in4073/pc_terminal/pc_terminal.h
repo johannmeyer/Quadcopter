@@ -21,6 +21,6 @@ int32_t pitch, roll, yaw;
 int32_t lift;
 uint8_t mode;
 
-
+int rs232_getchar_nb();
 
 #endif // PC_TERMINAL_H__

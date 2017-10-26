@@ -10,5 +10,6 @@
 #include <stdint.h>
 
 void encode(packet *my_packet, uint8_t mode, uint8_t p_incrementer);
+void decode();
 
 #endif //PACKET_PC_H

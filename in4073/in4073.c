@@ -361,20 +361,20 @@ int main(void)
         height_mode_flag = false;
 
         P = 19; // for yaw control
-        P1 = 13;
-        P2 = 15;
-        P3 = 20; // for height control
-        P4 = 0;
-        C1 = 1; // for Kalman Filter
-        C2 = 1;
+        P1 = 14;
+        P2 = 21;
+        P3 = 1; // for height control
+        P4 = 1;
+
 
         int msg_type_counter = 0;
         int frequent_packets[] = {PACKET_TYPE_GAINS1,
                                   PACKET_TYPE_GAINS2,
                                   PACKET_TYPE_ACTUATOR,
                                   };
-        int num_freq_packets = (sizeof(frequent_packets)/sizeof(int);
-        frequent_packets[msg_type_counter++%num_freq_packets]
+        int num_freq_packets = (sizeof(frequent_packets))/sizeof(int);
+
+        packet my_packet;
         while (!demo_done)
         {
                 decode(&logCore);
@@ -392,20 +392,60 @@ int main(void)
                                 height_mode_flag = false;
                                 height_lift_flag = false;
                                 prev_mode = FULL_MODE;
-                                printf("Full mode entered from main \n");
+                                // printf("Full mode entered from main \n");
                         }
 
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
                         // | %d | %d\n", prev_mode, roll,pitch, yaw,
                         // lift,ae[0],ae[1],ae[2],ae[3]);
-
-                        if (counter++ % 5 == 0)
+                        if (counter % 2 == 0)
                         {
-                          nrf_gpio_pin_toggle(BLUE);
-                          printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n",
-                                    prev_mode, roll, pitch, yaw, lift, ae[0],
-                                    ae[1], ae[2], ae[3]);
-                          printf("P1 : %d, P2: %d\n", P1, P2);
+                          encode(&my_packet, frequent_packets[msg_type_counter++%num_freq_packets]);
+                          uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                        }
+                        if (counter++ % 20 == 0)
+                        {
+                                nrf_gpio_pin_toggle(BLUE);
+
+                                //
+                                // encode(&my_packet, PACKET_TYPE_GAINS2);
+                                // uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                // encode(&my_packet, PACKET_TYPE_ACTUATOR);
+                                // uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                // encode(&my_packet, PACKET_TYPE_ANGLES);
+                                // uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                // encode(&my_packet, PACKET_TYPE_ACCEL);
+                                // uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                // encode(&my_packet, PACKET_TYPE_GYRO);
+                                // uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+
+                                // printf("hello\n");
+
+
+                                /*if(isCalibrated())
+                      {
+                                                read_baro();
+                                                acc_x = get_sensor(SAX);
+                                                height_value =
+                      (0.3*(abs(butter(acc_x,THETA)>>10)/10)) +
+                      (0.7*(abs(get_sensor(BARO))/4));
+                                                //height_value =
+                      (butter(acc_x,THETA)>>10);
+                                                //printf("%6d %6d %6d | ",
+                      get_sensor(PHI), get_sensor(THETA), get_sensor(PSI));
+                              //printf("Gyro: %6d %6d %6d %ld \n ",
+                      get_sensor(SP), get_sensor(SQ), get_sensor(SR),pressure);
+                              printf("Acc:%6d %ld | %ld
+                      \n",acc_x,height_value,pressure);
+                                        }*/
+                                /*else
+                                {
+                                                          printf("%6d %6d %6d |
+                                ", phi, theta, psi);
+                                        printf("%6d %6d %6d | ", sp, sq, sr);
+                                        printf("%6d %6d %6d | ", sax, say, saz);
+                                                          printf("\n");
+                                }*/
                         }
 #ifdef FLIGHT
                         battery_monitoring(prev_mode);
