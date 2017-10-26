@@ -64,5 +64,10 @@ uint8_t crc_message(void *message, uint8_t numBytes)
         crc_lut_byte(&crc, *(nextByte++));
     }
 
+    // To avoid START_BYTE aliasing and has the max number of bit flips. It
+    // does not require a flag in header.
+    if (crc == START_BYTE)
+            crc = 0;
+
     return crc;
 }

@@ -170,20 +170,24 @@ void yaw_mode()
         update_actuator();
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: full_mode()
+ *  Made by: Johann Meyer
+ *  Description: Runs the control loops required by FULL_MODE at the
+ *  required frequencies
+ *------------------------------------------------------------------
+ */
 void full_mode()
 {
-        //int32_t start_time = get_time_us();
-        if (outer_counter++ % 3 == 0)
+        // Outer loop must be updated slower than inner loop
+        if (outer_counter++ % OUTER_LOOP_FREQ == 0)
         {
                 angle_controller();
                 yaw_controller();
-                //yaw_act = 0;//TODO  remove after testing
         }
 
         rate_controller();
         update_actuator();
-        //printf("%ld\n", get_time_us()-start_time);
-      //  outer_counter++;
 }
 
 
@@ -287,21 +291,24 @@ int32_t get_baro()
 }
 
 
-
+/*------------------------------------------------------------------
+ *  Function Name: rate_controller()
+ *  Made by: Johann Meyer
+ *  Description: Runs the inner loop controller for FULL_MODE. The
+ *  controller is identical for both pitch and roll axes.
+ *------------------------------------------------------------------
+ */
 void rate_controller()
 {
-        /*
-        Johann Meyer
-         */
-        // Scale sensor values
-        // TODO check this works
+        // Get required precision from noisy sensors
         int16_t pitch_rate_s = (get_sensor(SQ)>>8);
         int16_t roll_rate_s = (get_sensor(SP)>>8);
 
         // Set actuation inputs
         pitch_act = pitch_rate_d +(P2 * pitch_rate_s);
         roll_act = roll_rate_d - (P2 * roll_rate_s);
-      //  printf("start new_lift : %d |pitch_act: %d | roll_act: %d | P1: %d | P2: %d \n",new_lift, pitch_act,roll_act, P1, P2);
+
+        // Prevent actuators from switching off
         if((new_lift - roll_act) < MIN_VALUE && new_lift > MIN_VALUE)
         {
           roll_overflow = MIN_VALUE - (new_lift - roll_act);
@@ -346,31 +353,26 @@ void rate_controller()
           pitch_act += pitch_overflow;
         }
 
-        // if(roll_act !=0)
-        // printf("pitch_rate_s: %d | roll_rate_s: %d | P1: %d | P2: %d \n", pitch_rate_s,roll_rate_s, P1, P2);
-
-        //printf("end pitch_act: %d | roll_act: %d | P1: %d | P2: %d \n", pitch_act,roll_act, P1, P2);
-
-
-        //roll_act = 0; //TODO  remove after testing roll
 }
 
+/*------------------------------------------------------------------
+ *  Function Name: angle_controller()
+ *  Made by: Johann Meyer
+ *  Description: Runs the outer control loop for FULL_MODE. It sets
+ *  the desired angle of the UAV for both pitch and roll axes.
+ *------------------------------------------------------------------
+ */
 void angle_controller()
 {
-        /*
-        Johann Meyer
-         */
         // Scale sensor values
-        // TODO check this works
         int16_t roll_s = (get_sensor(PHI)>>9);
         int16_t pitch_s = (get_sensor(THETA)>>9);
 
+        // Scale user commanded values
         int16_t roll_err = (roll>>4) - roll_s;
-        //printf("Roll error: %d\n", roll_err);
         int16_t pitch_err = (pitch>>4) - pitch_s;
 
         // Set new desired values for the rate_controller()
         pitch_rate_d = P1 * pitch_err;
         roll_rate_d = P1 * roll_err;
-        // printf("roll_s: %d | pitch_s: %d\n",roll_s, pitch_s);
 }

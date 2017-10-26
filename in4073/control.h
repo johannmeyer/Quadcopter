@@ -4,6 +4,7 @@
 #define MAX_VALUE 750
 #define MAX_MOTOR 800
 #define MAX_LIFT 600
+#define OUTER_LOOP_FREQ 3
 
 void update_motors();
 

@@ -368,9 +368,15 @@ int main(void)
         C1 = 1; // for Kalman Filter
         C2 = 1;
 
+        int msg_type_counter = 0;
+        int frequent_packets[] = {PACKET_TYPE_GAINS1,
+                                  PACKET_TYPE_GAINS2,
+                                  PACKET_TYPE_ACTUATOR,
+                                  };
+        int num_freq_packets = (sizeof(frequent_packets)/sizeof(int);
+        frequent_packets[msg_type_counter++%num_freq_packets]
         while (!demo_done)
         {
-                // TODO Process the data e.g. change states
                 decode(&logCore);
                 calculate_values();
                 if (check_timer_flag())
