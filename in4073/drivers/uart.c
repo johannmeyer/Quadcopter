@@ -5,11 +5,16 @@
  *  Embedded Software Lab
  *
  *  July 2016
+ *
+ *  Modified by:
+ *  J. Meyer
+ *
  *------------------------------------------------------------------
  */
 
 #include "in4073.h"
-
+#include "communication/packet.h"
+#include "communication/packet_uav.h"
 bool txd_available = true;
 
 void uart_put(uint8_t byte)
@@ -22,13 +27,35 @@ void uart_put(uint8_t byte)
 	NVIC_EnableIRQ(UART0_IRQn);
 }
 
+/*
+Wrapper function to put packets on the RS232 line
+ */
+void uart_put_packet(uint8_t *packet_data, size_t packet_size)
+{
+	for( int i = 0; i < packet_size; i++)
+		uart_put(packet_data[i]);
+}
+
 // Reroute printf
 int _write(int file, const char * p_char, int len)
 {
-	int i;
+	int i, count = 0;
+	packet my_packet;
 	for (i = 0; i < len; i++)
 	{
-		uart_put(*p_char++);
+		printf_data[count++] = p_char[i];
+		if (count == BODY_LENGTH) // Size of packet body
+		{
+			encode(&my_packet, PACKET_TYPE_PRINTF);
+			uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+			count = 0;
+		}
+		else if (i == len -1) // Packet does not necessarily contain a full packet
+		{
+			printf_data[count++] = '\0'; // Null terminate to ensure print is consistent
+			encode(&my_packet, PACKET_TYPE_PRINTF);
+			uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+		}
 	}
 	return len;
 }

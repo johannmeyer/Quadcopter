@@ -23,6 +23,7 @@
 #include <math.h>
 #include "control.h"
 
+// Modes of the UAV
 #define SAFE_MODE 0
 #define PANIC_MODE 1
 #define MANUAL_MODE 2
@@ -52,11 +53,12 @@ bool height_mode_flag;
 int8_t yaw_parameter;
 uint8_t mode, current_mode, prev_mode, lift;
 uint16_t new_lift, prev_lift;
-int8_t pitch,roll,yaw;
+int8_t pitch,roll,yaw; // values commanded by PC-side
 int8_t b,d;
 int8_t dcpsi_s, psi_s, yaw_error;
 int16_t motor[4],ae[4];
-uint8_t P, P1, P2, P3, P4, C1, C2;
+uint8_t P, P1, P2, P3, P4; // Gains for controllers
+uint8_t printf_data[4]; // Used to send printf in our custom packet
 void determine_mode(uint8_t mode);
 void process_mode(uint8_t current_mode);
 
@@ -81,7 +83,6 @@ typedef struct {
 void init_queue(queue *q);
 void enqueue(queue *q, char x);
 char dequeue(queue *q);
-void enqueue_packet(queue *q, uint8_t *data, size_t size);
 
 // UART
 #define RX_PIN_NUMBER  16
@@ -91,6 +92,8 @@ queue tx_queue;
 uint32_t last_correct_checksum_time;
 void uart_init(void);
 void uart_put(uint8_t);
+void uart_put_packet(uint8_t *packet_data, size_t packet_size);
+
 
 // TWI
 #define TWI_SCL	4

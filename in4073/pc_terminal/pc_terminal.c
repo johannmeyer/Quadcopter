@@ -148,18 +148,6 @@ void get_key(char c)
 		case 'h':
 			p_incrementer = GAIN_P4_DECREMENT;
 			break;
-		case 'v':
-			p_incrementer = GAIN_C1_INCREMENT;
-			break;
-		case 'b':
-			p_incrementer = GAIN_C1_DECREMENT;
-			break;
-		case 'n':
-			p_incrementer = GAIN_C2_INCREMENT;
-			break;
-		case 'm':
-			p_incrementer = GAIN_C2_DECREMENT;
-			break;
 		case 'A':									// up key
 			pitch_key = pitch_key +TRIM_VALUE;
 			break;
@@ -372,15 +360,17 @@ int main(int argc, char **argv)
 									{
 											do {
 												c = readChar;
-											} while((readChar = term_getchar_nb()) != -1);				// check for Esc key in order to read arrow keys
+											} while((readChar = term_getchar_nb()) != -1);	// check for Esc key in order to read arrow keys
 											get_key(c);
 									}
+
 									get_joystick_action(&mode, &roll_js, &pitch_js, &yaw_js, &lift_js);
 
 									// combine the keyboard and joystick data
 									combine_values();
 									// Reads data sent from the Drone
-									if ((c = rs232_getchar_nb()) != -1) decode();
+									//if ((c = rs232_getchar_nb()) != -1) fprintf(stderr, "%c",	 c);
+									decode();
 						}
 						encode(&my_packet, mode, p_incrementer);
 						rs232_putpacket(&my_packet);

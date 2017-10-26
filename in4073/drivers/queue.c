@@ -26,13 +26,6 @@ void enqueue(queue *q, char x)
         q->count += 1;
 }
 
-void enqueue_packet(queue *q, uint8_t *data, size_t size)
-{
-
-        for (int i = 0; i < size; i++)
-                enqueue(q, data[i]);
-}
-
 char dequeue(queue *q)
 {
 

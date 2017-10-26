@@ -320,11 +320,8 @@ int main(void)
         P2 = 21;
         P3 = 1; // for height control
         P4 = 1;
-        C1 = 1; // for Kalman Filter
-        C2 = 1;
 
         packet my_packet;
-
         while (!demo_done)
         {
                 // printf("new mode : %d, prev_mode : %d\n",mode , prev_mode);
@@ -345,7 +342,7 @@ int main(void)
                                 height_mode_flag = false;
                                 height_lift_flag = false;
                                 prev_mode = FULL_MODE;
-                                printf("Full mode entered from main \n");
+                                // printf("Full mode entered from main \n");
                         }
                         process_mode(prev_mode);
                         // printf("Message:\t%x | %d | %d | %d | %x ||\t %d | %d
@@ -355,15 +352,23 @@ int main(void)
                         if (counter++ % 20 == 0)
                         {
                                 nrf_gpio_pin_toggle(BLUE);
-                                printf(
-                                    "Message:\t%x | %d | %d | %d | %x ||\t %d | %d | %d | %d\n",
-                                    prev_mode, roll, pitch, yaw, lift, ae[0],
-                                    ae[1], ae[2], ae[3]);
+
                                 encode(&my_packet, PACKET_TYPE_GAINS1);
-                                enqueue_packet(&tx_queue, (uint8_t *)&my_packet, sizeof(my_packet));
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
                                 encode(&my_packet, PACKET_TYPE_GAINS2);
-                                enqueue_packet(&tx_queue, (uint8_t *)&my_packet, sizeof(my_packet));
-                                // printf("P1 : %d, P2: %d \n", P1, P2);
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                encode(&my_packet, PACKET_TYPE_ACTUATOR);
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                encode(&my_packet, PACKET_TYPE_ANGLES);
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                encode(&my_packet, PACKET_TYPE_ACCEL);
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+                                encode(&my_packet, PACKET_TYPE_GYRO);
+                                uart_put_packet((uint8_t *)&my_packet, sizeof(packet));
+
+                                // printf("hello\n");
+
+
                                 /*if(isCalibrated())
                       {
                                                 read_baro();
