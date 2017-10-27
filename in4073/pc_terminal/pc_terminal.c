@@ -248,8 +248,7 @@ void combine_values()
 	{
 		yaw =  32767;
 	}
-	//printf("Roll_key: %x, roll: %x \n",roll_key,roll );
-
+	
 }
 
 void rs232_open(void)

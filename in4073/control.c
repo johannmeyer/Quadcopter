@@ -125,33 +125,9 @@ void yaw_controller()
           yaw_overflow = (new_lift - yaw_act) - MAX_VALUE;
           yaw_act += yaw_overflow;
         }
-        //yaw_act *= -1;
-        /*if (yaw_act !=0)
-        {
-          printf("yaw_error: %d, converted SR: %d, SR: %d, P: %d \n",
-         yaw_act,  yaw_s, (int16_t) get_sensor(SR), P);
-       }*/
+    
 }
 
-/*void run_filters_and_control(uint8_t mode)
-{
-  switch (mode)
-  {
-    case FULL_MODE:
-      //rate_controller();
-      //update_actuator();
-      full_mode();
-      break;
-    case RAW_MODE:
-      full_mode();
-    default:
-    //printf("not full mode\n");
-    break;
-  }
-        // fancy stuff here
-        // control loops and/or filters
-
-}*/
 
 /*------------------------------------------------------------------
  *  Function Name: yaw_mode
@@ -262,10 +238,6 @@ void height_rate_controller()
           height_overflow = MIN_VALUE - (new_lift + height_act);
           height_act += height_overflow;
         }
-      //  if(height_act!=0)
-      static int count = 0;
-      if (count++%10)
-        printf("height_act : %d, acc_sensor: %d, height_s: %ld, P3: %d, P4: %d \n",height_act, height_rate_s,height_s, P3, P4);
 
 }
 
@@ -301,8 +273,8 @@ int32_t get_baro()
 void rate_controller()
 {
         // Get required precision from noisy sensors
-        int16_t pitch_rate_s = (get_sensor(SQ)>>8);
-        int16_t roll_rate_s = (get_sensor(SP)>>8);
+        int16_t pitch_rate_s = (get_sensor(SQ)>>9);
+        int16_t roll_rate_s = (get_sensor(SP)>>9);
 
         // Set actuation inputs
         pitch_act = pitch_rate_d +(P2 * pitch_rate_s);
@@ -365,8 +337,8 @@ void rate_controller()
 void angle_controller()
 {
         // Scale sensor values
-        int16_t roll_s = (get_sensor(PHI)>>9);
-        int16_t pitch_s = (get_sensor(THETA)>>9);
+        int16_t roll_s = (get_sensor(PHI)>>10);
+        int16_t pitch_s = (get_sensor(THETA)>>10);
 
         // Scale user commanded values
         int16_t roll_err = (roll>>4) - roll_s;
